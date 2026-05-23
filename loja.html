@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Comprar Envelopes | FigurinhasCup</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#f8fafc;
+    color:#111827;
+}
+
+.glow:hover{
+    transform:translateY(-3px);
+    transition:0.3s;
+    box-shadow:0 20px 40px rgba(0,0,0,0.12);
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+
+<header class="sticky top-0 z-50 bg-black text-white">
+
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        <a href="index.html" class="text-2xl font-black italic">
+            Figurinhas<span class="text-green-500">Cup</span>
+        </a>
+
+        <a
+        href="index.html"
+        class="bg-green-600 hover:bg-green-700 transition px-5 py-2 rounded-full text-sm font-black"
+        >
+            Voltar
+        </a>
+
+    </div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="px-4 py-14">
+
+    <div class="max-w-6xl mx-auto">
+
+        <div class="bg-gradient-to-br from-yellow-100 via-white to-green-100 border border-yellow-200 rounded-[2.5rem] overflow-hidden shadow-2xl">
+
+            <div class="grid lg:grid-cols-2 gap-10 items-center p-8 md:p-12">
+
+                <!-- ESQUERDA -->
+
+                <div>
+
+                    <span class="bg-yellow-400 text-black px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide">
+                        🏆 Loja oficial FigurinhasCup
+                    </span>
+
+                    <h1 class="text-4xl md:text-6xl font-black leading-tight mt-5">
+                        Compre envelopes novos e lacrados.
+                    </h1>
+
+                    <p class="text-gray-600 text-lg mt-5 leading-relaxed">
+                        Receba envelopes oficiais para completar seu álbum mais rápido.
+                    </p>
+
+                    <!-- BENEFÍCIOS -->
+
+                    <div class="grid grid-cols-2 gap-4 mt-8">
+
+                        <div class="bg-white rounded-3xl p-5 border border-yellow-100 glow">
+
+                            <div class="text-4xl mb-3">
+                                📦
+                            </div>
+
+                            <div class="font-black text-lg">
+                                5 figurinhas
+                            </div>
+
+                            <div class="text-sm text-gray-500">
+                                por envelope
+                            </div>
+
+                        </div>
+
+                        <div class="bg-white rounded-3xl p-5 border border-yellow-100 glow">
+
+                            <div class="text-4xl mb-3">
+                                🚚
+                            </div>
+
+                            <div class="font-black text-lg">
+                                Entrega rápida
+                            </div>
+
+                            <div class="text-sm text-gray-500">
+                                ou retirada
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- SEGURANÇA -->
+
+                    <div class="bg-black text-white rounded-3xl p-6 mt-8">
+
+                        <div class="text-sm uppercase text-green-400 font-black mb-3">
+                            Segurança
+                        </div>
+
+                        <div class="space-y-3 text-sm text-gray-300">
+
+                            <p>
+                                ✅ Negociações protegidas
+                            </p>
+
+                            <p>
+                                ✅ Atendimento via WhatsApp
+                            </p>
+
+                            <p>
+                                ✅ Retirada em local seguro
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- DIREITA -->
+
+                <div class="bg-white rounded-[2rem] p-8 shadow-xl border border-gray-100">
+
+                    <!-- IMAGEM -->
+
+                    <div class="bg-gradient-to-br from-green-100 to-yellow-100 rounded-[2rem] h-56 flex items-center justify-center text-8xl mb-6">
+                        📦
+                    </div>
+
+                    <!-- INFO -->
+
+                    <div class="flex items-center justify-between mb-5">
+
+                        <div>
+
+                            <div class="text-sm text-gray-500 font-bold uppercase">
+                                Envelope Oficial
+                            </div>
+
+                            <div class="text-4xl font-black">
+                                R$ 8,00
+                            </div>
+
+                        </div>
+
+                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase">
+                            Em estoque
+                        </div>
+
+                    </div>
+
+                    <!-- QUANTIDADE -->
+
+                    <div class="mb-6">
+
+                        <div class="text-sm font-black uppercase mb-3">
+                            Quantidade
+                        </div>
+
+                        <div class="flex items-center gap-4">
+
+                            <button
+                            onclick="alterarQtd(-1)"
+                            class="w-14 h-14 rounded-2xl bg-gray-100 text-2xl font-black"
+                            >
+                                −
+                            </button>
+
+                            <div
+                            id="qtdEnvelope"
+                            class="flex-1 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl font-black"
+                            >
+                                1
+                            </div>
+
+                            <button
+                            onclick="alterarQtd(1)"
+                            class="w-14 h-14 rounded-2xl bg-green-600 text-white text-2xl font-black"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TOTAL -->
+
+                    <div class="bg-black rounded-[2rem] p-6 text-white mb-6">
+
+                        <div class="text-sm uppercase text-gray-400 font-bold mb-2">
+                            Total
+                        </div>
+
+                        <div
+                        id="valorTotal"
+                        class="text-5xl md:text-6xl font-black"
+                        >
+                            R$ 8,00
+                        </div>
+
+                    </div>
+
+                    <!-- FORM -->
+
+                    <div class="space-y-4 mb-6">
+
+                        <input
+                        id="pedidoNome"
+                        type="text"
+                        placeholder="Seu nome"
+                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        >
+
+                        <input
+                        id="pedidoWhatsapp"
+                        type="text"
+                        placeholder="WhatsApp"
+                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        >
+
+                        <input
+                        id="pedidoCidade"
+                        type="text"
+                        placeholder="Cidade"
+                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        >
+
+                    </div>
+
+                    <!-- ENTREGA -->
+
+                    <div class="mb-6">
+
+                        <div class="text-sm font-black uppercase mb-3">
+                            Forma entrega
+                        </div>
+
+                        <select
+                        id="formaEntrega"
+                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
+                        >
+                            <option value="Entrega">
+                                Entrega
+                            </option>
+
+                            <option value="Retirada">
+                                Retirada local
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- BOTÕES -->
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <button
+                        onclick="salvarPedido()"
+                        class="bg-black hover:bg-gray-800 transition text-white p-5 rounded-[2rem] font-black"
+                        >
+                            Finalizar pedido
+                        </button>
+
+                        <button
+                        onclick="pedidoWhatsapp()"
+                        class="bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
+                        >
+                            WhatsApp
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- RODAPÉ -->
+
+<footer class="bg-black text-gray-400 py-10 px-4 mt-10">
+
+    <div class="max-w-7xl mx-auto text-center">
+
+        <div class="text-xl font-black text-white mb-3">
+            FigurinhasCup
+        </div>
+
+        <p class="text-sm">
+            Marketplace oficial de colecionadores.
+        </p>
+
+        <p class="text-xs mt-4 text-gray-500">
+            © 2026 FigurinhasCup
+        </p>
+
+    </div>
+
+</footer>
+
+<!-- FIREBASE -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBiN8FqX8UZeyAh1cG2GHZtQWiQH0xPBV4",
+
+    authDomain: "rephone-a0a80.firebaseapp.com",
+
+    projectId: "rephone-a0a80",
+
+    storageBucket: "rephone-a0a80.firebasestorage.app",
+
+    appId: "1:431497247030:web:a943715e4acc04b8995b97"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+// ========================================
+// CONFIG
+// ========================================
+
+let qtdEnvelope = 1;
+
+const precoEnvelope = 8;
+
+
+// ========================================
+// TOTAL
+// ========================================
+
+function atualizarTotal(){
+
+    document.getElementById('qtdEnvelope')
+    .innerHTML = qtdEnvelope;
+
+    const total =
+        qtdEnvelope * precoEnvelope;
+
+    document.getElementById('valorTotal')
+    .innerHTML =
+    `
+    R$ ${total.toLocaleString('pt-br',{
+        minimumFractionDigits:2
+    })}
+    `;
+
+}
+
+atualizarTotal();
+
+
+// ========================================
+// QUANTIDADE
+// ========================================
+
+window.alterarQtd = (valor)=>{
+
+    qtdEnvelope += valor;
+
+    if(qtdEnvelope < 1){
+
+        qtdEnvelope = 1;
+
+    }
+
+    atualizarTotal();
+
+};
+
+
+// ========================================
+// FIREBASE
+// ========================================
+
+window.salvarPedido = async()=>{
+
+    const nome =
+        document.getElementById('pedidoNome').value;
+
+    const whatsapp =
+        document.getElementById('pedidoWhatsapp').value;
+
+    const cidade =
+        document.getElementById('pedidoCidade').value;
+
+    const entrega =
+        document.getElementById('formaEntrega').value;
+
+    if(!nome || !whatsapp){
+
+        alert('Preencha nome e WhatsApp.');
+
+        return;
+
+    }
+
+    try{
+
+        await addDoc(
+            collection(db, 'pedidos'),
+            {
+
+                nome,
+
+                whatsapp,
+
+                cidade,
+
+                entrega,
+
+                quantidade:
+                    qtdEnvelope,
+
+                valorTotal:
+                    qtdEnvelope * precoEnvelope,
+
+                status:
+                    'novo',
+
+                criadoEm:
+                    serverTimestamp()
+
+            }
+        );
+
+        alert('Pedido enviado com sucesso.');
+
+        document.getElementById('pedidoNome').value = '';
+        document.getElementById('pedidoWhatsapp').value = '';
+        document.getElementById('pedidoCidade').value = '';
+
+        qtdEnvelope = 1;
+
+        atualizarTotal();
+
+    }
+
+    catch(e){
+
+        console.error(e);
+
+        alert('Erro ao enviar pedido.');
+
+    }
+
+};
+
+
+// ========================================
+// WHATSAPP
+// ========================================
+
+window.pedidoWhatsapp = ()=>{
+
+    const nome =
+        document.getElementById('pedidoNome').value;
+
+    const cidade =
+        document.getElementById('pedidoCidade').value;
+
+    const entrega =
+        document.getElementById('formaEntrega').value;
+
+    const total =
+        qtdEnvelope * precoEnvelope;
+
+    const msg =
+`Olá, quero comprar ${qtdEnvelope} envelopes oficiais.
+
+Nome: ${nome}
+
+Cidade: ${cidade}
+
+Entrega: ${entrega}
+
+Valor total: R$ ${total.toFixed(2)}`;
+
+    const url =
+`https://wa.me/5527999999999?text=${encodeURIComponent(msg)}`;
+
+    window.open(url,'_blank');
+
+};
+
+</script>
+
+</body>
+</html>
