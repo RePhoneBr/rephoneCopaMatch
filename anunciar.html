@@ -364,415 +364,278 @@ body{
         <!-- PUBLICAR -->
 
         <button
-        id="publicarBtn"
-        onclick="publicar()"
-        class="w-full bg-green-600 hover:bg-green-700 transition text-white p-4 md:p-5 rounded-[2rem] text-lg md:text-xl font-black"
-        >
-            PUBLICAR FIGURINHAS
-        </button>
+id="publicarBtn"
+type="button"
+onclick="publicar()"
+class="w-full bg-green-600 hover:bg-green-700 transition text-white p-4 md:p-5 rounded-[2rem] text-lg md:text-xl font-black"
+>
+    PUBLICAR FIGURINHAS
+</button>
 
     </div>
 
 </section>
 
 <script type="module">
-
-<script type="module">
-
 import { auth, db, storage } from './firebase.js';
 
 import {
     onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import {
     collection,
     addDoc,
     serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import {
     ref,
     uploadBytes,
     getDownloadURL
-}
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-
-// ======================================
-// ELEMENTOS
-// ======================================
-
-const fotosInput =
-    document.getElementById('fotos');
-
-const preview =
-    document.getElementById('preview');
-
-const previewContainer =
-    document.getElementById('previewContainer');
-
-const qtdFotos =
-    document.getElementById('qtdFotos');
-
-const gpsStatus =
-    document.getElementById('gpsStatus');
-
-const gpsDot =
-    document.getElementById('gpsDot');
-
-const gpsAlert =
-    document.getElementById('gpsAlert');
-
-
-// ======================================
-// VARIÁVEIS
-// ======================================
+const fotosInput = document.getElementById('fotos');
+const preview = document.getElementById('preview');
+const previewContainer = document.getElementById('previewContainer');
+const qtdFotos = document.getElementById('qtdFotos');
+const gpsStatus = document.getElementById('gpsStatus');
+const gpsDot = document.getElementById('gpsDot');
+const gpsAlert = document.getElementById('gpsAlert');
+const publicarBtn = document.getElementById('publicarBtn');
 
 let tipoAnuncio = "individual";
-
 let fotosSelecionadas = [];
-
 let uLat = null;
 let uLng = null;
-
 let localizacaoAtiva = false;
 
+let tentativaSemGPS =
+    parseInt(localStorage.getItem('tentativaSemGPS')) || 0;
 
-// ======================================
-// AUTH
-// ======================================
-
-onAuthStateChanged(auth,(user)=>{
-
-    if(!user){
-
-        window.location.href =
-            "login.html";
-
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        alert("Faça login.");
+        window.location.href = "login.html";
     }
-
 });
 
-
-// ======================================
-// GEOLOCALIZAÇÃO
-// ======================================
-
-if(navigator.geolocation){
+function solicitarLocalizacao() {
+    if (!navigator.geolocation) {
+        gpsStatus.textContent = "Geolocalização não suportada.";
+        gpsDot.className = "w-4 h-4 rounded-full bg-yellow-500";
+        gpsAlert.classList.remove('hidden');
+        return;
+    }
 
     navigator.geolocation.getCurrentPosition(
-
-        (pos)=>{
-
+        (pos) => {
             uLat = pos.coords.latitude;
             uLng = pos.coords.longitude;
-
             localizacaoAtiva = true;
 
-            gpsDot.className =
-                "w-4 h-4 rounded-full bg-green-500 animate-pulse";
-
-            gpsStatus.innerHTML =
-                "Localização verificada com sucesso.";
-
+            gpsDot.className = "w-4 h-4 rounded-full bg-green-500 animate-pulse";
+            gpsStatus.textContent = "Localização verificada com sucesso.";
             gpsAlert.classList.add('hidden');
-
         },
-
-        (error)=>{
-
+        (error) => {
             console.log(error);
 
             localizacaoAtiva = false;
 
-            gpsDot.className =
-                "w-4 h-4 rounded-full bg-yellow-500";
-
-            gpsStatus.innerHTML =
-                "Localização desativada.";
-
+            gpsDot.className = "w-4 h-4 rounded-full bg-yellow-500";
+            gpsStatus.textContent = "Localização desativada.";
             gpsAlert.classList.remove('hidden');
-
         },
-
         {
-            enableHighAccuracy:true,
-            timeout:10000,
-            maximumAge:0
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         }
+    );
+}
 
+solicitarLocalizacao();
+
+function validarGPS() {
+    if (localizacaoAtiva) {
+        return true;
+    }
+
+    tentativaSemGPS++;
+
+    localStorage.setItem(
+        'tentativaSemGPS',
+        tentativaSemGPS
     );
 
-}else{
+    if (tentativaSemGPS <= 1) {
+        alert(
+            "Ative sua localização para aumentar a segurança das negociações e receber selo verificado."
+        );
 
-    gpsStatus.innerHTML =
-        "Geolocalização não suportada.";
+        solicitarLocalizacao();
 
+        return false;
+    }
+
+    return true;
 }
 
-
-// ======================================
-// TIPO
-// ======================================
-
-document.getElementById('btnIndividual').onclick = ()=>{
-
+document.getElementById('btnIndividual').onclick = () => {
     tipoAnuncio = "individual";
-
     ativarTipo();
-
 };
 
-document.getElementById('btnPack').onclick = ()=>{
-
+document.getElementById('btnPack').onclick = () => {
     tipoAnuncio = "pack";
-
     ativarTipo();
-
 };
 
-function ativarTipo(){
-
+function ativarTipo() {
     document.getElementById('btnIndividual').className =
-    tipoAnuncio === "individual"
-    ?
-    "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
-    :
-    "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
+        tipoAnuncio === "individual"
+            ? "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
+            : "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
 
     document.getElementById('btnPack').className =
-    tipoAnuncio === "pack"
-    ?
-    "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
-    :
-    "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
-
+        tipoAnuncio === "pack"
+            ? "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
+            : "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
 }
 
-
-// ======================================
-// PREVIEW
-// ======================================
-
-fotosInput.addEventListener('change',()=>{
-
-    fotosSelecionadas =
-        [...fotosInput.files];
+fotosInput.addEventListener('change', () => {
+    fotosSelecionadas = Array.from(fotosInput.files);
 
     preview.innerHTML = "";
-
     previewContainer.classList.remove('hidden');
 
-    qtdFotos.innerHTML =
-        fotosSelecionadas.length + " fotos";
+    qtdFotos.textContent =
+        fotosSelecionadas.length === 1
+            ? "1 foto"
+            : `${fotosSelecionadas.length} fotos`;
 
-    fotosSelecionadas.forEach(file=>{
+    fotosSelecionadas.forEach((file) => {
+        const reader = new FileReader();
 
-        const reader =
-            new FileReader();
+        reader.onload = (event) => {
+            const img = document.createElement('img');
 
-        reader.onload = (e)=>{
+            img.src = event.target.result;
+            img.alt = "Prévia da figurinha";
+            img.className = "w-28 h-28 md:w-32 md:h-32 object-cover rounded-3xl border border-gray-200 flex-shrink-0";
 
-            preview.innerHTML += `
-
-            <img
-            src="${e.target.result}"
-            class="w-28 h-28 md:w-32 md:h-32 object-cover rounded-3xl border border-gray-200 flex-shrink-0"
-            >
-
-            `;
-
+            preview.appendChild(img);
         };
 
         reader.readAsDataURL(file);
-
     });
-
 });
 
+window.publicar = async () => {
+    const user = auth.currentUser;
 
-// ======================================
-// PUBLICAR
-// ======================================
-
-window.publicar = async()=>{
-
-    const user =
-        auth.currentUser;
-
-    if(!user){
-
+    if (!user) {
         alert("Faça login.");
-
         return;
-
     }
 
-    // ======================================
-    // VALIDA GPS
-    // ======================================
-
-    if(!localizacaoAtiva){
-
-        const continuar =
-            confirm(
-                "Sua localização está desativada.\n\nO anúncio será publicado como NÃO VERIFICADO e aparecerá com alerta de segurança.\n\nDeseja continuar?"
-            );
-
-        if(!continuar){
-
-            return;
-
-        }
-
+    if (!validarGPS()) {
+        return;
     }
 
-    // ======================================
-    // VALIDA FOTOS
-    // ======================================
-
-    if(fotosSelecionadas.length === 0){
-
+    if (fotosSelecionadas.length === 0) {
         alert("Adicione pelo menos uma foto.");
-
         return;
-
     }
 
-    const btn =
-        document.getElementById('publicarBtn');
+    const numero = document.getElementById('numero').value.trim();
+    const jogador = document.getElementById('jogador').value.trim();
+    const selecao = document.getElementById('selecao').value.trim();
+    const cidade = document.getElementById('cidade').value.trim();
+    const tipo = document.getElementById('tipo').value;
+    const preco = document.getElementById('preco').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
 
-    btn.disabled = true;
+    if (tipoAnuncio === "individual" && (!numero || !jogador)) {
+        alert("Informe o número e o jogador da figurinha.");
+        return;
+    }
 
-    btn.innerHTML =
-        "PUBLICANDO...";
+    if (!selecao || !cidade || !preco || !whatsapp) {
+        alert("Preencha seleção, cidade, valor e WhatsApp.");
+        return;
+    }
 
-    try{
+    publicarBtn.disabled = true;
+    publicarBtn.textContent = "PUBLICANDO...";
 
-        let fotosURLs = [];
+    try {
+        const fotosURLs = [];
 
-        for(const file of fotosSelecionadas){
-
-            const storageRef =
-            ref(
+        for (const [index, file] of fotosSelecionadas.entries()) {
+            const storageRef = ref(
                 storage,
-                `figurinhas/${Date.now()}-${file.name}`
+                `figurinhas/${user.uid}/${Date.now()}-${index}-${file.name}`
             );
 
-            await uploadBytes(
-                storageRef,
-                file
-            );
+            await uploadBytes(storageRef, file);
 
-            const url =
-                await getDownloadURL(storageRef);
+            const url = await getDownloadURL(storageRef);
 
             fotosURLs.push(url);
-
         }
 
-        // ======================================
-        // STATUS
-        // ======================================
-
-        const statusVerificacao =
-            localizacaoAtiva
-            ?
-            "aprovado"
-            :
-            "nao_verificado";
-
-        // ======================================
-        // FIRESTORE
-        // ======================================
-
         await addDoc(
-            collection(db,"anuncios"),
+            collection(db, "anuncios"),
             {
+                uid: user.uid,
+                nome: user.displayName || "",
 
-                uid:user.uid,
-
-                numero:
-                    document.getElementById('numero').value,
-
-                jogador:
-                    tipoAnuncio === "pack"
-                    ?
-                    "Pack Figurinhas"
-                    :
-                    document.getElementById('jogador').value,
-
-                selecao:
-                    document.getElementById('selecao').value,
-
-                cidade:
-                    document.getElementById('cidade').value,
-
-                tipo:
-                    document.getElementById('tipo').value,
-
-                preco:
-                    document.getElementById('preco').value,
-
-                whatsapp:
-                    document.getElementById('whatsapp').value,
+                numero,
+                jogador: tipoAnuncio === "pack" ? "Pack Figurinhas" : jogador,
+                selecao,
+                cidade,
+                tipo,
+                preco,
+                whatsapp,
 
                 tipoAnuncio,
+                raridade: tipoAnuncio === "pack" ? "Pack" : "Comum",
 
-                fotos:fotosURLs,
+                fotos: fotosURLs,
+                foto: fotosURLs[0] || "",
 
-                foto:fotosURLs[0] || "",
+                lat: uLat || null,
+                lng: uLng || null,
 
-                lat:uLat,
+                verificado: localizacaoAtiva,
+                alerta: !localizacaoAtiva,
 
-                lng:uLng,
+                status: "aprovado",
+                destaque: false,
 
-                verificado:
-                    localizacaoAtiva,
-
-                alerta:
-                    !localizacaoAtiva,
-
-                status:
-                    statusVerificacao,
-
-                criadoEm:
-                    serverTimestamp()
-
+                criadoEm: serverTimestamp()
             }
         );
 
+        localStorage.removeItem('tentativaSemGPS');
+
         alert(
             localizacaoAtiva
-            ?
-            "Figurinha publicada com selo verificado."
-            :
-            "Figurinha publicada sem verificação de localização."
+                ? "Figurinha publicada com selo verificado."
+                : "Figurinha publicada como NÃO VERIFICADA."
         );
 
-        window.location.href =
-            "dashboard.html";
-
-    }
-
-    catch(e){
-
-        console.error(e);
-
+        window.location.href = "dashboard.html";
+    } catch (error) {
+        console.error(error);
         alert("Erro ao publicar.");
-
+    } finally {
+        publicarBtn.disabled = false;
+        publicarBtn.textContent = "PUBLICAR FIGURINHAS";
     }
-
-    btn.disabled = false;
-
-    btn.innerHTML =
-        "PUBLICAR FIGURINHAS";
-
 };
-
 </script>
 
 </body>
