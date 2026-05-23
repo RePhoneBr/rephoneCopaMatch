@@ -166,9 +166,12 @@ function mostrarMensagem(msg, tipo = 'erro'){
 
 onAuthStateChanged(auth, (user)=>{
 
+    // Apenas verifica sessão
+    // sem redirecionamento automático
+
     if(user){
 
-        window.location.href = "index.html";
+        console.log("Usuário já logado");
 
     }
 
