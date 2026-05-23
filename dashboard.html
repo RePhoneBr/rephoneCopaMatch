@@ -178,21 +178,15 @@ body{
 </section>
 
 <script type="module">
+<script type="module">
+import { auth, db } from './firebase.js';
 
 import {
-    auth,
-    db
-} from './firebase.js';
-
-import {
-
     onAuthStateChanged,
     signOut
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import {
-
     collection,
     query,
     where,
@@ -200,268 +194,186 @@ import {
     deleteDoc,
     doc,
     updateDoc
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const cards =
-    document.getElementById('cards');
+const cards = document.getElementById('cards');
+const loaderArea = document.getElementById('loaderArea');
+const totalAds = document.getElementById('totalAds');
+const ativosAds = document.getElementById('ativosAds');
+const vendidosAds = document.getElementById('vendidosAds');
+const logoutBtn = document.getElementById('logoutBtn');
 
-document
-    .getElementById('logoutBtn')
-    .addEventListener('click', ()=>{
+logoutBtn.addEventListener('click', async () => {
+    try {
+        await signOut(auth);
+        window.location.href = "login.html";
+    } catch (error) {
+        alert("Erro ao sair. Tente novamente.");
+        console.error(error);
+    }
+});
 
-        signOut(auth);
-
-    });
-
-onAuthStateChanged(auth, (user)=>{
-
-    if(!user){
-
-        window.location.href =
-            "login.html";
-
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
         return;
-
     }
 
     carregarAnuncios(user.uid);
-
 });
 
-function carregarAnuncios(uid){
+function carregarAnuncios(uid) {
+    const q = query(
+        collection(db, "anuncios"),
+        where("uid", "==", uid)
+    );
 
-    const q =
-        query(
-            collection(db, "anuncios"),
-            where("uid", "==", uid)
-        );
-
-    onSnapshot(q, (snapshot)=>{
-
-        const anuncios =
-            snapshot.docs.map(doc=>({
-                id: doc.id,
-                ...doc.data()
+    onSnapshot(
+        q,
+        (snapshot) => {
+            const anuncios = snapshot.docs.map((documento) => ({
+                id: documento.id,
+                ...documento.data()
             }));
 
-        renderizar(anuncios);
-
-    });
-
+            renderizar(anuncios);
+        },
+        (error) => {
+            loaderArea.style.display = 'none';
+            cards.innerHTML = `
+                <div class="col-span-full bg-white rounded-[2rem] p-10 text-center border border-gray-100">
+                    <h2 class="text-3xl font-black">Erro ao carregar anúncios</h2>
+                    <p class="text-gray-500 mt-3">Tente atualizar a página.</p>
+                </div>
+            `;
+            console.error(error);
+        }
+    );
 }
 
-function renderizar(lista){
+function formatarPreco(valor) {
+    const numero = Number(valor);
 
-    document
-        .getElementById('loaderArea')
-        .style.display = 'none';
-
-    cards.innerHTML = "";
-
-    const vendidos =
-        lista.filter(a=>a.status === 'vendido');
-
-    const ativos =
-        lista.filter(a=>a.status !== 'vendido');
-
-    document.getElementById('totalAds').innerHTML =
-        lista.length;
-
-    document.getElementById('ativosAds').innerHTML =
-        ativos.length;
-
-    document.getElementById('vendidosAds').innerHTML =
-        vendidos.length;
-
-    if(lista.length === 0){
-
-        cards.innerHTML = `
-
-        <div class="col-span-full bg-white rounded-[2rem] p-10 text-center border border-gray-100">
-
-            <h2 class="text-3xl font-black">
-                Nenhum anúncio ainda
-            </h2>
-
-            <p class="text-gray-500 mt-3">
-                Comece publicando sua primeira figurinha.
-            </p>
-
-            <a
-                href="anunciar.html"
-                class="inline-block mt-6 bg-green-600 text-white px-8 py-4 rounded-2xl font-black"
-            >
-                Publicar agora
-            </a>
-
-        </div>
-
-        `;
-
-        return;
-
+    if (!Number.isFinite(numero)) {
+        return "R$ 0,00";
     }
 
-    lista.forEach(ad=>{
+    return numero.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
 
-        const vendido =
-            ad.status === 'vendido';
+function renderizar(lista) {
+    loaderArea.style.display = 'none';
+    cards.innerHTML = "";
 
-        cards.innerHTML += `
+    const vendidos = lista.filter((ad) => ad.status === 'vendido');
+    const ativos = lista.filter((ad) => ad.status !== 'vendido');
 
-        <div class="bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden card-hover ${vendido ? 'opacity-60 grayscale' : ''}">
+    totalAds.textContent = lista.length;
+    ativosAds.textContent = ativos.length;
+    vendidosAds.textContent = vendidos.length;
 
-            ${vendido ? `
+    if (lista.length === 0) {
+        cards.innerHTML = `
+            <div class="col-span-full bg-white rounded-[2rem] p-10 text-center border border-gray-100">
+                <h2 class="text-3xl font-black">Nenhum anúncio ainda</h2>
+                <p class="text-gray-500 mt-3">Comece publicando sua primeira figurinha.</p>
+                <a href="anunciar.html" class="inline-block mt-6 bg-green-600 text-white px-8 py-4 rounded-2xl font-black">
+                    Publicar agora
+                </a>
+            </div>
+        `;
+        return;
+    }
 
-                <div class="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-xs font-black z-10">
-                    VENDIDO
-                </div>
+    lista.forEach((ad) => {
+        const vendido = ad.status === 'vendido';
 
-            ` : ''}
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden card-hover ${vendido ? 'opacity-60 grayscale' : ''}`;
 
-            <img
-                src="${ad.foto}"
-                class="w-full h-56 object-cover rounded-2xl"
-            >
+        card.innerHTML = `
+            ${vendido ? '<div class="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-xs font-black z-10">VENDIDO</div>' : ''}
+
+            <img src="${ad.foto || 'https://placehold.co/600x400?text=Sem+foto'}" alt="Foto da figurinha ${ad.jogador || ''}" class="w-full h-56 object-cover rounded-2xl">
 
             <div class="mt-5">
-
-                <div class="flex items-center justify-between">
-
+                <div class="flex items-center justify-between gap-3">
                     <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black uppercase">
-
-                        ${ad.tipo}
-
+                        ${ad.tipo || 'Figurinha'}
                     </span>
 
                     <span class="text-xs font-bold text-gray-400 uppercase">
-
-                        ${ad.raridade}
-
+                        ${ad.raridade || 'Normal'}
                     </span>
-
                 </div>
 
-                <h2 class="text-2xl font-black mt-4">
-
-                    ${ad.jogador}
-
-                </h2>
+                <h2 class="text-2xl font-black mt-4">${ad.jogador || 'Sem nome'}</h2>
 
                 <p class="text-gray-500 text-sm mt-1">
-
-                    ${ad.selecao} • #${ad.numero}
-
+                    ${ad.selecao || 'Seleção não informada'} • #${ad.numero || '--'}
                 </p>
 
                 <div class="mt-4 text-sm text-green-700 font-bold">
-
-                    📍 ${ad.cidade}
-
+                    ${ad.cidade || 'Cidade não informada'}
                 </div>
 
                 <div class="flex items-center justify-between mt-6">
-
-                    <span class="text-2xl font-black">
-
-                        R$ ${parseFloat(ad.preco).toFixed(2)}
-
-                    </span>
-
+                    <span class="text-2xl font-black">${formatarPreco(ad.preco)}</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mt-6">
-
-                    <a
-                        href="anuncio.html?id=${ad.id}"
-                        class="bg-black text-white p-3 rounded-2xl text-center font-black text-sm"
-                    >
+                    <a href="anuncio.html?id=${encodeURIComponent(ad.id)}" class="bg-black text-white p-3 rounded-2xl text-center font-black text-sm">
                         VER
                     </a>
 
-                    ${
-                        vendido ?
-
-                        `
-
-                        <button
-                            onclick="reativar('${ad.id}')"
-                            class="bg-green-600 text-white p-3 rounded-2xl font-black text-sm"
-                        >
-                            REATIVAR
-                        </button>
-
-                        `
-
-                        :
-
-                        `
-
-                        <button
-                            onclick="marcarVendido('${ad.id}')"
-                            class="bg-yellow-500 text-white p-3 rounded-2xl font-black text-sm"
-                        >
-                            VENDIDO
-                        </button>
-
-                        `
-                    }
-
+                    <button class="${vendido ? 'bg-green-600' : 'bg-yellow-500'} text-white p-3 rounded-2xl font-black text-sm" data-action="${vendido ? 'reativar' : 'vendido'}" data-id="${ad.id}">
+                        ${vendido ? 'REATIVAR' : 'VENDIDO'}
+                    </button>
                 </div>
 
-                <button
-                    onclick="excluir('${ad.id}')"
-                    class="w-full mt-3 bg-red-500 text-white p-3 rounded-2xl font-black text-sm"
-                >
+                <button class="w-full mt-3 bg-red-500 text-white p-3 rounded-2xl font-black text-sm" data-action="excluir" data-id="${ad.id}">
                     EXCLUIR
                 </button>
-
             </div>
-
-        </div>
-
         `;
 
+        cards.appendChild(card);
     });
-
 }
 
-window.excluir = async(id)=>{
+cards.addEventListener('click', async (event) => {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
 
-    const confirmar =
-        confirm("Excluir anúncio?");
+    const { action, id } = button.dataset;
 
-    if(!confirmar) return;
+    try {
+        if (action === 'excluir') {
+            const confirmar = confirm("Excluir anúncio?");
+            if (!confirmar) return;
 
-    await deleteDoc(
-        doc(db, "anuncios", id)
-    );
-
-};
-
-window.marcarVendido = async(id)=>{
-
-    await updateDoc(
-        doc(db, "anuncios", id),
-        {
-            status: "vendido"
+            await deleteDoc(doc(db, "anuncios", id));
         }
-    );
 
-};
-
-window.reativar = async(id)=>{
-
-    await updateDoc(
-        doc(db, "anuncios", id),
-        {
-            status: "ativo"
+        if (action === 'vendido') {
+            await updateDoc(doc(db, "anuncios", id), {
+                status: "vendido"
+            });
         }
-    );
 
-};
-
+        if (action === 'reativar') {
+            await updateDoc(doc(db, "anuncios", id), {
+                status: "ativo"
+            });
+        }
+    } catch (error) {
+        alert("Não foi possível atualizar o anúncio.");
+        console.error(error);
+    }
+});
 </script>
 
 </body>
