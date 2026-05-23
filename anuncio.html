@@ -5,18 +5,18 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-/>
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-<title>Anunciar Figurinha | FigurinhasCup</title>
+<title>Figurinha</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
 rel="stylesheet"
-/>
+>
 
 <style>
 
@@ -25,820 +25,432 @@ body{
 }
 
 .glass{
-    background:rgba(255,255,255,0.92);
-    backdrop-filter:blur(14px);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
 }
 
-.preview-scroll::-webkit-scrollbar{
-    height:6px;
+.card-hover{
+    transition:0.3s;
 }
 
-.preview-scroll::-webkit-scrollbar-thumb{
-    background:#d1d5db;
-    border-radius:999px;
+.card-hover:hover{
+    transform:translateY(-4px);
+}
+
+.loader{
+    border:4px solid #f3f3f3;
+    border-top:4px solid #16a34a;
+    border-radius:50%;
+    width:45px;
+    height:45px;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
 }
 
 </style>
 
 </head>
 
-<body class="bg-gray-100 text-gray-900 pb-32">
-
-<!-- HEADER -->
+<body class="bg-gray-100">
 
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
 
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         <a
-        href="index.html"
-        class="text-3xl font-black italic text-green-600"
+            href="index.html"
+            class="text-3xl font-black text-green-600 italic"
         >
             FigurinhasCup
         </a>
 
         <a
-        href="dashboard.html"
-        class="bg-black text-white px-5 py-2 rounded-full text-sm font-black"
+            href="index.html"
+            class="text-sm font-bold"
         >
-            Dashboard
+            Voltar
         </a>
 
     </div>
 
 </header>
 
-<!-- HERO -->
+<div
+    id="loaderArea"
+    class="flex justify-center py-24"
+>
+    <div class="loader"></div>
+</div>
 
-<section class="max-w-4xl mx-auto px-4 py-10">
+<main
+    id="content"
+    class="hidden"
+>
 
-    <div class="mb-8">
+<section class="max-w-7xl mx-auto px-4 py-10">
 
-        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase">
-            Publicação inteligente
-        </span>
+    <div class="grid lg:grid-cols-2 gap-10">
 
-        <h1 class="text-5xl font-black mt-5 leading-tight">
-            Anuncie suas figurinhas com segurança.
-        </h1>
+        <div>
 
-        <p class="text-gray-500 text-lg mt-4">
-            Tire fotos pelo celular, envie packs completos e publique anúncios verificados automaticamente.
-        </p>
-
-    </div>
-
-    <!-- ALERTA GPS -->
-
-    <div
-    id="gpsAlert"
-    class="hidden bg-yellow-100 border border-yellow-300 text-yellow-800 p-5 rounded-3xl mb-8"
-    >
-        <div class="font-black text-lg mb-2">
-            ⚠️ Localização não ativada
-        </div>
-
-        <p class="text-sm">
-            Ative sua localização para ganhar selo verificado e aumentar a segurança das negociações.
-        </p>
-    </div>
-
-    <!-- FORM -->
-
-    <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-gray-100">
-
-        <!-- TIPO -->
-
-        <div class="mb-8">
-
-            <label class="block text-sm font-black mb-3 uppercase">
-                Tipo anúncio
-            </label>
-
-            <div class="grid grid-cols-2 gap-4">
-
-                <button
-                id="btnIndividual"
-                type="button"
-                class="tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
-                >
-                    🎴 Figurinha
-                </button>
-
-                <button
-                id="btnPack"
-                type="button"
-                class="tipoBtn bg-gray-100 p-5 rounded-3xl font-black"
-                >
-                    📦 Pack
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- FOTOS -->
-
-        <div class="mb-8">
-
-            <label class="block text-sm font-black mb-3 uppercase">
-                Fotos das figurinhas
-            </label>
-
-            <label
-            class="border-2 border-dashed border-gray-300 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition"
+            <img
+                id="foto"
+                class="w-full rounded-[2rem] shadow-2xl object-cover"
             >
 
-                <div class="text-6xl mb-4">
-                    📸
-                </div>
-
-                <div class="text-2xl font-black">
-                    Tirar foto ou importar
-                </div>
-
-                <p class="text-gray-500 mt-2 text-sm">
-                    Câmera do celular ou galeria • múltiplas imagens
-                </p>
-
-                <input
-                id="fotos"
-                type="file"
-                accept="image/*"
-                capture="environment"
-                multiple
-                class="hidden"
-                >
-
-            </label>
-
         </div>
 
-        <!-- PREVIEW -->
+        <div>
 
-        <div
-        id="previewContainer"
-        class="hidden mb-8"
-        >
-
-            <div class="flex items-center justify-between mb-3">
-
-                <span class="font-black uppercase text-sm">
-                    Pré-visualização
-                </span>
+            <div class="flex items-center gap-3 mb-5">
 
                 <span
-                id="qtdFotos"
-                class="text-sm font-bold text-gray-500"
-                >
-                    0 fotos
-                </span>
+                    id="tipo"
+                    class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase"
+                ></span>
+
+                <span
+                    id="raridade"
+                    class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-xs font-black uppercase"
+                ></span>
 
             </div>
 
+            <h1
+                id="titulo"
+                class="text-5xl font-black leading-tight"
+            ></h1>
+
+            <p
+                id="subtitulo"
+                class="text-gray-500 mt-4 text-lg"
+            ></p>
+
             <div
-            id="preview"
-            class="preview-scroll flex gap-4 overflow-x-auto pb-3"
+                id="localizacao"
+                class="mt-6 text-green-700 font-bold"
             ></div>
 
-        </div>
-
-        <!-- CAMPOS -->
-
-        <div class="grid md:grid-cols-2 gap-5 mb-5">
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Número
-                </label>
-
-                <input
-                id="numero"
-                type="text"
-                placeholder="Ex: 127"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-                >
-
-            </div>
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Jogador / título
-                </label>
-
-                <input
-                id="jogador"
-                type="text"
-                placeholder="Ex: Neymar Jr"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-                >
-
-            </div>
-
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-5 mb-5">
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Seleção
-                </label>
-
-                <input
-                id="selecao"
-                type="text"
-                placeholder="Ex: Brasil"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-                >
-
-            </div>
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Cidade
-                </label>
-
-                <input
-                id="cidade"
-                type="text"
-                placeholder="Ex: Aracruz"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-                >
-
-            </div>
-
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-5 mb-5">
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Tipo negociação
-                </label>
-
-                <select
-                id="tipo"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
-                >
-                    <option value="Venda">Venda</option>
-                    <option value="Troca">Troca</option>
-                    <option value="Venda ou troca">Venda ou troca</option>
-                </select>
-
-            </div>
-
-            <div>
-
-                <label class="block text-sm font-black mb-2 uppercase">
-                    Valor
-                </label>
-
-                <input
-                id="preco"
-                type="number"
-                placeholder="Ex: 5"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-                >
-
-            </div>
-
-        </div>
-
-        <!-- WHATS -->
-
-        <div class="mb-8">
-
-            <label class="block text-sm font-black mb-2 uppercase">
-                WhatsApp
-            </label>
-
-            <input
-            id="whatsapp"
-            type="text"
-            placeholder="27999999999"
-            class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
-            >
-
-        </div>
-
-        <!-- STATUS -->
-
-        <div class="bg-black rounded-[2rem] p-6 text-white mb-8">
-
-            <div class="flex items-center gap-3 mb-3">
-
-                <div
-                id="gpsDot"
-                class="w-4 h-4 rounded-full bg-gray-500"
-                ></div>
-
-                <span class="font-black uppercase text-sm">
-                    Segurança localização
-                </span>
-
-            </div>
-
             <div
-            id="gpsStatus"
-            class="text-sm text-gray-300"
-            >
-                Verificando localização...
+                id="descricao"
+                class="mt-8 bg-white rounded-[2rem] p-6 border border-gray-100 text-gray-600 leading-relaxed"
+            ></div>
+
+            <div class="mt-10 flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-gray-400 font-bold uppercase">
+                        Valor
+                    </p>
+
+                    <h2
+                        id="preco"
+                        class="text-5xl font-black"
+                    ></h2>
+
+                </div>
+
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mt-10">
+
+                <a
+                    id="btnWhatsapp"
+                    target="_blank"
+                    class="bg-green-600 text-white p-5 rounded-2xl text-center font-black text-lg hover:scale-[1.02] transition-all"
+                >
+                    WhatsApp
+                </a>
+
+                <button
+                    id="btnCompartilhar"
+                    class="bg-black text-white p-5 rounded-2xl font-black text-lg"
+                >
+                    Compartilhar
+                </button>
+
             </div>
 
         </div>
-
-        <!-- PUBLICAR -->
-
-        <button
-        id="publicarBtn"
-        onclick="publicar()"
-        class="w-full bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] text-xl font-black"
-        >
-            PUBLICAR FIGURINHAS
-        </button>
 
     </div>
 
 </section>
 
+<section class="px-4 pb-20">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div class="flex items-center justify-between mb-8">
+
+            <div>
+
+                <span class="text-green-600 font-black uppercase text-sm">
+                    Marketplace
+                </span>
+
+                <h2 class="text-4xl font-black">
+                    Relacionados
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div
+            id="relacionados"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        ></div>
+
+    </div>
+
+</section>
+
+</main>
+
 <script type="module">
 
-import { auth, db, storage } from './firebase.js';
+import {
+    db
+} from './firebase.js';
 
 import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-import {
-    collection,
-    addDoc,
-    serverTimestamp,
     doc,
-    getDoc
+    getDoc,
+    collection,
+    getDocs
+
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+const params =
+    new URLSearchParams(window.location.search);
 
+const id =
+    params.get('id');
 
-// ======================================
-// ELEMENTOS
-// ======================================
+let userLat = null;
+let userLng = null;
 
-const fotosInput =
-    document.getElementById('fotos');
-
-const preview =
-    document.getElementById('preview');
-
-const previewContainer =
-    document.getElementById('previewContainer');
-
-const qtdFotos =
-    document.getElementById('qtdFotos');
-
-const gpsStatus =
-    document.getElementById('gpsStatus');
-
-const gpsDot =
-    document.getElementById('gpsDot');
-
-const gpsAlert =
-    document.getElementById('gpsAlert');
-
-const btn =
-    document.getElementById('publicarBtn');
-
-
-// ======================================
-// VARIÁVEIS
-// ======================================
-
-let tipoAnuncio =
-    "individual";
-
-let fotosSelecionadas = [];
-
-let uLat = null;
-let uLng = null;
-
-let localizacaoAtiva = false;
-
-let alertaLocalizacao = false;
-
-
-// ======================================
-// AUTH
-// ======================================
-
-onAuthStateChanged(auth, (user)=>{
-
-    if(!user){
-
-        window.location.href =
-            "login.html";
-
-    }
-
-});
-
-
-// ======================================
-// TIPO
-// ======================================
-
-document
-.getElementById('btnIndividual')
-.onclick = ()=>{
-
-    tipoAnuncio = "individual";
-
-    ativarTipo();
-
-};
-
-document
-.getElementById('btnPack')
-.onclick = ()=>{
-
-    tipoAnuncio = "pack";
-
-    ativarTipo();
-
-};
-
-function ativarTipo(){
-
-    document
-    .getElementById('btnIndividual')
-    .className =
-    tipoAnuncio === "individual"
-    ?
-    "tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
-    :
-    "tipoBtn bg-gray-100 p-5 rounded-3xl font-black";
-
-    document
-    .getElementById('btnPack')
-    .className =
-    tipoAnuncio === "pack"
-    ?
-    "tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
-    :
-    "tipoBtn bg-gray-100 p-5 rounded-3xl font-black";
-
-}
-
-
-// ======================================
-// PREVIEW
-// ======================================
-
-fotosInput.addEventListener('change', ()=>{
-
-    fotosSelecionadas =
-        [...fotosInput.files];
-
-    preview.innerHTML = "";
-
-    previewContainer.classList.remove('hidden');
-
-    qtdFotos.innerHTML =
-        fotosSelecionadas.length + " fotos";
-
-    fotosSelecionadas.forEach(file=>{
-
-        const reader =
-            new FileReader();
-
-        reader.onload = (e)=>{
-
-            preview.innerHTML += `
-
-            <img
-            src="${e.target.result}"
-            class="w-32 h-32 object-cover rounded-3xl border border-gray-200"
-            >
-
-            `;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
-});
-
-
-// ======================================
-// DISTÂNCIA
-// ======================================
-
-function calcularDistancia(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-){
+function calcularDistancia(lat1, lon1, lat2, lon2){
 
     const R = 6371;
 
     const dLat =
-        (lat2 - lat1)
-        * Math.PI / 180;
+        (lat2-lat1) * Math.PI/180;
 
     const dLon =
-        (lon2 - lon1)
-        * Math.PI / 180;
+        (lon2-lon1) * Math.PI/180;
 
     const a =
-        Math.sin(dLat/2)
-        *
-        Math.sin(dLat/2)
-        +
-        Math.cos(lat1 * Math.PI / 180)
-        *
-        Math.cos(lat2 * Math.PI / 180)
-        *
-        Math.sin(dLon/2)
-        *
+        Math.sin(dLat/2) *
+        Math.sin(dLat/2) +
+
+        Math.cos(lat1 * Math.PI/180) *
+        Math.cos(lat2 * Math.PI/180) *
+
+        Math.sin(dLon/2) *
         Math.sin(dLon/2);
 
-    return R
-        *
-        2
-        *
+    return (
+        R * 2 *
         Math.atan2(
             Math.sqrt(a),
             Math.sqrt(1-a)
-        );
+        )
+    ).toFixed(1);
 
 }
 
+navigator.geolocation.getCurrentPosition((pos)=>{
 
-// ======================================
-// GEOLOCALIZAÇÃO
-// ======================================
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
 
-navigator.geolocation.getCurrentPosition(
+});
 
-    async(pos)=>{
+async function carregarAnuncio(){
 
-        uLat =
-            pos.coords.latitude;
+    const anuncioRef =
+        doc(db, "anuncios", id);
 
-        uLng =
-            pos.coords.longitude;
+    const anuncioSnap =
+        await getDoc(anuncioRef);
 
-        localizacaoAtiva = true;
+    if(!anuncioSnap.exists()){
 
-        gpsDot.className =
-            "w-4 h-4 rounded-full bg-green-500 animate-pulse";
+        alert("Anúncio não encontrado");
 
-        gpsStatus.innerHTML =
-            "Localização verificada com sucesso.";
-
-        // ============================
-        // VERIFICA CADASTRO
-        // ============================
-
-        const user =
-            auth.currentUser;
-
-        if(user){
-
-            const userRef =
-                doc(
-                    db,
-                    "usuarios",
-                    user.uid
-                );
-
-            const userSnap =
-                await getDoc(userRef);
-
-            if(userSnap.exists()){
-
-                const data =
-                    userSnap.data();
-
-                if(
-                    data.lat &&
-                    data.lng
-                ){
-
-                    const dist =
-                        calcularDistancia(
-                            uLat,
-                            uLng,
-                            data.lat,
-                            data.lng
-                        );
-
-                    if(dist > 1){
-
-                        alertaLocalizacao = true;
-
-                        gpsStatus.innerHTML =
-                        `
-                        ⚠️ Localização atual diferente da cadastrada (${dist.toFixed(1)}km).
-                        `;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    },
-
-    ()=>{
-
-        localizacaoAtiva = false;
-
-        gpsDot.className =
-            "w-4 h-4 rounded-full bg-yellow-500";
-
-        gpsStatus.innerHTML =
-            "Localização desativada.";
-
-        gpsAlert.classList.remove('hidden');
-
-    }
-
-);
-
-
-// ======================================
-// PUBLICAR
-// ======================================
-
-window.publicar = async()=>{
-
-    if(!auth.currentUser){
-
-        alert("Faça login.");
+        window.location.href =
+            "index.html";
 
         return;
 
     }
 
-    btn.innerHTML =
-        "PUBLICANDO...";
+    const ad =
+        anuncioSnap.data();
 
-    btn.disabled = true;
+    document.title =
+        ad.jogador;
 
-    try{
+    document.getElementById('foto').src =
+        ad.foto;
 
-        // ======================================
-        // UPLOAD
-        // ======================================
+    document.getElementById('tipo').innerHTML =
+        ad.tipo;
 
-        let fotosURLs = [];
+    document.getElementById('raridade').innerHTML =
+        ad.raridade;
 
-        for(const file of fotosSelecionadas){
+    document.getElementById('titulo').innerHTML =
+        ad.jogador;
 
-            const storageRef =
-                ref(
-                    storage,
-                    `figurinhas/${Date.now()}-${file.name}`
-                );
+    document.getElementById('subtitulo').innerHTML =
+        `${ad.selecao} • #${ad.numero}`;
 
-            await uploadBytes(
-                storageRef,
-                file
-            );
+    let distancia = "";
 
-            const url =
-                await getDownloadURL(storageRef);
+    if(
+        userLat &&
+        ad.lat
+    ){
 
-            fotosURLs.push(url);
-
-        }
-
-        // ======================================
-        // DADOS
-        // ======================================
-
-        const numero =
-            document.getElementById('numero').value;
-
-        const jogador =
-            tipoAnuncio === 'pack'
-            ?
-            'Pack Figurinhas'
-            :
-            document.getElementById('jogador').value;
-
-        const selecao =
-            document.getElementById('selecao').value;
-
-        const cidade =
-            document.getElementById('cidade').value;
-
-        const tipo =
-            document.getElementById('tipo').value;
-
-        const preco =
-            document.getElementById('preco').value;
-
-        const whatsapp =
-            document.getElementById('whatsapp').value;
-
-        // ======================================
-        // FIRESTORE
-        // ======================================
-
-        await addDoc(
-            collection(db, "anuncios"),
-            {
-
-                uid:
-                    auth.currentUser.uid,
-
-                numero,
-
-                jogador,
-
-                selecao,
-
-                cidade,
-
-                tipo,
-
-                preco,
-
-                whatsapp,
-
-                tipoAnuncio,
-
-                fotos:
-                    fotosURLs,
-
-                foto:
-                    fotosURLs[0] || "",
-
-                lat:
-                    uLat || null,
-
-                lng:
-                    uLng || null,
-
-                verificado:
-                    localizacaoAtiva,
-
-                alertaLocalizacao,
-
-                destaque:
-                    false,
-
-                status:
-                    "aprovado",
-
-                criadoEm:
-                    serverTimestamp()
-
-            }
-        );
-
-        alert(
-            localizacaoAtiva
-            ?
-            "Figurinhas publicadas com selo verificado."
-            :
-            "Figurinhas publicadas sem verificação."
-        );
-
-        window.location.href =
-            "dashboard.html";
+        distancia =
+            " • " +
+            calcularDistancia(
+                userLat,
+                userLng,
+                ad.lat,
+                ad.lng
+            ) +
+            " km";
 
     }
 
-    catch(e){
+    document.getElementById('localizacao').innerHTML =
+        `📍 ${ad.cidade} - ${ad.estado}${distancia}`;
 
-        console.error(e);
+    document.getElementById('descricao').innerHTML =
+        ad.descricao || "Sem descrição";
 
-        alert("Erro ao publicar.");
+    document.getElementById('preco').innerHTML =
+        `R$ ${parseFloat(ad.preco).toFixed(2)}`;
 
-    }
+    document.getElementById('btnWhatsapp').href =
+        `https://wa.me/55${ad.whatsapp.replace(/\D/g,'')}?text=Olá! Tenho interesse na figurinha ${ad.jogador} #${ad.numero}`;
 
-    btn.innerHTML =
-        "PUBLICAR FIGURINHAS";
+    document.getElementById('btnCompartilhar')
+    .addEventListener('click', ()=>{
 
-    btn.disabled = false;
+        navigator.share({
 
-};
+            title: ad.jogador,
+
+            text:
+                `Confira esta figurinha no FigurinhasCup`,
+
+            url: window.location.href
+
+        });
+
+    });
+
+    carregarRelacionados(ad.selecao);
+
+    document
+        .getElementById('loaderArea')
+        .style.display = 'none';
+
+    document
+        .getElementById('content')
+        .classList.remove('hidden');
+
+}
+
+async function carregarRelacionados(selecao){
+
+    const snap =
+        await getDocs(
+            collection(db, "anuncios")
+        );
+
+    const relacionados =
+        snap.docs
+        .map(doc=>({
+            id: doc.id,
+            ...doc.data()
+        }))
+        .filter(a=>
+            a.selecao === selecao &&
+            a.id !== id
+        )
+        .slice(0,4);
+
+    const area =
+        document.getElementById('relacionados');
+
+    area.innerHTML = "";
+
+    relacionados.forEach(ad=>{
+
+        area.innerHTML += `
+
+        <div class="bg-white rounded-[2rem] p-4 border border-gray-100 card-hover">
+
+            <img
+                src="${ad.foto}"
+                class="w-full h-48 object-cover rounded-2xl"
+            >
+
+            <div class="mt-4">
+
+                <h3 class="text-xl font-black">
+
+                    ${ad.jogador}
+
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-1">
+
+                    #${ad.numero}
+
+                </p>
+
+                <div class="flex items-center justify-between mt-5">
+
+                    <span class="font-black text-xl">
+
+                        R$ ${parseFloat(ad.preco).toFixed(2)}
+
+                    </span>
+
+                    <a
+                        href="anuncio.html?id=${ad.id}"
+                        class="bg-black text-white px-4 py-2 rounded-full text-sm font-black"
+                    >
+                        Ver
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+carregarAnuncio();
 
 </script>
 
