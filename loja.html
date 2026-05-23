@@ -212,6 +212,81 @@ body{
 
                     </div>
 
+                    <!-- ENTREGA -->
+
+                    <div class="mb-6">
+
+                        <div class="text-sm font-black uppercase mb-3">
+                            Forma entrega
+                        </div>
+
+                        <select
+                        id="formaEntrega"
+                        onchange="atualizarTotal()"
+                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
+                        >
+                            <option value="Entrega">
+                                🚚 Entrega Motoboy (+ R$ 8,00)
+                            </option>
+
+                            <option value="Retirada">
+                                🏪 Retirada no local
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- LOCAL RETIRADA -->
+
+                    <div
+                    id="retiradaBox"
+                    class="bg-green-50 border border-green-200 rounded-3xl p-5 mb-6 hidden"
+                    >
+
+                        <div class="text-sm font-black uppercase text-green-700 mb-2">
+                            Local retirada
+                        </div>
+
+                        <div class="text-lg font-black">
+                            RePhone
+                        </div>
+
+                        <div class="text-sm text-gray-600 mt-1">
+                            Bairro Jequitibá - Aracruz
+                        </div>
+
+                    </div>
+
+                    <!-- TAXA ENTREGA -->
+
+                    <div
+                    id="taxaEntregaBox"
+                    class="bg-yellow-50 border border-yellow-200 rounded-3xl p-5 mb-6"
+                    >
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <div class="text-sm font-black uppercase text-yellow-700">
+                                    Taxa motoboy
+                                </div>
+
+                                <div class="text-sm text-gray-600">
+                                    Entrega rápida em Aracruz
+                                </div>
+
+                            </div>
+
+                            <div class="text-2xl font-black">
+                                + R$ 8,00
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     <!-- TOTAL -->
 
                     <div class="bg-black rounded-[2rem] p-6 text-white mb-6">
@@ -224,7 +299,7 @@ body{
                         id="valorTotal"
                         class="text-5xl md:text-6xl font-black"
                         >
-                            R$ 8,00
+                            R$ 16,00
                         </div>
 
                     </div>
@@ -256,35 +331,11 @@ body{
 
                     </div>
 
-                    <!-- ENTREGA -->
+                    <!-- BOTÃO -->
 
-                    <div class="mb-6">
+                    <div class="grid grid-cols-1 gap-4">
 
-                        <div class="text-sm font-black uppercase mb-3">
-                            Forma entrega
-                        </div>
-
-                        <select
-                        id="formaEntrega"
-                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
-                        >
-                            <option value="Entrega">
-                                Entrega
-                            </option>
-
-                            <option value="Retirada">
-                                Retirada local
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <!-- BOTÕES -->
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                      <button
+                        <button
                         onclick="pedidoWhatsapp()"
                         class="bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
                         >
@@ -359,26 +410,76 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-// ========================================
 // CONFIG
-// ========================================
 
 let qtdEnvelope = 1;
 
 const precoEnvelope = 8;
 
 
-// ========================================
-// TOTAL
-// ========================================
+// TOTAL FINAL
 
-function atualizarTotal(){
+function totalFinal(){
+
+    const entrega =
+        document.getElementById('formaEntrega').value;
+
+    let taxaEntrega = 0;
+
+    if(entrega === 'Entrega'){
+
+        taxaEntrega = 8;
+
+    }
+
+    return (
+        qtdEnvelope * precoEnvelope
+    ) + taxaEntrega;
+
+}
+
+
+// TOTAL
+
+window.atualizarTotal = ()=>{
 
     document.getElementById('qtdEnvelope')
     .innerHTML = qtdEnvelope;
 
+    const entrega =
+        document.getElementById('formaEntrega').value;
+
+    let taxaEntrega = 0;
+
+    if(entrega === 'Entrega'){
+
+        taxaEntrega = 8;
+
+        document
+        .getElementById('taxaEntregaBox')
+        .classList.remove('hidden');
+
+        document
+        .getElementById('retiradaBox')
+        .classList.add('hidden');
+
+    }
+
+    else{
+
+        document
+        .getElementById('taxaEntregaBox')
+        .classList.add('hidden');
+
+        document
+        .getElementById('retiradaBox')
+        .classList.remove('hidden');
+
+    }
+
     const total =
-        qtdEnvelope * precoEnvelope;
+        (qtdEnvelope * precoEnvelope)
+        + taxaEntrega;
 
     document.getElementById('valorTotal')
     .innerHTML =
@@ -388,14 +489,12 @@ function atualizarTotal(){
     })}
     `;
 
-}
+};
 
 atualizarTotal();
 
 
-// ========================================
 // QUANTIDADE
-// ========================================
 
 window.alterarQtd = (valor)=>{
 
@@ -412,9 +511,7 @@ window.alterarQtd = (valor)=>{
 };
 
 
-// ========================================
 // FIREBASE
-// ========================================
 
 window.salvarPedido = async()=>{
 
@@ -456,7 +553,7 @@ window.salvarPedido = async()=>{
                     qtdEnvelope,
 
                 valorTotal:
-                    qtdEnvelope * precoEnvelope,
+                    totalFinal(),
 
                 status:
                     'novo',
@@ -468,14 +565,6 @@ window.salvarPedido = async()=>{
         );
 
         alert('Pedido enviado com sucesso.');
-
-        document.getElementById('pedidoNome').value = '';
-        document.getElementById('pedidoWhatsapp').value = '';
-        document.getElementById('pedidoCidade').value = '';
-
-        qtdEnvelope = 1;
-
-        atualizarTotal();
 
     }
 
@@ -490,9 +579,7 @@ window.salvarPedido = async()=>{
 };
 
 
-// ========================================
 // WHATSAPP
-// ========================================
 
 window.pedidoWhatsapp = ()=>{
 
@@ -506,7 +593,7 @@ window.pedidoWhatsapp = ()=>{
         document.getElementById('formaEntrega').value;
 
     const total =
-        qtdEnvelope * precoEnvelope;
+        totalFinal();
 
     const msg =
 `Olá, quero comprar ${qtdEnvelope} envelopes oficiais.
@@ -515,7 +602,11 @@ Nome: ${nome}
 
 Cidade: ${cidade}
 
-Entrega: ${entrega}
+Forma entrega: ${entrega}
+
+${entrega === 'Retirada'
+? 'Local retirada: RePhone - Bairro Jequitibá - Aracruz'
+: 'Entrega motoboy: R$ 8,00'}
 
 Valor total: R$ ${total.toFixed(2)}`;
 
