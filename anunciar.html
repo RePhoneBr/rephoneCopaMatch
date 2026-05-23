@@ -6,7 +6,7 @@
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+content="width=device-width, initial-scale=1.0"
 />
 
 <title>Anunciar Figurinha | FigurinhasCup</title>
@@ -20,8 +20,17 @@ rel="stylesheet"
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
+html{
+    font-size:clamp(14px,1vw,16px);
+}
+
 body{
-    font-family:'Inter', sans-serif;
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
 }
 
 .glass{
@@ -52,14 +61,14 @@ body{
 
         <a
         href="index.html"
-        class="text-3xl font-black italic text-green-600"
+        class="text-2xl md:text-3xl font-black italic text-green-600"
         >
             FigurinhasCup
         </a>
 
         <a
         href="dashboard.html"
-        class="bg-black text-white px-5 py-2 rounded-full text-sm font-black"
+        class="bg-black text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-black"
         >
             Dashboard
         </a>
@@ -70,19 +79,19 @@ body{
 
 <!-- HERO -->
 
-<section class="max-w-4xl mx-auto px-4 py-10">
+<section class="max-w-4xl mx-auto px-4 py-8 md:py-10">
 
     <div class="mb-8">
 
-        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase">
+        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
             Publicação inteligente
         </span>
 
-        <h1 class="text-5xl font-black mt-5 leading-tight">
+        <h1 class="text-3xl md:text-5xl font-black mt-5 leading-tight">
             Anuncie suas figurinhas com segurança.
         </h1>
 
-        <p class="text-gray-500 text-lg mt-4">
+        <p class="text-gray-500 text-sm md:text-lg mt-4 leading-relaxed">
             Tire fotos pelo celular, envie packs completos e publique anúncios verificados automaticamente.
         </p>
 
@@ -98,20 +107,20 @@ body{
             ⚠️ Localização não ativada
         </div>
 
-        <p class="text-sm">
+        <p class="text-sm leading-relaxed">
             Ative sua localização para ganhar selo verificado e aumentar a segurança das negociações.
         </p>
     </div>
 
     <!-- FORM -->
 
-    <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border border-gray-100">
+    <div class="bg-white rounded-[2rem] p-5 md:p-8 shadow-xl border border-gray-100">
 
         <!-- TIPO -->
 
         <div class="mb-8">
 
-            <label class="block text-sm font-black mb-3 uppercase">
+            <label class="block text-xs md:text-sm font-black mb-3 uppercase">
                 Tipo anúncio
             </label>
 
@@ -120,7 +129,7 @@ body{
                 <button
                 id="btnIndividual"
                 type="button"
-                class="tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
+                class="tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
                 >
                     🎴 Figurinha
                 </button>
@@ -128,7 +137,7 @@ body{
                 <button
                 id="btnPack"
                 type="button"
-                class="tipoBtn bg-gray-100 p-5 rounded-3xl font-black"
+                class="tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base"
                 >
                     📦 Pack
                 </button>
@@ -141,23 +150,23 @@ body{
 
         <div class="mb-8">
 
-            <label class="block text-sm font-black mb-3 uppercase">
+            <label class="block text-xs md:text-sm font-black mb-3 uppercase">
                 Fotos das figurinhas
             </label>
 
             <label
-            class="border-2 border-dashed border-gray-300 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition"
+            class="border-2 border-dashed border-gray-300 rounded-[2rem] p-6 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition"
             >
 
-                <div class="text-6xl mb-4">
+                <div class="text-5xl md:text-6xl mb-4">
                     📸
                 </div>
 
-                <div class="text-2xl font-black">
+                <div class="text-xl md:text-2xl font-black">
                     Tirar foto ou importar
                 </div>
 
-                <p class="text-gray-500 mt-2 text-sm">
+                <p class="text-gray-500 mt-2 text-xs md:text-sm leading-relaxed">
                     Câmera do celular ou galeria • múltiplas imagens
                 </p>
 
@@ -183,13 +192,13 @@ body{
 
             <div class="flex items-center justify-between mb-3">
 
-                <span class="font-black uppercase text-sm">
+                <span class="font-black uppercase text-xs md:text-sm">
                     Pré-visualização
                 </span>
 
                 <span
                 id="qtdFotos"
-                class="text-sm font-bold text-gray-500"
+                class="text-xs md:text-sm font-bold text-gray-500"
                 >
                     0 fotos
                 </span>
@@ -209,7 +218,7 @@ body{
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Número
                 </label>
 
@@ -217,14 +226,14 @@ body{
                 id="numero"
                 type="text"
                 placeholder="Ex: 127"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
 
             </div>
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Jogador / título
                 </label>
 
@@ -232,7 +241,7 @@ body{
                 id="jogador"
                 type="text"
                 placeholder="Ex: Neymar Jr"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
 
             </div>
@@ -243,7 +252,7 @@ body{
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Seleção
                 </label>
 
@@ -251,14 +260,14 @@ body{
                 id="selecao"
                 type="text"
                 placeholder="Ex: Brasil"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
 
             </div>
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Cidade
                 </label>
 
@@ -266,7 +275,7 @@ body{
                 id="cidade"
                 type="text"
                 placeholder="Ex: Aracruz"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
 
             </div>
@@ -277,13 +286,13 @@ body{
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Tipo negociação
                 </label>
 
                 <select
                 id="tipo"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
                     <option value="Venda">Venda</option>
                     <option value="Troca">Troca</option>
@@ -294,7 +303,7 @@ body{
 
             <div>
 
-                <label class="block text-sm font-black mb-2 uppercase">
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Valor
                 </label>
 
@@ -302,7 +311,7 @@ body{
                 id="preco"
                 type="number"
                 placeholder="Ex: 5"
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
 
             </div>
@@ -313,7 +322,7 @@ body{
 
         <div class="mb-8">
 
-            <label class="block text-sm font-black mb-2 uppercase">
+            <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                 WhatsApp
             </label>
 
@@ -321,14 +330,14 @@ body{
             id="whatsapp"
             type="text"
             placeholder="27999999999"
-            class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+            class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
             >
 
         </div>
 
         <!-- STATUS -->
 
-        <div class="bg-black rounded-[2rem] p-6 text-white mb-8">
+        <div class="bg-black rounded-[2rem] p-5 md:p-6 text-white mb-8">
 
             <div class="flex items-center gap-3 mb-3">
 
@@ -337,7 +346,7 @@ body{
                 class="w-4 h-4 rounded-full bg-gray-500"
                 ></div>
 
-                <span class="font-black uppercase text-sm">
+                <span class="font-black uppercase text-xs md:text-sm">
                     Segurança localização
                 </span>
 
@@ -345,7 +354,7 @@ body{
 
             <div
             id="gpsStatus"
-            class="text-sm text-gray-300"
+            class="text-xs md:text-sm text-gray-300 leading-relaxed"
             >
                 Verificando localização...
             </div>
@@ -357,7 +366,7 @@ body{
         <button
         id="publicarBtn"
         onclick="publicar()"
-        class="w-full bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] text-xl font-black"
+        class="w-full bg-green-600 hover:bg-green-700 transition text-white p-4 md:p-5 rounded-[2rem] text-lg md:text-xl font-black"
         >
             PUBLICAR FIGURINHAS
         </button>
@@ -372,92 +381,42 @@ import { auth, db, storage } from './firebase.js';
 
 import {
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import {
     collection,
     addDoc,
-    serverTimestamp,
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import {
     ref,
     uploadBytes,
     getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+}
+from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
+const fotosInput = document.getElementById('fotos');
+const preview = document.getElementById('preview');
+const previewContainer = document.getElementById('previewContainer');
+const qtdFotos = document.getElementById('qtdFotos');
 
-// ======================================
-// ELEMENTOS
-// ======================================
-
-const fotosInput =
-    document.getElementById('fotos');
-
-const preview =
-    document.getElementById('preview');
-
-const previewContainer =
-    document.getElementById('previewContainer');
-
-const qtdFotos =
-    document.getElementById('qtdFotos');
-
-const gpsStatus =
-    document.getElementById('gpsStatus');
-
-const gpsDot =
-    document.getElementById('gpsDot');
-
-const gpsAlert =
-    document.getElementById('gpsAlert');
-
-const btn =
-    document.getElementById('publicarBtn');
-
-
-// ======================================
-// VARIÁVEIS
-// ======================================
-
-let tipoAnuncio =
-    "individual";
-
+let tipoAnuncio = "individual";
 let fotosSelecionadas = [];
 
-let uLat = null;
-let uLng = null;
-
-let localizacaoAtiva = false;
-
-let alertaLocalizacao = false;
-
-
-// ======================================
-// AUTH
-// ======================================
-
-onAuthStateChanged(auth, (user)=>{
+onAuthStateChanged(auth,(user)=>{
 
     if(!user){
 
-        window.location.href =
-            "login.html";
+        window.location.href = "login.html";
 
     }
 
 });
 
-
-// ======================================
-// TIPO
-// ======================================
-
-document
-.getElementById('btnIndividual')
-.onclick = ()=>{
+document.getElementById('btnIndividual').onclick = ()=>{
 
     tipoAnuncio = "individual";
 
@@ -465,9 +424,7 @@ document
 
 };
 
-document
-.getElementById('btnPack')
-.onclick = ()=>{
+document.getElementById('btnPack').onclick = ()=>{
 
     tipoAnuncio = "pack";
 
@@ -477,57 +434,44 @@ document
 
 function ativarTipo(){
 
-    document
-    .getElementById('btnIndividual')
-    .className =
+    document.getElementById('btnIndividual').className =
     tipoAnuncio === "individual"
     ?
-    "tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
+    "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
     :
-    "tipoBtn bg-gray-100 p-5 rounded-3xl font-black";
+    "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
 
-    document
-    .getElementById('btnPack')
-    .className =
+    document.getElementById('btnPack').className =
     tipoAnuncio === "pack"
     ?
-    "tipoBtn bg-green-600 text-white p-5 rounded-3xl font-black"
+    "tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
     :
-    "tipoBtn bg-gray-100 p-5 rounded-3xl font-black";
+    "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
 
 }
 
+fotosInput.addEventListener('change',()=>{
 
-// ======================================
-// PREVIEW
-// ======================================
-
-fotosInput.addEventListener('change', ()=>{
-
-    fotosSelecionadas =
-        [...fotosInput.files];
+    fotosSelecionadas = [...fotosInput.files];
 
     preview.innerHTML = "";
 
     previewContainer.classList.remove('hidden');
 
     qtdFotos.innerHTML =
-        fotosSelecionadas.length + " fotos";
+    fotosSelecionadas.length + " fotos";
 
     fotosSelecionadas.forEach(file=>{
 
-        const reader =
-            new FileReader();
+        const reader = new FileReader();
 
         reader.onload = (e)=>{
 
             preview.innerHTML += `
-
             <img
             src="${e.target.result}"
-            class="w-32 h-32 object-cover rounded-3xl border border-gray-200"
+            class="w-28 h-28 md:w-32 md:h-32 object-cover rounded-3xl border border-gray-200 flex-shrink-0"
             >
-
             `;
 
         };
@@ -538,155 +482,11 @@ fotosInput.addEventListener('change', ()=>{
 
 });
 
-
-// ======================================
-// DISTÂNCIA
-// ======================================
-
-function calcularDistancia(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-){
-
-    const R = 6371;
-
-    const dLat =
-        (lat2 - lat1)
-        * Math.PI / 180;
-
-    const dLon =
-        (lon2 - lon1)
-        * Math.PI / 180;
-
-    const a =
-        Math.sin(dLat/2)
-        *
-        Math.sin(dLat/2)
-        +
-        Math.cos(lat1 * Math.PI / 180)
-        *
-        Math.cos(lat2 * Math.PI / 180)
-        *
-        Math.sin(dLon/2)
-        *
-        Math.sin(dLon/2);
-
-    return R
-        *
-        2
-        *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1-a)
-        );
-
-}
-
-
-// ======================================
-// GEOLOCALIZAÇÃO
-// ======================================
-
-navigator.geolocation.getCurrentPosition(
-
-    async(pos)=>{
-
-        uLat =
-            pos.coords.latitude;
-
-        uLng =
-            pos.coords.longitude;
-
-        localizacaoAtiva = true;
-
-        gpsDot.className =
-            "w-4 h-4 rounded-full bg-green-500 animate-pulse";
-
-        gpsStatus.innerHTML =
-            "Localização verificada com sucesso.";
-
-        // ============================
-        // VERIFICA CADASTRO
-        // ============================
-
-        const user =
-            auth.currentUser;
-
-        if(user){
-
-            const userRef =
-                doc(
-                    db,
-                    "usuarios",
-                    user.uid
-                );
-
-            const userSnap =
-                await getDoc(userRef);
-
-            if(userSnap.exists()){
-
-                const data =
-                    userSnap.data();
-
-                if(
-                    data.lat &&
-                    data.lng
-                ){
-
-                    const dist =
-                        calcularDistancia(
-                            uLat,
-                            uLng,
-                            data.lat,
-                            data.lng
-                        );
-
-                    if(dist > 1){
-
-                        alertaLocalizacao = true;
-
-                        gpsStatus.innerHTML =
-                        `
-                        ⚠️ Localização atual diferente da cadastrada (${dist.toFixed(1)}km).
-                        `;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    },
-
-    ()=>{
-
-        localizacaoAtiva = false;
-
-        gpsDot.className =
-            "w-4 h-4 rounded-full bg-yellow-500";
-
-        gpsStatus.innerHTML =
-            "Localização desativada.";
-
-        gpsAlert.classList.remove('hidden');
-
-    }
-
-);
-
-
-// ======================================
-// PUBLICAR
-// ======================================
-
 window.publicar = async()=>{
 
-    if(!auth.currentUser){
+    const user = auth.currentUser;
+
+    if(!user){
 
         alert("Faça login.");
 
@@ -694,31 +494,26 @@ window.publicar = async()=>{
 
     }
 
-    btn.innerHTML =
-        "PUBLICANDO...";
+    const btn =
+        document.getElementById('publicarBtn');
 
     btn.disabled = true;
 
-    try{
+    btn.innerHTML = "PUBLICANDO...";
 
-        // ======================================
-        // UPLOAD
-        // ======================================
+    try{
 
         let fotosURLs = [];
 
         for(const file of fotosSelecionadas){
 
             const storageRef =
-                ref(
-                    storage,
-                    `figurinhas/${Date.now()}-${file.name}`
-                );
-
-            await uploadBytes(
-                storageRef,
-                file
+            ref(
+                storage,
+                `figurinhas/${Date.now()}-${file.name}`
             );
+
+            await uploadBytes(storageRef,file);
 
             const url =
                 await getDownloadURL(storageRef);
@@ -727,98 +522,51 @@ window.publicar = async()=>{
 
         }
 
-        // ======================================
-        // DADOS
-        // ======================================
+        await addDoc(collection(db,"anuncios"),{
 
-        const numero =
-            document.getElementById('numero').value;
+            uid:user.uid,
 
-        const jogador =
-            tipoAnuncio === 'pack'
-            ?
-            'Pack Figurinhas'
-            :
-            document.getElementById('jogador').value;
+            numero:
+                document.getElementById('numero').value,
 
-        const selecao =
-            document.getElementById('selecao').value;
+            jogador:
+                tipoAnuncio === "pack"
+                ?
+                "Pack Figurinhas"
+                :
+                document.getElementById('jogador').value,
 
-        const cidade =
-            document.getElementById('cidade').value;
+            selecao:
+                document.getElementById('selecao').value,
 
-        const tipo =
-            document.getElementById('tipo').value;
+            cidade:
+                document.getElementById('cidade').value,
 
-        const preco =
-            document.getElementById('preco').value;
+            tipo:
+                document.getElementById('tipo').value,
 
-        const whatsapp =
-            document.getElementById('whatsapp').value;
+            preco:
+                document.getElementById('preco').value,
 
-        // ======================================
-        // FIRESTORE
-        // ======================================
+            whatsapp:
+                document.getElementById('whatsapp').value,
 
-        await addDoc(
-            collection(db, "anuncios"),
-            {
+            tipoAnuncio,
 
-                uid:
-                    auth.currentUser.uid,
+            fotos:fotosURLs,
 
-                numero,
+            foto:fotosURLs[0] || "",
 
-                jogador,
+            verificado:true,
 
-                selecao,
+            status:"aprovado",
 
-                cidade,
+            criadoEm:
+                serverTimestamp()
 
-                tipo,
+        });
 
-                preco,
-
-                whatsapp,
-
-                tipoAnuncio,
-
-                fotos:
-                    fotosURLs,
-
-                foto:
-                    fotosURLs[0] || "",
-
-                lat:
-                    uLat || null,
-
-                lng:
-                    uLng || null,
-
-                verificado:
-                    localizacaoAtiva,
-
-                alertaLocalizacao,
-
-                destaque:
-                    false,
-
-                status:
-                    "aprovado",
-
-                criadoEm:
-                    serverTimestamp()
-
-            }
-        );
-
-        alert(
-            localizacaoAtiva
-            ?
-            "Figurinhas publicadas com selo verificado."
-            :
-            "Figurinhas publicadas sem verificação."
-        );
+        alert("Figurinha publicada com sucesso.");
 
         window.location.href =
             "dashboard.html";
@@ -833,10 +581,10 @@ window.publicar = async()=>{
 
     }
 
+    btn.disabled = false;
+
     btn.innerHTML =
         "PUBLICAR FIGURINHAS";
-
-    btn.disabled = false;
 
 };
 
