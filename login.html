@@ -380,17 +380,69 @@ form.addEventListener('submit', async(e)=>{
 // RECUPERAR SENHA
 // ========================================
 
-document
-.getElementById('btnRecuperar')
-.addEventListener('click', async()=>{
+const btnRecuperar =
+    document.getElementById('btnRecuperar');
+
+let tempoRecuperacao = 60;
+let intervaloRecuperacao = null;
+
+function bloquearRecuperacao(){
+
+    btnRecuperar.disabled = true;
+
+    btnRecuperar.classList.add(
+        'opacity-50',
+        'cursor-not-allowed'
+    );
+
+    tempoRecuperacao = 60;
+
+    btnRecuperar.innerHTML =
+        `Aguarde ${tempoRecuperacao}s`;
+
+    intervaloRecuperacao =
+        setInterval(()=>{
+
+            tempoRecuperacao--;
+
+            btnRecuperar.innerHTML =
+                `Aguarde ${tempoRecuperacao}s`;
+
+            if(tempoRecuperacao <= 0){
+
+                clearInterval(intervaloRecuperacao);
+
+                intervaloRecuperacao = null;
+
+                btnRecuperar.disabled = false;
+
+                btnRecuperar.classList.remove(
+                    'opacity-50',
+                    'cursor-not-allowed'
+                );
+
+                btnRecuperar.innerHTML =
+                    "Esqueci minha senha";
+
+            }
+
+        },1000);
+
+}
+
+btnRecuperar.addEventListener('click', async()=>{
+
+    if(btnRecuperar.disabled){
+        return;
+    }
 
     const email =
-        document.getElementById('email').value;
+        document.getElementById('email').value.trim();
 
     if(!email){
 
         mostrarMensagem(
-            "Digite seu email para recuperar a senha."
+            "Digite seu email cadastrado para recuperar a senha."
         );
 
         return;
@@ -405,9 +457,11 @@ document
         );
 
         mostrarMensagem(
-            "Link de recuperação enviado para seu email.",
+            "Enviamos um link para o email cadastrado. Acesse sua caixa de entrada e crie uma nova senha pelo link enviado.",
             "sucesso"
         );
+
+        bloquearRecuperacao();
 
     }
 
@@ -430,7 +484,7 @@ document
         }else{
 
             mostrarMensagem(
-                "Erro ao enviar recuperação."
+                "Erro ao enviar recuperação. Tente novamente."
             );
 
         }
