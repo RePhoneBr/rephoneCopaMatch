@@ -53,49 +53,42 @@ body{
     animation:spin 1s linear infinite;
 }
 
-.security-ticker{
+.security-alert{
     background:#dc2626;
     color:white;
-    overflow:hidden;
-    white-space:nowrap;
     border-bottom:2px solid #991b1b;
+    overflow:hidden;
 }
 
-.security-ticker-track{
-    display:inline-block;
-    padding:0.75rem 0;
+.security-alert-message{
+    display:none;
+    min-height:3.1rem;
+    padding:0.8rem 1rem;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     font-size:0.78rem;
     font-weight:900;
+    line-height:1.35;
     text-transform:uppercase;
-    animation:ticker 28s linear infinite;
 }
 
-.security-ticker span{
-    margin-right:3rem;
-}
-
-@keyframes spin{
-    100%{
-        transform:rotate(360deg);
-    }
-}
-
-@keyframes ticker{
-    0%{
-        transform:translateX(100%);
-    }
-
-    100%{
-        transform:translateX(-100%);
-    }
+.security-alert-message.active{
+    display:flex;
 }
 
 @media (min-width:768px){
-    .security-ticker-track{
+    .security-alert-message{
+        min-height:3rem;
         font-size:0.9rem;
     }
 }
 
+    @keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
 </style>
 
 </head>
@@ -151,14 +144,29 @@ body{
 
 </header>
 
-<div class="security-ticker">
-    <div class="security-ticker-track">
-        <span>ALERTA DE SEGURANÇA: negocie em locais públicos e movimentados.</span>
-        <span>Nunca envie dinheiro adiantado sem confirmar o produto e o vendedor.</span>
-        <span>Desconfie de preços muito abaixo do normal.</span>
-        <span>Em caso de emergência policial, ligue 190.</span>
-        <span>Para denúncias, ligue 181 ou procure a delegacia mais próxima.</span>
-        <span>Preserve conversas, comprovantes e dados do anúncio em caso de golpe.</span>
+<div class="security-alert">
+    <div class="security-alert-message active">
+        ALERTA DE SEGURANÇA: negocie em locais públicos e movimentados.
+    </div>
+
+    <div class="security-alert-message">
+        Nunca envie dinheiro adiantado sem confirmar o produto e o vendedor.
+    </div>
+
+    <div class="security-alert-message">
+        Desconfie de preços muito abaixo do normal.
+    </div>
+
+    <div class="security-alert-message">
+        Em caso de emergência policial, ligue 190.
+    </div>
+
+    <div class="security-alert-message">
+        Para denúncias, ligue 181 ou procure a delegacia mais próxima.
+    </div>
+
+    <div class="security-alert-message">
+        Preserve conversas, comprovantes e dados do anúncio em caso de golpe.
     </div>
 </div>
 
@@ -185,7 +193,7 @@ body{
             <input
                 type="text"
                 id="searchInput"
-                placeholder="Buscar jogador, seleção ou número..."
+                placeholder="Buscar figurinha, seleção, cidade ou tipo..."
                 class="md:col-span-3 p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
             >
 
@@ -593,7 +601,7 @@ function renderizar(){
                 </h2>
 
                 <p class="text-gray-500 text-xs md:text-sm mt-1 break-words">
-                    ${ad.selecao || 'Coleção'} • #${ad.numero || '000'}
+                    ${ad.selecao || 'Coleção'}${ad.numero ? ' • #' + ad.numero : ''}
                 </p>
 
                 <div class="mt-4 text-xs md:text-sm text-green-700 font-bold break-words">
@@ -797,7 +805,31 @@ document
             "anunciar.html";
 
     });
+    
+const securityMessages =
+    document.querySelectorAll('.security-alert-message');
 
+let securityMessageIndex = 0;
+
+setInterval(()=>{
+
+    if(securityMessages.length === 0){
+        return;
+    }
+
+    securityMessages[securityMessageIndex]
+        .classList
+        .remove('active');
+
+    securityMessageIndex =
+        (securityMessageIndex + 1) % securityMessages.length;
+
+    securityMessages[securityMessageIndex]
+        .classList
+        .add('active');
+
+},6000);
+    
 reconhecerLocalizacao();
 
 </script>
