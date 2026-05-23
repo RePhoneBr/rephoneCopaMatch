@@ -196,26 +196,33 @@ body{
         <div class="grid md:grid-cols-2 gap-5 mb-5">
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
-                    Número
+                    Categoria da figurinha
                 </label>
 
-                <input
-                id="numero"
-                type="text"
-                placeholder="Ex: 127"
+                <select
+                id="categoriaFigurinha"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
+                    <option value="Jogadores">Jogadores</option>
+                    <option value="Símbolos Oficiais">Símbolos Oficiais</option>
+                    <option value="Escudos e Emblemas">Escudos e Emblemas</option>
+
+                    <optgroup label="Parcerias Especiais">
+                        <option value="Figurinhas da Coca-Cola">Figurinhas da Coca-Cola</option>
+                        <option value="Figurinhas da McDonald's">Figurinhas da McDonald's</option>
+                    </optgroup>
+                </select>
             </div>
 
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
-                    Jogador / título
+                    Nome / título da figurinha
                 </label>
 
                 <input
                 id="jogador"
                 type="text"
-                placeholder="Ex: Neymar Jr"
+                placeholder="Ex: Neymar Jr, Escudo Brasil, Coca-Cola"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
             </div>
@@ -224,17 +231,37 @@ body{
         <div class="grid md:grid-cols-2 gap-5 mb-5">
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
-                    Seleção
+                    Tipo de figurinha
+                </label>
+
+                <select
+                id="raridade"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
+                >
+                    <option value="Comum">Comum</option>
+                    <option value="Lilás/Roxa">Lilás/Roxa - comum entre as raras</option>
+                    <option value="Bronze">Bronze - raridade intermediária</option>
+                    <option value="Prata">Prata - muito difícil de encontrar</option>
+                    <option value="Ouro">Ouro - versão máxima de raridade</option>
+                    <option value="Legend">Legend</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
+                    Seleção / coleção
                 </label>
 
                 <input
                 id="selecao"
                 type="text"
-                placeholder="Ex: Brasil"
+                placeholder="Ex: Brasil, Copa, Coca-Cola"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
             </div>
+        </div>
 
+        <div class="grid md:grid-cols-2 gap-5 mb-5">
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Cidade
@@ -247,9 +274,7 @@ body{
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
             </div>
-        </div>
 
-        <div class="grid md:grid-cols-2 gap-5 mb-5">
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Tipo negociação
@@ -264,7 +289,9 @@ body{
                     <option value="Venda ou troca">Venda ou troca</option>
                 </select>
             </div>
+        </div>
 
+        <div class="grid md:grid-cols-2 gap-5 mb-8">
             <div>
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Valor
@@ -277,19 +304,19 @@ body{
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
             </div>
-        </div>
 
-        <div class="mb-8">
-            <label class="block text-xs md:text-sm font-black mb-2 uppercase">
-                WhatsApp
-            </label>
+            <div>
+                <label class="block text-xs md:text-sm font-black mb-2 uppercase">
+                    WhatsApp
+                </label>
 
-            <input
-            id="whatsapp"
-            type="text"
-            placeholder="27999999999"
-            class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
-            >
+                <input
+                id="whatsapp"
+                type="text"
+                placeholder="27999999999"
+                class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
+                >
+            </div>
         </div>
 
         <div class="bg-black rounded-[2rem] p-5 md:p-6 text-white mb-8">
@@ -310,6 +337,57 @@ body{
             >
                 Verificando localização...
             </div>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-[2rem] p-5 mb-5">
+            <h3 class="font-black text-blue-800 text-base md:text-lg mb-3">
+                Aviso de privacidade e proteção de dados
+            </h3>
+
+            <p class="text-sm text-blue-800 leading-relaxed mb-4">
+                Ao publicar um anúncio, você autoriza o tratamento dos dados informados para exibição,
+                funcionamento, segurança e gerenciamento do marketplace FigurinhasCup, conforme a Lei Geral
+                de Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018). Os dados do anúncio podem incluir
+                fotos, categoria, título, coleção, cidade, WhatsApp, localização aproximada ou verificada,
+                data de publicação, status do anúncio e registros de interesse de compra.
+            </p>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input
+                id="aceiteLGPD"
+                type="checkbox"
+                class="mt-1 w-5 h-5 accent-green-600 shrink-0"
+                >
+
+                <span class="text-sm font-bold text-gray-700 leading-relaxed">
+                    Li e estou ciente do tratamento dos dados do anúncio conforme a LGPD.
+                </span>
+            </label>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-[2rem] p-5 mb-8">
+            <h3 class="font-black text-red-700 text-base md:text-lg mb-3">
+                Advertência e responsabilidade do anúncio
+            </h3>
+
+            <p class="text-sm text-red-700 leading-relaxed mb-4">
+                Você declara que é responsável pelas imagens, informações, preço, contato e negociação deste
+                anúncio. Também confirma que possui autorização para divulgar as imagens enviadas e entende
+                que todos os dados referentes ao anúncio ficarão armazenados no sistema enquanto forem necessários
+                para manter o serviço, prevenir fraudes, resolver disputas e proteger os usuários da plataforma.
+            </p>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input
+                id="aceiteResponsabilidade"
+                type="checkbox"
+                class="mt-1 w-5 h-5 accent-green-600 shrink-0"
+                >
+
+                <span class="text-sm font-bold text-gray-700 leading-relaxed">
+                    Li e aceito a responsabilidade pelo conteúdo publicado e pelo armazenamento dos dados deste anúncio.
+                </span>
+            </label>
         </div>
 
         <button
@@ -349,6 +427,8 @@ const gpsStatus = document.getElementById('gpsStatus');
 const gpsDot = document.getElementById('gpsDot');
 const gpsAlert = document.getElementById('gpsAlert');
 const publicarBtn = document.getElementById('publicarBtn');
+const aceiteLGPD = document.getElementById('aceiteLGPD');
+const aceiteResponsabilidade = document.getElementById('aceiteResponsabilidade');
 
 let tipoAnuncio = "individual";
 let fotosSelecionadas = [];
@@ -534,6 +614,19 @@ preview.addEventListener('click', (event) => {
     renderizarPreview();
 });
 
+function obterDescricaoRaridade(raridade) {
+    const descricoes = {
+        "Comum": "Figurinha comum",
+        "Lilás/Roxa": "A versão mais comum entre as raras",
+        "Bronze": "Variante de raridade intermediária",
+        "Prata": "Muito difícil de encontrar",
+        "Ouro": "A versão máxima de raridade",
+        "Legend": "Legend"
+    };
+
+    return descricoes[raridade] || "";
+}
+
 async function reduzirImagem(file) {
     if (file.size <= 1200000) {
         return file;
@@ -658,21 +751,32 @@ window.publicar = async () => {
         return;
     }
 
-    const numero = document.getElementById('numero').value.trim();
+    const categoriaFigurinha = document.getElementById('categoriaFigurinha').value;
     const jogador = document.getElementById('jogador').value.trim();
+    const raridade = document.getElementById('raridade').value;
     const selecao = document.getElementById('selecao').value.trim();
     const cidade = document.getElementById('cidade').value.trim();
     const tipo = document.getElementById('tipo').value;
     const preco = document.getElementById('preco').value.trim();
     const whatsapp = document.getElementById('whatsapp').value.trim();
 
-    if (tipoAnuncio === "individual" && (!numero || !jogador)) {
-        alert("Informe o número e o jogador da figurinha.");
+    if (tipoAnuncio === "individual" && !jogador) {
+        alert("Informe o nome ou título da figurinha.");
         return;
     }
 
     if (!selecao || !cidade || !preco || !whatsapp) {
-        alert("Preencha seleção, cidade, valor e WhatsApp.");
+        alert("Preencha seleção/coleção, cidade, valor e WhatsApp.");
+        return;
+    }
+
+    if (!aceiteLGPD.checked) {
+        alert("Você precisa confirmar ciência sobre o tratamento dos dados conforme a LGPD.");
+        return;
+    }
+
+    if (!aceiteResponsabilidade.checked) {
+        alert("Você precisa aceitar o termo de responsabilidade antes de publicar.");
         return;
     }
 
@@ -703,8 +807,8 @@ window.publicar = async () => {
                 uid: user.uid,
                 nome: user.displayName || "",
 
-                numero,
-                jogador: tipoAnuncio === "pack" ? "Pack Figurinhas" : jogador,
+                numero: "",
+                jogador: tipoAnuncio === "pack" && !jogador ? "Pack Figurinhas" : jogador,
                 selecao,
                 cidade,
                 tipo,
@@ -712,7 +816,9 @@ window.publicar = async () => {
                 whatsapp,
 
                 tipoAnuncio,
-                raridade: tipoAnuncio === "pack" ? "Pack" : "Comum",
+                categoriaFigurinha,
+                raridade,
+                raridadeDescricao: obterDescricaoRaridade(raridade),
 
                 fotos: fotosURLs,
                 foto: fotosURLs[0] || "",
@@ -726,6 +832,14 @@ window.publicar = async () => {
                 status: "aprovado",
                 vendidoEm: null,
                 destaque: false,
+
+                aceiteLGPD: true,
+                aceiteLGPDEm: serverTimestamp(),
+                lgpdVersao: "2026-05-23",
+
+                aceiteResponsabilidade: true,
+                aceiteResponsabilidadeEm: serverTimestamp(),
+                termoResponsabilidadeVersao: "2026-05-23",
 
                 criadoEm: serverTimestamp()
             }
