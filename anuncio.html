@@ -107,7 +107,7 @@ body{
 
         <div>
 
-            <div class="flex items-center gap-3 mb-5">
+            <div class="flex items-center gap-3 mb-5 flex-wrap">
 
                 <span
                     id="tipo"
@@ -118,6 +118,13 @@ body{
                     id="raridade"
                     class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-xs font-black uppercase"
                 ></span>
+
+                <span
+                    id="statusVenda"
+                    class="hidden bg-red-500 text-white px-4 py-2 rounded-full text-xs font-black uppercase"
+                >
+                    Vendida
+                </span>
 
             </div>
 
@@ -217,6 +224,7 @@ body{
 <script type="module">
 
 import {
+    auth,
     db
 } from './firebase.js';
 
@@ -225,7 +233,9 @@ import {
     doc,
     getDoc,
     collection,
-    getDocs
+    getDocs,
+    addDoc,
+    serverTimestamp
 
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
@@ -268,6 +278,27 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
 
 }
 
+function formatarPreco(valor){
+
+    const numero =
+        Number(valor);
+
+    if(!Number.isFinite(numero)){
+
+        return "R$ 0,00";
+
+    }
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
 navigator.geolocation.getCurrentPosition((pos)=>{
 
     userLat = pos.coords.latitude;
@@ -275,7 +306,76 @@ navigator.geolocation.getCurrentPosition((pos)=>{
 
 });
 
+async function registrarInteresse(ad){
+
+    try{
+
+        await addDoc(
+            collection(db, "interesses"),
+            {
+
+                anuncioId:
+                    id,
+
+                vendedorUid:
+                    ad.uid || "",
+
+                jogador:
+                    ad.jogador || "",
+
+                selecao:
+                    ad.selecao || "",
+
+                numero:
+                    ad.numero || "",
+
+                foto:
+                    ad.foto || "",
+
+                compradorUid:
+                    auth.currentUser?.uid || null,
+
+                compradorNome:
+                    auth.currentUser?.displayName || "",
+
+                compradorEmail:
+                    auth.currentUser?.email || "",
+
+                compradorWhatsApp:
+                    auth.currentUser?.phoneNumber || "",
+
+                vendedorWhatsApp:
+                    ad.whatsapp || "",
+
+                status:
+                    "pendente",
+
+                criadoEm:
+                    serverTimestamp()
+
+            }
+        );
+
+    }catch(error){
+
+        console.error("Erro ao registrar interesse:", error);
+
+    }
+
+}
+
 async function carregarAnuncio(){
+
+    if(!id){
+
+        alert("Anúncio não encontrado");
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
 
     const anuncioRef =
         doc(db, "anuncios", id);
@@ -297,29 +397,43 @@ async function carregarAnuncio(){
     const ad =
         anuncioSnap.data();
 
+    const vendido =
+        ad.status === "vendido";
+
     document.title =
-        ad.jogador;
+        ad.jogador || "Figurinha";
 
     document.getElementById('foto').src =
-        ad.foto;
+        ad.foto || "https://placehold.co/800x600?text=Sem+foto";
 
     document.getElementById('tipo').innerHTML =
-        ad.tipo;
+        ad.tipo || "Figurinha";
 
     document.getElementById('raridade').innerHTML =
-        ad.raridade;
+        ad.raridade || "Normal";
 
     document.getElementById('titulo').innerHTML =
-        ad.jogador;
+        ad.jogador || "Sem nome";
 
     document.getElementById('subtitulo').innerHTML =
-        `${ad.selecao} • #${ad.numero}`;
+        `${ad.selecao || "Seleção não informada"} • #${ad.numero || "--"}`;
+
+    if(vendido){
+
+        document
+            .getElementById('statusVenda')
+            .classList
+            .remove('hidden');
+
+    }
 
     let distancia = "";
 
     if(
         userLat &&
-        ad.lat
+        userLng &&
+        ad.lat &&
+        ad.lng
     ){
 
         distancia =
@@ -335,28 +449,65 @@ async function carregarAnuncio(){
     }
 
     document.getElementById('localizacao').innerHTML =
-        `📍 ${ad.cidade} - ${ad.estado}${distancia}`;
+        `${ad.cidade || "Cidade não informada"}${ad.estado ? " - " + ad.estado : ""}${distancia}`;
 
     document.getElementById('descricao').innerHTML =
         ad.descricao || "Sem descrição";
 
     document.getElementById('preco').innerHTML =
-        `R$ ${parseFloat(ad.preco).toFixed(2)}`;
+        formatarPreco(ad.preco);
 
-    document.getElementById('btnWhatsapp').href =
-        `https://wa.me/55${ad.whatsapp.replace(/\D/g,'')}?text=Olá! Tenho interesse na figurinha ${ad.jogador} #${ad.numero}`;
+    const btnWhatsapp =
+        document.getElementById('btnWhatsapp');
+
+    if(vendido){
+
+        btnWhatsapp.removeAttribute('href');
+
+        btnWhatsapp.removeAttribute('target');
+
+        btnWhatsapp.innerHTML =
+            "FIGURINHA VENDIDA";
+
+        btnWhatsapp.className =
+            "bg-red-500 text-white p-5 rounded-2xl text-center font-black text-lg cursor-not-allowed opacity-80";
+
+    }else{
+
+        const whatsapp =
+            String(ad.whatsapp || "").replace(/\D/g,'');
+
+        btnWhatsapp.href =
+            `https://wa.me/55${whatsapp}?text=Olá! Tenho interesse na figurinha ${ad.jogador || ""} #${ad.numero || ""}`;
+
+        btnWhatsapp.addEventListener('click', async (event)=>{
+
+            event.preventDefault();
+
+            await registrarInteresse(ad);
+
+            window.open(
+                btnWhatsapp.href,
+                "_blank"
+            );
+
+        });
+
+    }
 
     document.getElementById('btnCompartilhar')
     .addEventListener('click', ()=>{
 
         navigator.share({
 
-            title: ad.jogador,
+            title:
+                ad.jogador || "Figurinha",
 
             text:
                 `Confira esta figurinha no FigurinhasCup`,
 
-            url: window.location.href
+            url:
+                window.location.href
 
         });
 
@@ -405,7 +556,7 @@ async function carregarRelacionados(selecao){
         <div class="bg-white rounded-[2rem] p-4 border border-gray-100 card-hover">
 
             <img
-                src="${ad.foto}"
+                src="${ad.foto || 'https://placehold.co/600x400?text=Sem+foto'}"
                 class="w-full h-48 object-cover rounded-2xl"
             >
 
@@ -413,13 +564,13 @@ async function carregarRelacionados(selecao){
 
                 <h3 class="text-xl font-black">
 
-                    ${ad.jogador}
+                    ${ad.jogador || "Sem nome"}
 
                 </h3>
 
                 <p class="text-gray-500 text-sm mt-1">
 
-                    #${ad.numero}
+                    #${ad.numero || "--"}
 
                 </p>
 
@@ -427,7 +578,7 @@ async function carregarRelacionados(selecao){
 
                     <span class="font-black text-xl">
 
-                        R$ ${parseFloat(ad.preco).toFixed(2)}
+                        ${formatarPreco(ad.preco)}
 
                     </span>
 
