@@ -377,6 +377,8 @@ body{
 
 <script type="module">
 
+<script type="module">
+
 import { auth, db, storage } from './firebase.js';
 
 import {
@@ -398,23 +400,123 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-const fotosInput = document.getElementById('fotos');
-const preview = document.getElementById('preview');
-const previewContainer = document.getElementById('previewContainer');
-const qtdFotos = document.getElementById('qtdFotos');
+
+// ======================================
+// ELEMENTOS
+// ======================================
+
+const fotosInput =
+    document.getElementById('fotos');
+
+const preview =
+    document.getElementById('preview');
+
+const previewContainer =
+    document.getElementById('previewContainer');
+
+const qtdFotos =
+    document.getElementById('qtdFotos');
+
+const gpsStatus =
+    document.getElementById('gpsStatus');
+
+const gpsDot =
+    document.getElementById('gpsDot');
+
+const gpsAlert =
+    document.getElementById('gpsAlert');
+
+
+// ======================================
+// VARIÁVEIS
+// ======================================
 
 let tipoAnuncio = "individual";
+
 let fotosSelecionadas = [];
+
+let uLat = null;
+let uLng = null;
+
+let localizacaoAtiva = false;
+
+
+// ======================================
+// AUTH
+// ======================================
 
 onAuthStateChanged(auth,(user)=>{
 
     if(!user){
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
 
     }
 
 });
+
+
+// ======================================
+// GEOLOCALIZAÇÃO
+// ======================================
+
+if(navigator.geolocation){
+
+    navigator.geolocation.getCurrentPosition(
+
+        (pos)=>{
+
+            uLat = pos.coords.latitude;
+            uLng = pos.coords.longitude;
+
+            localizacaoAtiva = true;
+
+            gpsDot.className =
+                "w-4 h-4 rounded-full bg-green-500 animate-pulse";
+
+            gpsStatus.innerHTML =
+                "Localização verificada com sucesso.";
+
+            gpsAlert.classList.add('hidden');
+
+        },
+
+        (error)=>{
+
+            console.log(error);
+
+            localizacaoAtiva = false;
+
+            gpsDot.className =
+                "w-4 h-4 rounded-full bg-yellow-500";
+
+            gpsStatus.innerHTML =
+                "Localização desativada.";
+
+            gpsAlert.classList.remove('hidden');
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000,
+            maximumAge:0
+        }
+
+    );
+
+}else{
+
+    gpsStatus.innerHTML =
+        "Geolocalização não suportada.";
+
+}
+
+
+// ======================================
+// TIPO
+// ======================================
 
 document.getElementById('btnIndividual').onclick = ()=>{
 
@@ -450,28 +552,37 @@ function ativarTipo(){
 
 }
 
+
+// ======================================
+// PREVIEW
+// ======================================
+
 fotosInput.addEventListener('change',()=>{
 
-    fotosSelecionadas = [...fotosInput.files];
+    fotosSelecionadas =
+        [...fotosInput.files];
 
     preview.innerHTML = "";
 
     previewContainer.classList.remove('hidden');
 
     qtdFotos.innerHTML =
-    fotosSelecionadas.length + " fotos";
+        fotosSelecionadas.length + " fotos";
 
     fotosSelecionadas.forEach(file=>{
 
-        const reader = new FileReader();
+        const reader =
+            new FileReader();
 
         reader.onload = (e)=>{
 
             preview.innerHTML += `
+
             <img
             src="${e.target.result}"
             class="w-28 h-28 md:w-32 md:h-32 object-cover rounded-3xl border border-gray-200 flex-shrink-0"
             >
+
             `;
 
         };
@@ -482,13 +593,50 @@ fotosInput.addEventListener('change',()=>{
 
 });
 
+
+// ======================================
+// PUBLICAR
+// ======================================
+
 window.publicar = async()=>{
 
-    const user = auth.currentUser;
+    const user =
+        auth.currentUser;
 
     if(!user){
 
         alert("Faça login.");
+
+        return;
+
+    }
+
+    // ======================================
+    // VALIDA GPS
+    // ======================================
+
+    if(!localizacaoAtiva){
+
+        const continuar =
+            confirm(
+                "Sua localização está desativada.\n\nO anúncio será publicado como NÃO VERIFICADO e aparecerá com alerta de segurança.\n\nDeseja continuar?"
+            );
+
+        if(!continuar){
+
+            return;
+
+        }
+
+    }
+
+    // ======================================
+    // VALIDA FOTOS
+    // ======================================
+
+    if(fotosSelecionadas.length === 0){
+
+        alert("Adicione pelo menos uma foto.");
 
         return;
 
@@ -499,7 +647,8 @@ window.publicar = async()=>{
 
     btn.disabled = true;
 
-    btn.innerHTML = "PUBLICANDO...";
+    btn.innerHTML =
+        "PUBLICANDO...";
 
     try{
 
@@ -513,7 +662,10 @@ window.publicar = async()=>{
                 `figurinhas/${Date.now()}-${file.name}`
             );
 
-            await uploadBytes(storageRef,file);
+            await uploadBytes(
+                storageRef,
+                file
+            );
 
             const url =
                 await getDownloadURL(storageRef);
@@ -522,51 +674,84 @@ window.publicar = async()=>{
 
         }
 
-        await addDoc(collection(db,"anuncios"),{
+        // ======================================
+        // STATUS
+        // ======================================
 
-            uid:user.uid,
+        const statusVerificacao =
+            localizacaoAtiva
+            ?
+            "aprovado"
+            :
+            "nao_verificado";
 
-            numero:
-                document.getElementById('numero').value,
+        // ======================================
+        // FIRESTORE
+        // ======================================
 
-            jogador:
-                tipoAnuncio === "pack"
-                ?
-                "Pack Figurinhas"
-                :
-                document.getElementById('jogador').value,
+        await addDoc(
+            collection(db,"anuncios"),
+            {
 
-            selecao:
-                document.getElementById('selecao').value,
+                uid:user.uid,
 
-            cidade:
-                document.getElementById('cidade').value,
+                numero:
+                    document.getElementById('numero').value,
 
-            tipo:
-                document.getElementById('tipo').value,
+                jogador:
+                    tipoAnuncio === "pack"
+                    ?
+                    "Pack Figurinhas"
+                    :
+                    document.getElementById('jogador').value,
 
-            preco:
-                document.getElementById('preco').value,
+                selecao:
+                    document.getElementById('selecao').value,
 
-            whatsapp:
-                document.getElementById('whatsapp').value,
+                cidade:
+                    document.getElementById('cidade').value,
 
-            tipoAnuncio,
+                tipo:
+                    document.getElementById('tipo').value,
 
-            fotos:fotosURLs,
+                preco:
+                    document.getElementById('preco').value,
 
-            foto:fotosURLs[0] || "",
+                whatsapp:
+                    document.getElementById('whatsapp').value,
 
-            verificado:true,
+                tipoAnuncio,
 
-            status:"aprovado",
+                fotos:fotosURLs,
 
-            criadoEm:
-                serverTimestamp()
+                foto:fotosURLs[0] || "",
 
-        });
+                lat:uLat,
 
-        alert("Figurinha publicada com sucesso.");
+                lng:uLng,
+
+                verificado:
+                    localizacaoAtiva,
+
+                alerta:
+                    !localizacaoAtiva,
+
+                status:
+                    statusVerificacao,
+
+                criadoEm:
+                    serverTimestamp()
+
+            }
+        );
+
+        alert(
+            localizacaoAtiva
+            ?
+            "Figurinha publicada com selo verificado."
+            :
+            "Figurinha publicada sem verificação de localização."
+        );
 
         window.location.href =
             "dashboard.html";
