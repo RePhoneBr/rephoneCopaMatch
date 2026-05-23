@@ -14,8 +14,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
-rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet"
 >
 
 <style>
@@ -24,17 +24,14 @@ rel="stylesheet"
     box-sizing:border-box;
 }
 
-html{
-    font-size:clamp(14px,1vw,16px);
-}
-
 body{
     font-family:'Inter', sans-serif;
     overflow-x:hidden;
+    padding-bottom:92px;
 }
 
 .glass{
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(14px);
 }
 
@@ -43,8 +40,8 @@ body{
 }
 
 .card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 25px 40px rgba(0,0,0,0.08);
+    transform:translateY(-4px);
+    box-shadow:0 20px 35px rgba(0,0,0,0.08);
 }
 
 .loader{
@@ -66,19 +63,26 @@ body{
 
 </head>
 
-<body class="bg-gray-100">
-
-<!-- HEADER -->
+<body class="bg-gray-100 text-gray-900">
 
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
 
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
 
         <a
             href="index.html"
-            class="text-2xl md:text-3xl font-black text-green-600 italic"
+            class="shrink-0"
         >
-            FigurinhasCup
+            <div class="text-2xl md:text-3xl font-black text-green-600 italic leading-none">
+                FigurinhasCup
+            </div>
+
+            <div
+                id="headerLocationText"
+                class="mt-1 text-[10px] md:text-xs text-gray-500 font-bold max-w-[190px] md:max-w-none truncate"
+            >
+                Localizando sua região...
+            </div>
         </a>
 
         <div class="hidden md:flex gap-8 text-sm font-bold">
@@ -97,7 +101,7 @@ body{
 
             <a
                 href="login.html"
-                class="bg-black text-white px-5 py-2 rounded-full text-sm font-bold"
+                class="bg-black text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-bold"
             >
                 Entrar
             </a>
@@ -108,9 +112,7 @@ body{
 
 </header>
 
-<!-- HERO -->
-
-<section class="py-12 md:py-16 px-4">
+<section class="py-8 md:py-14 px-4">
 
     <div class="max-w-5xl mx-auto text-center">
 
@@ -118,50 +120,74 @@ body{
             Marketplace inteligente de figurinhas
         </span>
 
-        <h1 class="text-4xl sm:text-5xl md:text-7xl font-black mt-6 tracking-tight leading-none">
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black mt-6 leading-tight">
             Complete seu álbum.
         </h1>
 
-        <p class="text-gray-500 max-w-2xl mx-auto mt-6 text-base md:text-lg">
+        <p class="text-gray-500 max-w-2xl mx-auto mt-4 md:mt-6 text-sm md:text-lg leading-relaxed">
             Troque, compre e venda figurinhas com colecionadores próximos.
         </p>
 
-        <!-- BUSCA -->
-
-        <div class="bg-white rounded-[2rem] p-4 shadow-2xl mt-10 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-[2rem] p-3 md:p-4 shadow-xl mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
 
             <input
                 type="text"
                 id="searchInput"
-                placeholder="Buscar figurinha..."
-                class="md:col-span-3 p-4 rounded-2xl bg-gray-100 outline-none"
+                placeholder="Buscar jogador, seleção ou número..."
+                class="md:col-span-3 p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
             >
 
             <button
-                onclick="buscar()"
-                class="bg-green-600 hover:bg-green-700 transition text-white rounded-2xl font-black p-4"
+                id="searchBtn"
+                type="button"
+                class="bg-green-600 hover:bg-green-700 transition text-white rounded-2xl font-black p-4 text-sm md:text-base"
             >
                 BUSCAR
             </button>
 
         </div>
 
-        <div
-            id="locationText"
-            class="mt-5 text-sm text-green-700 font-bold"
-        >
-            📍 Localizando colecionadores...
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+
+            <div class="bg-white rounded-2xl px-4 py-3 border border-gray-100">
+
+                <p class="text-[10px] md:text-xs font-black uppercase text-gray-400">
+                    Anunciadas
+                </p>
+
+                <p
+                    id="totalText"
+                    class="text-lg md:text-xl font-black"
+                >
+                    0 figurinhas
+                </p>
+
+            </div>
+
+            <div class="bg-white rounded-2xl px-4 py-3 border border-gray-100">
+
+                <p class="text-[10px] md:text-xs font-black uppercase text-gray-400">
+                    Organização
+                </p>
+
+                <p
+                    id="orderText"
+                    class="text-xs md:text-sm font-bold text-green-700"
+                >
+                    Mais próximas primeiro
+                </p>
+
+            </div>
+
         </div>
 
     </div>
 
 </section>
 
-<!-- FEED -->
-
 <section
     id="feed"
-    class="px-4 pb-20"
+    class="px-4 pb-8"
 >
 
     <div
@@ -173,29 +199,31 @@ body{
 
     <div
         id="cards"
-        class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
     ></div>
 
 </section>
 
-<!-- BOTÃO LOJA -->
+<footer class="fixed bottom-0 left-0 right-0 z-50 glass border-t border-gray-200">
 
-<a
-href="loja.html"
-class="fixed bottom-24 right-5 z-50 bg-gradient-to-r from-yellow-400 to-green-500 hover:scale-105 transition-all duration-300 text-black px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 font-black text-sm"
->
+    <div class="max-w-7xl mx-auto px-4 py-3">
 
-    <span class="text-2xl">
-        🛒
-    </span>
+        <a
+            href="loja.html"
+            class="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-400 to-green-500 text-black px-6 py-4 rounded-2xl shadow-xl font-black text-sm md:text-base"
+        >
+            <span class="text-xl">
+                🛒
+            </span>
 
-    <span>
-        Loja Oficial
-    </span>
+            <span>
+                Loja Oficial
+            </span>
+        </a>
 
-</a>
+    </div>
 
-<!-- FIREBASE -->
+</footer>
 
 <script type="module">
 
@@ -220,60 +248,336 @@ import {
 
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-
-// ========================================
-// VARIÁVEIS
-// ========================================
-
 let anuncios = [];
-
 let userLat = null;
 let userLng = null;
+let locationName = "sua região";
 
+const cards =
+    document.getElementById('cards');
 
-// ========================================
-// DISTÂNCIA
-// ========================================
+const loaderArea =
+    document.getElementById('loaderArea');
+
+const searchInput =
+    document.getElementById('searchInput');
+
+const searchBtn =
+    document.getElementById('searchBtn');
+
+const totalText =
+    document.getElementById('totalText');
+
+const orderText =
+    document.getElementById('orderText');
+
+const headerLocationText =
+    document.getElementById('headerLocationText');
 
 function calcularDistancia(lat1, lon1, lat2, lon2){
 
     const R = 6371;
 
     const dLat =
-        (lat2-lat1) * Math.PI/180;
+        (Number(lat2) - Number(lat1)) * Math.PI / 180;
 
     const dLon =
-        (lon2-lon1) * Math.PI/180;
+        (Number(lon2) - Number(lon1)) * Math.PI / 180;
 
     const a =
-        Math.sin(dLat/2) *
-        Math.sin(dLat/2) +
+        Math.sin(dLat / 2) *
+        Math.sin(dLat / 2) +
 
-        Math.cos(lat1 * Math.PI/180) *
-        Math.cos(lat2 * Math.PI/180) *
+        Math.cos(Number(lat1) * Math.PI / 180) *
+        Math.cos(Number(lat2) * Math.PI / 180) *
 
-        Math.sin(dLon/2) *
-        Math.sin(dLon/2);
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
 
-    return (
-        R * 2 *
+    return R * 2 *
         Math.atan2(
             Math.sqrt(a),
-            Math.sqrt(1-a)
-        )
-    ).toFixed(1);
+            Math.sqrt(1 - a)
+        );
 
 }
 
+function formatarDistancia(valor){
 
-// ========================================
-// GEOLOCALIZAÇÃO
-// ========================================
+    if(!Number.isFinite(valor)){
+        return "";
+    }
 
-navigator.geolocation.getCurrentPosition(async(pos)=>{
+    if(valor < 1){
+        return "menos de 1 km";
+    }
 
-    userLat = pos.coords.latitude;
-    userLng = pos.coords.longitude;
+    return `${valor.toFixed(1)} km`;
+
+}
+
+function formatarPreco(valor){
+
+    const numero =
+        Number(valor);
+
+    if(!Number.isFinite(numero)){
+        return "R$ 0,00";
+    }
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+function normalizarTexto(valor){
+
+    return String(valor || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+function prepararLista(){
+
+    const termo =
+        normalizarTexto(searchInput.value.trim());
+
+    let lista =
+        anuncios.filter((ad)=>
+            ad.status !== "vendido"
+        );
+
+    if(termo){
+
+        lista =
+            lista.filter((ad)=>
+                normalizarTexto(ad.jogador).includes(termo) ||
+                normalizarTexto(ad.selecao).includes(termo) ||
+                normalizarTexto(ad.numero).includes(termo) ||
+                normalizarTexto(ad.cidade).includes(termo)
+            );
+
+    }
+
+    lista =
+        lista.map((ad)=>{
+
+            let distancia = null;
+
+            if(
+                userLat !== null &&
+                userLng !== null &&
+                ad.lat !== undefined &&
+                ad.lng !== undefined &&
+                ad.lat !== null &&
+                ad.lng !== null
+            ){
+
+                distancia =
+                    calcularDistancia(
+                        userLat,
+                        userLng,
+                        ad.lat,
+                        ad.lng
+                    );
+
+            }
+
+            return {
+                ...ad,
+                distancia
+            };
+
+        });
+
+    lista.sort((a,b)=>{
+
+        const aTemDistancia =
+            Number.isFinite(a.distancia);
+
+        const bTemDistancia =
+            Number.isFinite(b.distancia);
+
+        if(aTemDistancia && bTemDistancia){
+            return a.distancia - b.distancia;
+        }
+
+        if(aTemDistancia){
+            return -1;
+        }
+
+        if(bTemDistancia){
+            return 1;
+        }
+
+        return 0;
+
+    });
+
+    return lista;
+
+}
+
+function atualizarResumo(lista){
+
+    const total =
+        anuncios.filter((ad)=>ad.status !== "vendido").length;
+
+    totalText.textContent =
+        total === 1
+            ? "1 figurinha"
+            : `${total} figurinhas`;
+
+    if(searchInput.value.trim()){
+
+        orderText.textContent =
+            `${lista.length} resultado${lista.length === 1 ? "" : "s"} mais próximo${lista.length === 1 ? "" : "s"} primeiro`;
+
+        return;
+
+    }
+
+    orderText.textContent =
+        userLat !== null
+            ? "Mais próximas primeiro"
+            : "Mais recentes até liberar localização";
+
+}
+
+function renderizar(){
+
+    loaderArea.style.display =
+        'none';
+
+    const lista =
+        prepararLista();
+
+    atualizarResumo(lista);
+
+    cards.innerHTML =
+        "";
+
+    if(lista.length === 0){
+
+        cards.innerHTML = `
+            <div class="col-span-full bg-white rounded-[2rem] p-8 md:p-10 text-center border border-gray-100">
+                <h2 class="text-2xl md:text-3xl font-black">
+                    Nenhuma figurinha encontrada
+                </h2>
+
+                <p class="text-gray-500 mt-3 text-sm md:text-base">
+                    Tente buscar por outro jogador, seleção ou número.
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    lista.forEach((ad)=>{
+
+        const distanciaTexto =
+            formatarDistancia(ad.distancia);
+
+        const verificado =
+            Boolean(ad.verificado || ad.localizacaoVerificada);
+
+        const foto =
+            ad.foto || "https://placehold.co/600x400?text=Sem+foto";
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            "card bg-white rounded-[2rem] p-4 md:p-5 border border-gray-100 relative overflow-hidden";
+
+        card.innerHTML = `
+            ${
+                verificado
+                    ?
+                    `
+                    <div class="absolute top-4 left-4 z-10 bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
+                        VERIFICADO
+                    </div>
+                    `
+                    :
+                    `
+                    <div class="absolute top-4 left-4 z-10 bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
+                        NÃO VERIFICADO
+                    </div>
+                    `
+            }
+
+            <img
+                src="${foto}"
+                alt="Foto da figurinha"
+                class="w-full h-44 sm:h-52 object-cover rounded-2xl"
+            >
+
+            <div class="mt-4">
+
+                <div class="flex items-center justify-between gap-2">
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase truncate max-w-[60%]">
+                        ${ad.tipo || 'Figurinha'}
+                    </span>
+
+                    <span class="text-[10px] md:text-xs font-bold text-gray-400 truncate">
+                        ${ad.raridade || 'Comum'}
+                    </span>
+
+                </div>
+
+                <h2 class="text-lg md:text-2xl font-black mt-3 break-words leading-tight">
+                    ${ad.jogador || 'Pack Figurinhas'}
+                </h2>
+
+                <p class="text-gray-500 text-xs md:text-sm mt-1 break-words">
+                    ${ad.selecao || 'Coleção'} • #${ad.numero || '000'}
+                </p>
+
+                <div class="mt-4 text-xs md:text-sm text-green-700 font-bold break-words">
+                    ${ad.cidade || 'Não informado'}
+                    ${distanciaTexto ? ' • ' + distanciaTexto : ''}
+                </div>
+
+                <div class="flex items-center justify-between mt-5 gap-3">
+
+                    <span class="text-lg md:text-2xl font-black">
+                        ${formatarPreco(ad.preco)}
+                    </span>
+
+                    <a
+                        href="anuncio.html?id=${encodeURIComponent(ad.id)}"
+                        class="bg-black hover:bg-gray-800 transition text-white px-4 md:px-5 py-3 rounded-full text-xs md:text-sm font-black whitespace-nowrap"
+                    >
+                        VER
+                    </a>
+
+                </div>
+
+            </div>
+        `;
+
+        cards.appendChild(card);
+
+    });
+
+}
+
+async function atualizarNomeDaLocalizacao(){
+
+    if(userLat === null || userLng === null){
+        return;
+    }
 
     try{
 
@@ -282,24 +586,79 @@ navigator.geolocation.getCurrentPosition(async(pos)=>{
                 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}`
             );
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
-        document.getElementById('locationText').innerHTML =
-            `📍 Ofertas próximas de ${data.address.city || data.address.town || 'sua região'}`;
+        locationName =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.village ||
+            data.address?.municipality ||
+            data.address?.county ||
+            "sua região";
+
+        headerLocationText.textContent =
+            `Sua localização: ${locationName}`;
 
     }catch(error){
 
-        document.getElementById('locationText').innerHTML =
-            `📍 Navegando pelo marketplace`;
+        headerLocationText.textContent =
+            "Sua localização: região aproximada";
 
     }
 
-});
+}
 
+function reconhecerLocalizacao(){
 
-// ========================================
-// LOGIN
-// ========================================
+    if(!navigator.geolocation){
+
+        headerLocationText.textContent =
+            "Localização indisponível";
+
+        renderizar();
+
+        return;
+
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        async(pos)=>{
+
+            userLat =
+                pos.coords.latitude;
+
+            userLng =
+                pos.coords.longitude;
+
+            headerLocationText.textContent =
+                "Sua localização: região aproximada";
+
+            await atualizarNomeDaLocalizacao();
+
+            renderizar();
+
+        },
+
+        ()=>{
+
+            headerLocationText.textContent =
+                "Localização não ativada";
+
+            renderizar();
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000,
+            maximumAge:60000
+        }
+
+    );
+
+}
 
 onAuthStateChanged(auth, async(user)=>{
 
@@ -309,43 +668,37 @@ onAuthStateChanged(auth, async(user)=>{
     if(user){
 
         authArea.innerHTML = `
-
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 md:gap-3">
 
                 <a
                     href="dashboard.html"
-                    class="text-sm font-bold"
+                    class="text-xs md:text-sm font-bold"
                 >
                     Meu painel
                 </a>
 
                 <button
                     id="logoutBtn"
-                    class="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold"
+                    type="button"
+                    class="bg-red-500 text-white px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold"
                 >
                     Sair
                 </button>
 
             </div>
-
         `;
 
         document
             .getElementById('logoutBtn')
-            .addEventListener('click', ()=>{
+            .addEventListener('click', async()=>{
 
-                signOut(auth);
+                await signOut(auth);
 
             });
 
     }
 
 });
-
-
-// ========================================
-// LISTAR ANÚNCIOS
-// ========================================
 
 const q =
     query(
@@ -356,180 +709,28 @@ const q =
 onSnapshot(q, (snapshot)=>{
 
     anuncios =
-        snapshot.docs.map(doc=>({
-            id: doc.id,
-            ...doc.data()
+        snapshot.docs.map((documento)=>({
+            id: documento.id,
+            ...documento.data()
         }));
 
-    renderizar(anuncios);
+    renderizar();
 
 });
 
+searchInput.addEventListener('input', ()=>{
+    renderizar();
+});
 
-// ========================================
-// RENDERIZAR
-// ========================================
-
-function renderizar(lista){
-
-    document
-        .getElementById('loaderArea')
-        .style.display = 'none';
-
-    const cards =
-        document.getElementById('cards');
-
-    cards.innerHTML = "";
-
-    lista.forEach(ad=>{
-
-        let distancia = "";
-
-        if(
-            userLat &&
-            ad.lat
-        ){
-
-            distancia =
-                calcularDistancia(
-                    userLat,
-                    userLng,
-                    ad.lat,
-                    ad.lng
-                ) + " km";
-
-        }
-
-        const verificado =
-            ad.localizacaoVerificada;
-
-        cards.innerHTML += `
-
-        <div class="card bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden">
-
-            ${
-                !verificado
-                ?
-                `
-                <div class="absolute top-4 left-4 z-10 bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
-                    ⚠ NÃO VERIFICADO
-                </div>
-                `
-                :
-                `
-                <div class="absolute top-4 left-4 z-10 bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
-                    ✔ VERIFICADO
-                </div>
-                `
-            }
-
-            <img
-                src="${ad.foto}"
-                class="w-full h-52 object-cover rounded-2xl"
-            >
-
-            <div class="mt-4">
-
-                <div class="flex items-center justify-between gap-2">
-
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black uppercase">
-
-                        ${ad.tipo || 'Figurinha'}
-
-                    </span>
-
-                    <span class="text-xs font-bold text-gray-400">
-
-                        ${ad.raridade || 'Comum'}
-
-                    </span>
-
-                </div>
-
-                <h2 class="text-xl md:text-2xl font-black mt-3 break-words">
-
-                    ${ad.jogador || 'Pack Figurinhas'}
-
-                </h2>
-
-                <p class="text-gray-500 text-sm mt-1 break-words">
-
-                    ${ad.selecao || 'Coleção'} • #${ad.numero || '000'}
-
-                </p>
-
-                <div class="mt-4 text-sm text-green-700 font-bold">
-
-                    📍 ${ad.cidade || 'Não informado'}
-                    ${distancia ? '• ' + distancia : ''}
-
-                </div>
-
-                <div class="flex items-center justify-between mt-6 gap-3">
-
-                    <span class="text-xl md:text-2xl font-black">
-
-                        R$ ${parseFloat(ad.preco || 0).toFixed(2)}
-
-                    </span>
-
-                    <a
-                        href="anuncio.html?id=${ad.id}"
-                        class="bg-black hover:bg-gray-800 transition text-white px-5 py-3 rounded-full text-sm font-black whitespace-nowrap"
-                    >
-                        VER
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-}
-
-
-// ========================================
-// BUSCA
-// ========================================
-
-window.buscar = ()=>{
-
-    const value =
-        document
-        .getElementById('searchInput')
-        .value
-        .toLowerCase();
-
-    const filtrados =
-        anuncios.filter(ad=>
-
-            (ad.jogador || '').toLowerCase().includes(value)
-            ||
-
-            (ad.selecao || '').toLowerCase().includes(value)
-            ||
-
-            (ad.numero || '').toString().includes(value)
-
-        );
-
-    renderizar(filtrados);
-
-};
-
-
-// ========================================
-// BOTÃO ANUNCIAR
-// ========================================
+searchBtn.addEventListener('click', ()=>{
+    renderizar();
+});
 
 document
     .getElementById('btnAnunciar')
-    .addEventListener('click', ()=>{
+    .addEventListener('click', (event)=>{
+
+        event.preventDefault();
 
         if(!auth.currentUser){
 
@@ -544,6 +745,8 @@ document
             "anunciar.html";
 
     });
+
+reconhecerLocalizacao();
 
 </script>
 
