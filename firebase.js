@@ -13,12 +13,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "SUA_API",
-    authDomain: "SEU_DOMINIO",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_STORAGE",
-    messagingSenderId: "SEU_SENDER_ID",
-    appId: "SEU_APP_ID"
+    apiKey: "AIzaSyBiN8FqX8UZeyAh1cG2GHZtQWiQH0xPBV4",
+    authDomain: "rephone-a0a80.firebaseapp.com",
+    projectId: "rephone-a0a80",
+    storageBucket: "rephone-a0a80.appspot.com",
+    messagingSenderId: "431497247030",
+    appId: "1:431497247030:web:a943715e4acc04b8995b97""
 };
 
 const app = initializeApp(firebaseConfig);
