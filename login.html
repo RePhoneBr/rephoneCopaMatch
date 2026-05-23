@@ -3,54 +3,179 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
 <title>Login | FigurinhasCup</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+rel="stylesheet"
+>
 
 <style>
 
+:root{
+
+    --title-big: clamp(2.2rem, 5vw, 4.5rem);
+
+    --title-medium: clamp(1.5rem, 3vw, 2.5rem);
+
+    --text-normal: clamp(0.92rem, 1vw, 1rem);
+
+    --text-small: clamp(0.78rem, 1vw, 0.92rem);
+
+}
+
+html{
+
+    font-size: clamp(14px, 1vw, 18px);
+
+}
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+}
+
+img{
+    max-width:100%;
+    height:auto;
 }
 
 .glass{
+
     background: rgba(255,255,255,0.92);
+
     backdrop-filter: blur(12px);
+
+}
+
+.input-style{
+
+    width:100%;
+
+    padding:0.95rem 1rem;
+
+    border-radius:1.2rem;
+
+    background:#f3f4f6;
+
+    outline:none;
+
+    transition:0.2s;
+
+    font-size:var(--text-normal);
+
+}
+
+.input-style:focus{
+
+    box-shadow:0 0 0 3px rgba(34,197,94,0.25);
+
+}
+
+.btn-main{
+
+    width:100%;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:1rem;
+
+    border-radius:1.2rem;
+
+    font-weight:900;
+
+    font-size:clamp(1rem,2vw,1.1rem);
+
+    transition:0.25s;
+
+}
+
+.btn-main:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 15px 30px rgba(22,163,74,0.25);
+
 }
 
 </style>
 
 </head>
 
-<body class="bg-gradient-to-br from-green-50 to-white min-h-screen flex items-center justify-center p-6">
+<body class="bg-gradient-to-br from-green-50 to-white min-h-screen flex items-center justify-center p-4 sm:p-6">
 
-<div class="glass w-full max-w-md rounded-[2rem] p-8 shadow-2xl border border-white">
+<div
+class="
+glass
+w-full
+max-w-md
+rounded-[2rem]
+p-5
+sm:p-8
+shadow-2xl
+border
+border-white
+"
+>
+
+    <!-- LOGO -->
 
     <div class="text-center mb-8">
 
-        <h1 class="text-5xl font-black text-green-600 italic tracking-tight">
+        <h1
+        class="
+        font-black
+        text-green-600
+        italic
+        tracking-tight
+        leading-none
+        "
+        style="font-size:var(--title-big)"
+        >
             FigurinhasCup
         </h1>
 
-        <p class="text-gray-500 mt-3 text-sm">
+        <p
+        class="text-gray-500 mt-4"
+        style="font-size:var(--text-normal)"
+        >
             Entre na sua conta para anunciar figurinhas
         </p>
 
     </div>
 
-    <form id="loginForm" class="space-y-4">
+    <!-- FORM -->
+
+    <form
+    id="loginForm"
+    class="space-y-4"
+    >
+
+        <!-- EMAIL -->
 
         <input
             type="email"
             id="email"
             placeholder="Seu email"
             required
-            class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+            class="input-style"
         >
+
+        <!-- SENHA -->
 
         <div class="relative">
 
@@ -59,34 +184,50 @@ body{
                 id="senha"
                 placeholder="Sua senha"
                 required
-                class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                class="input-style pr-24"
             >
 
             <button
                 type="button"
                 id="toggleSenha"
-                class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-500"
+                class="
+                absolute
+                right-4
+                top-1/2
+                -translate-y-1/2
+                text-gray-500
+                font-bold
+                "
+                style="font-size:var(--text-small)"
             >
                 Mostrar
             </button>
 
         </div>
 
-        <button
-            class="w-full bg-green-600 text-white p-4 rounded-2xl font-black text-lg hover:scale-[1.02] transition-all"
-        >
+        <!-- BOTÃO -->
+
+        <button class="btn-main">
+
             ENTRAR
+
         </button>
 
     </form>
 
-    <!-- RECUPERAR SENHA -->
+    <!-- RECUPERAR -->
 
     <div class="text-center mt-5">
 
         <button
             id="btnRecuperar"
-            class="text-sm font-bold text-gray-500 hover:text-green-600 transition"
+            class="
+            text-gray-500
+            hover:text-green-600
+            transition
+            font-bold
+            "
+            style="font-size:var(--text-small)"
         >
             Esqueci minha senha
         </button>
@@ -99,18 +240,25 @@ body{
 
         <a
             href="registro.html"
-            class="text-green-600 font-bold text-sm"
+            class="
+            text-green-600
+            font-bold
+            hover:opacity-80
+            transition
+            "
+            style="font-size:var(--text-small)"
         >
             Criar nova conta
         </a>
 
     </div>
 
-    <!-- ALERTA -->
+    <!-- ALERTAS -->
 
     <div
         id="msgBox"
-        class="hidden mt-6 rounded-2xl p-4 text-sm font-bold"
+        class="hidden mt-6 rounded-2xl p-4 font-bold"
+        style="font-size:var(--text-small)"
     ></div>
 
 </div>
@@ -122,9 +270,13 @@ import {
 } from './firebase.js';
 
 import {
+
     signInWithEmailAndPassword,
+
     onAuthStateChanged,
+
     sendPasswordResetEmail
+
 }
 from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
@@ -136,7 +288,7 @@ const msgBox =
 
 
 // ========================================
-// ALERTA
+// ALERTAS
 // ========================================
 
 function mostrarMensagem(msg, tipo = 'erro'){
@@ -146,12 +298,12 @@ function mostrarMensagem(msg, tipo = 'erro'){
     if(tipo === 'sucesso'){
 
         msgBox.className =
-        'mt-6 rounded-2xl p-4 text-sm font-bold bg-green-100 text-green-700';
+        'mt-6 rounded-2xl p-4 font-bold bg-green-100 text-green-700';
 
     }else{
 
         msgBox.className =
-        'mt-6 rounded-2xl p-4 text-sm font-bold bg-red-100 text-red-700';
+        'mt-6 rounded-2xl p-4 font-bold bg-red-100 text-red-700';
 
     }
 
@@ -161,17 +313,14 @@ function mostrarMensagem(msg, tipo = 'erro'){
 
 
 // ========================================
-// AUTO LOGIN
+// VERIFICA LOGIN
 // ========================================
 
 onAuthStateChanged(auth, (user)=>{
 
-    // Apenas verifica sessão
-    // sem redirecionamento automático
-
     if(user){
 
-        console.log("Usuário já logado");
+        console.log("Usuário logado");
 
     }
 
@@ -205,6 +354,14 @@ form.addEventListener('submit', async(e)=>{
             "sucesso"
         );
 
+        setTimeout(()=>{
+
+            window.location.href =
+                "index.html";
+
+        },1000);
+
+    }
 
     catch(error){
 
