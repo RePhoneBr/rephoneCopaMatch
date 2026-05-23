@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
 
 <meta
@@ -19,7 +18,6 @@ rel="stylesheet"
 />
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -46,19 +44,13 @@ body{
     background:#d1d5db;
     border-radius:999px;
 }
-
 </style>
-
 </head>
 
 <body class="bg-gray-100 text-gray-900 pb-32">
 
-<!-- HEADER -->
-
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
-
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-
         <a
         href="index.html"
         class="text-2xl md:text-3xl font-black italic text-green-600"
@@ -72,17 +64,12 @@ body{
         >
             Dashboard
         </a>
-
     </div>
-
 </header>
-
-<!-- HERO -->
 
 <section class="max-w-4xl mx-auto px-4 py-8 md:py-10">
 
     <div class="mb-8">
-
         <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
             Publicação inteligente
         </span>
@@ -94,17 +81,14 @@ body{
         <p class="text-gray-500 text-sm md:text-lg mt-4 leading-relaxed">
             Tire fotos pelo celular, envie packs completos e publique anúncios verificados automaticamente.
         </p>
-
     </div>
-
-    <!-- ALERTA GPS -->
 
     <div
     id="gpsAlert"
     class="hidden bg-yellow-100 border border-yellow-300 text-yellow-800 p-5 rounded-3xl mb-8"
     >
         <div class="font-black text-lg mb-2">
-            ⚠️ Localização não ativada
+            Localização não ativada
         </div>
 
         <p class="text-sm leading-relaxed">
@@ -112,26 +96,20 @@ body{
         </p>
     </div>
 
-    <!-- FORM -->
-
     <div class="bg-white rounded-[2rem] p-5 md:p-8 shadow-xl border border-gray-100">
 
-        <!-- TIPO -->
-
         <div class="mb-8">
-
             <label class="block text-xs md:text-sm font-black mb-3 uppercase">
                 Tipo anúncio
             </label>
 
             <div class="grid grid-cols-2 gap-4">
-
                 <button
                 id="btnIndividual"
                 type="button"
                 class="tipoBtn bg-green-600 text-white p-4 rounded-3xl font-black text-sm md:text-base"
                 >
-                    🎴 Figurinha
+                    Figurinha
                 </button>
 
                 <button
@@ -139,59 +117,64 @@ body{
                 type="button"
                 class="tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base"
                 >
-                    📦 Pack
+                    Pack
                 </button>
-
             </div>
-
         </div>
 
-        <!-- FOTOS -->
-
         <div class="mb-8">
-
             <label class="block text-xs md:text-sm font-black mb-3 uppercase">
                 Fotos das figurinhas
             </label>
 
-            <label
-            class="border-2 border-dashed border-gray-300 rounded-[2rem] p-6 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition"
-            >
+            <div class="grid md:grid-cols-2 gap-4">
+                <label class="border-2 border-dashed border-gray-300 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition">
+                    <div class="text-5xl mb-4">📸</div>
 
-                <div class="text-5xl md:text-6xl mb-4">
-                    📸
-                </div>
+                    <div class="text-xl font-black">
+                        Tirar foto
+                    </div>
 
-                <div class="text-xl md:text-2xl font-black">
-                    Tirar foto ou importar
-                </div>
+                    <p class="text-gray-500 mt-2 text-xs md:text-sm">
+                        Usar câmera do celular
+                    </p>
 
-                <p class="text-gray-500 mt-2 text-xs md:text-sm leading-relaxed">
-                    Câmera do celular ou galeria • múltiplas imagens
-                </p>
+                    <input
+                    id="fotosCamera"
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    class="hidden"
+                    >
+                </label>
 
-                <input
-                id="fotos"
-                type="file"
-                accept="image/*"
-                capture="environment"
-                multiple
-                class="hidden"
-                >
+                <label class="border-2 border-dashed border-gray-300 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-green-500 transition">
+                    <div class="text-5xl mb-4">🖼️</div>
 
-            </label>
+                    <div class="text-xl font-black">
+                        Importar da galeria
+                    </div>
 
+                    <p class="text-gray-500 mt-2 text-xs md:text-sm">
+                        Selecionar uma ou várias imagens
+                    </p>
+
+                    <input
+                    id="fotosGaleria"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    class="hidden"
+                    >
+                </label>
+            </div>
         </div>
-
-        <!-- PREVIEW -->
 
         <div
         id="previewContainer"
         class="hidden mb-8"
         >
-
             <div class="flex items-center justify-between mb-3">
-
                 <span class="font-black uppercase text-xs md:text-sm">
                     Pré-visualização
                 </span>
@@ -202,22 +185,16 @@ body{
                 >
                     0 fotos
                 </span>
-
             </div>
 
             <div
             id="preview"
             class="preview-scroll flex gap-4 overflow-x-auto pb-3"
             ></div>
-
         </div>
 
-        <!-- CAMPOS -->
-
         <div class="grid md:grid-cols-2 gap-5 mb-5">
-
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Número
                 </label>
@@ -228,11 +205,9 @@ body{
                 placeholder="Ex: 127"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
-
             </div>
 
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Jogador / título
                 </label>
@@ -243,15 +218,11 @@ body{
                 placeholder="Ex: Neymar Jr"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
-
             </div>
-
         </div>
 
         <div class="grid md:grid-cols-2 gap-5 mb-5">
-
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Seleção
                 </label>
@@ -262,11 +233,9 @@ body{
                 placeholder="Ex: Brasil"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
-
             </div>
 
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Cidade
                 </label>
@@ -277,15 +246,11 @@ body{
                 placeholder="Ex: Aracruz"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
-
             </div>
-
         </div>
 
         <div class="grid md:grid-cols-2 gap-5 mb-5">
-
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Tipo negociação
                 </label>
@@ -298,11 +263,9 @@ body{
                     <option value="Troca">Troca</option>
                     <option value="Venda ou troca">Venda ou troca</option>
                 </select>
-
             </div>
 
             <div>
-
                 <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                     Valor
                 </label>
@@ -313,15 +276,10 @@ body{
                 placeholder="Ex: 5"
                 class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
                 >
-
             </div>
-
         </div>
 
-        <!-- WHATS -->
-
         <div class="mb-8">
-
             <label class="block text-xs md:text-sm font-black mb-2 uppercase">
                 WhatsApp
             </label>
@@ -332,15 +290,10 @@ body{
             placeholder="27999999999"
             class="w-full p-4 rounded-2xl bg-gray-100 outline-none text-sm md:text-base"
             >
-
         </div>
 
-        <!-- STATUS -->
-
         <div class="bg-black rounded-[2rem] p-5 md:p-6 text-white mb-8">
-
             <div class="flex items-center gap-3 mb-3">
-
                 <div
                 id="gpsDot"
                 class="w-4 h-4 rounded-full bg-gray-500"
@@ -349,7 +302,6 @@ body{
                 <span class="font-black uppercase text-xs md:text-sm">
                     Segurança localização
                 </span>
-
             </div>
 
             <div
@@ -358,26 +310,23 @@ body{
             >
                 Verificando localização...
             </div>
-
         </div>
 
-        <!-- PUBLICAR -->
-
         <button
-id="publicarBtn"
-type="button"
-onclick="publicar()"
-class="w-full bg-green-600 hover:bg-green-700 transition text-white p-4 md:p-5 rounded-[2rem] text-lg md:text-xl font-black"
->
-    PUBLICAR FIGURINHAS
-</button>
+        id="publicarBtn"
+        type="button"
+        onclick="publicar()"
+        class="w-full bg-green-600 hover:bg-green-700 transition text-white p-4 md:p-5 rounded-[2rem] text-lg md:text-xl font-black"
+        >
+            PUBLICAR FIGURINHAS
+        </button>
 
     </div>
 
 </section>
 
 <script type="module">
-import { auth, db, storage } from './firebase.js';
+import { auth, db } from './firebase.js';
 
 import {
     onAuthStateChanged
@@ -389,13 +338,10 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+const IMGBB_API_KEY = "a4405be3b982f9aad88589728a3d949c";
 
-const fotosInput = document.getElementById('fotos');
+const fotosCameraInput = document.getElementById('fotosCamera');
+const fotosGaleriaInput = document.getElementById('fotosGaleria');
 const preview = document.getElementById('preview');
 const previewContainer = document.getElementById('previewContainer');
 const qtdFotos = document.getElementById('qtdFotos');
@@ -504,10 +450,27 @@ function ativarTipo() {
             : "tipoBtn bg-gray-100 p-4 rounded-3xl font-black text-sm md:text-base";
 }
 
-fotosInput.addEventListener('change', () => {
-    fotosSelecionadas = Array.from(fotosInput.files);
+function adicionarFotos(arquivos) {
+    const novasFotos = Array.from(arquivos)
+        .filter((file) => file.type.startsWith('image/'));
 
+    fotosSelecionadas = [
+        ...fotosSelecionadas,
+        ...novasFotos
+    ];
+
+    renderizarPreview();
+}
+
+function renderizarPreview() {
     preview.innerHTML = "";
+
+    if (fotosSelecionadas.length === 0) {
+        previewContainer.classList.add('hidden');
+        qtdFotos.textContent = "0 fotos";
+        return;
+    }
+
     previewContainer.classList.remove('hidden');
 
     qtdFotos.textContent =
@@ -515,22 +478,168 @@ fotosInput.addEventListener('change', () => {
             ? "1 foto"
             : `${fotosSelecionadas.length} fotos`;
 
-    fotosSelecionadas.forEach((file) => {
+    fotosSelecionadas.forEach((file, index) => {
         const reader = new FileReader();
 
         reader.onload = (event) => {
-            const img = document.createElement('img');
+            const box = document.createElement('div');
 
-            img.src = event.target.result;
-            img.alt = "Prévia da figurinha";
-            img.className = "w-28 h-28 md:w-32 md:h-32 object-cover rounded-3xl border border-gray-200 flex-shrink-0";
+            box.className =
+                "relative w-28 h-28 md:w-32 md:h-32 flex-shrink-0";
 
-            preview.appendChild(img);
+            box.innerHTML = `
+                <img
+                    src="${event.target.result}"
+                    class="w-full h-full object-cover rounded-3xl border border-gray-200"
+                    alt="Prévia da figurinha"
+                >
+
+                <button
+                    type="button"
+                    class="absolute -top-2 -right-2 bg-red-500 text-white w-7 h-7 rounded-full font-black text-xs"
+                    data-remove-foto="${index}"
+                >
+                    X
+                </button>
+            `;
+
+            preview.appendChild(box);
         };
 
         reader.readAsDataURL(file);
     });
+}
+
+fotosCameraInput.addEventListener('change', () => {
+    adicionarFotos(fotosCameraInput.files);
+    fotosCameraInput.value = "";
 });
+
+fotosGaleriaInput.addEventListener('change', () => {
+    adicionarFotos(fotosGaleriaInput.files);
+    fotosGaleriaInput.value = "";
+});
+
+preview.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-remove-foto]');
+
+    if (!button) {
+        return;
+    }
+
+    const index = Number(button.dataset.removeFoto);
+
+    fotosSelecionadas.splice(index, 1);
+
+    renderizarPreview();
+});
+
+async function reduzirImagem(file) {
+    if (file.size <= 1200000) {
+        return file;
+    }
+
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        const url = URL.createObjectURL(file);
+
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxSize = 1400;
+
+            let width = image.width;
+            let height = image.height;
+
+            if (width > height && width > maxSize) {
+                height = Math.round((height * maxSize) / width);
+                width = maxSize;
+            }
+
+            if (height > width && height > maxSize) {
+                width = Math.round((width * maxSize) / height);
+                height = maxSize;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            canvas
+                .getContext('2d')
+                .drawImage(image, 0, 0, width, height);
+
+            canvas.toBlob(
+                (blob) => {
+                    URL.revokeObjectURL(url);
+
+                    if (!blob) {
+                        reject(new Error("Erro ao preparar imagem."));
+                        return;
+                    }
+
+                    resolve(
+                        new File(
+                            [blob],
+                            file.name.replace(/\.[^/.]+$/, ".jpg"),
+                            {
+                                type: "image/jpeg",
+                                lastModified: Date.now()
+                            }
+                        )
+                    );
+                },
+                "image/jpeg",
+                0.82
+            );
+        };
+
+        image.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Imagem inválida. Tente outra foto."));
+        };
+
+        image.src = url;
+    });
+}
+
+async function enviarImagemParaImgBB(file) {
+    const formData = new FormData();
+
+    formData.append("image", file);
+    formData.append("name", file.name);
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+        controller.abort();
+    }, 90000);
+
+    try {
+        const response = await fetch(
+            `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+            {
+                method: "POST",
+                body: formData,
+                signal: controller.signal
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error("Erro ao enviar imagem para o ImgBB.");
+        }
+
+        return result.data.url;
+    } catch (error) {
+        if (error.name === "AbortError") {
+            throw new Error("O envio da imagem demorou demais. Tente uma foto menor ou outra conexão.");
+        }
+
+        throw error;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
 
 window.publicar = async () => {
     const user = auth.currentUser;
@@ -568,23 +677,25 @@ window.publicar = async () => {
     }
 
     publicarBtn.disabled = true;
-    publicarBtn.textContent = "PUBLICANDO...";
+    publicarBtn.textContent = "PREPARANDO FOTOS...";
 
     try {
         const fotosURLs = [];
 
         for (const [index, file] of fotosSelecionadas.entries()) {
-            const storageRef = ref(
-                storage,
-                `figurinhas/${user.uid}/${Date.now()}-${index}-${file.name}`
-            );
+            publicarBtn.textContent =
+                `ENVIANDO FOTO ${index + 1}/${fotosSelecionadas.length}...`;
 
-            await uploadBytes(storageRef, file);
+            const imagemReduzida =
+                await reduzirImagem(file);
 
-            const url = await getDownloadURL(storageRef);
+            const url =
+                await enviarImagemParaImgBB(imagemReduzida);
 
             fotosURLs.push(url);
         }
+
+        publicarBtn.textContent = "PUBLICANDO ANÚNCIO...";
 
         await addDoc(
             collection(db, "anuncios"),
@@ -613,6 +724,7 @@ window.publicar = async () => {
                 alerta: !localizacaoAtiva,
 
                 status: "aprovado",
+                vendidoEm: null,
                 destaque: false,
 
                 criadoEm: serverTimestamp()
@@ -630,7 +742,7 @@ window.publicar = async () => {
         window.location.href = "dashboard.html";
     } catch (error) {
         console.error(error);
-        alert("Erro ao publicar.");
+        alert(error.message || "Erro ao publicar.");
     } finally {
         publicarBtn.disabled = false;
         publicarBtn.textContent = "PUBLICAR FIGURINHAS";
