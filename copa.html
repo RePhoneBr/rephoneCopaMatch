@@ -2,155 +2,252 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CopaMatch | Troca de Figurinhas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figurinhas da Copa | Troca e Venda Segura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { 
-            --dark: #6b0b1a; /* Bordô Catar/Fifa */
-            --gold: #bda677; 
-            --green: #22c55e;
-            --bg: #fdfaf3; 
-            --text-muted: #64748b; 
-            --blue: #2563eb; 
-            --yellow: #facc15;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
-        body { background: var(--bg); color: #1e293b; overflow-x: hidden; padding-bottom: 100px; }
-        
-        /* HEADER */
-        .main-header { background: var(--dark); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .logo { font-weight: 900; font-size: 22px; color: white; text-decoration: none; text-transform: uppercase; letter-spacing: -1px; }
-        .logo span { color: var(--yellow); }
-        
-        .ticker-wrapper { width: 100%; background: #4a0812; color: white; overflow: hidden; white-space: nowrap; padding: 10px 0; font-size: 11px; font-weight: 800; position: sticky; top: 55px; z-index: 999; }
-        .ticker-content { display: inline-block; animation: ticker-animation 30s linear infinite; }
-        @keyframes ticker-animation { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* CARDS FIGURINHAS */
-        .feed { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 1200px; margin: 0 auto; }
-        .card { background: white; border-radius: 15px; padding: 10px; border: 1px solid #e2e8f0; position: relative; transition: 0.3s; display: flex; flex-direction: column; }
-        
-        .img-container { 
-            width: 100%; 
-            height: 140px; 
-            background: #f1f5f9; 
-            border-radius: 10px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            margin-bottom: 8px;
-            border: 2px solid #eee;
+        .match-glow:hover {
+            box-shadow: 0 0 24px rgba(34, 197, 94, 0.45);
+            transform: scale(1.02);
+            transition: all 0.3s ease;
         }
-        .card img { width: 80%; height: 80%; object-fit: contain; }
-        
-        .badge-raridade { position: absolute; top: 8px; right: 8px; background: var(--gold); color: #4a0812; font-size: 8px; padding: 4px 8px; border-radius: 6px; font-weight: 900; z-index: 5; }
-        
-        .info-selecao { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; margin-top: 5px; align-self: flex-start; text-transform: uppercase; background: #f1f5f9; color: var(--text-muted); }
 
-        .price-tag { background: linear-gradient(135deg, var(--dark), #921124); color: white; padding: 8px; border-radius: 10px; font-weight: 900; font-size: 14px; margin-top: auto; text-align: center; }
-
-        /* FORMULÁRIO MATCH */
-        .search-box { background:white; padding:20px; border-radius:25px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-
-        /* FOOTER */
-        .rephone-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; gap: 5px; z-index: 1000; }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 font-sans text-gray-900">
 
-    <header class="main-header">
-        <a href="#" class="logo">Copa<span>Match</span></a>
-        <button style="background:none; border:none; color:white; font-size:28px;" onclick="toggleMenu()">☰</button>
-    </header>
-
-    <div class="ticker-wrapper">
-        <div class="ticker-content">
-            <span>⚽ TROQUE COM SEGURANÇA EM LOCAIS PÚBLICOS</span> — 
-            <span>⭐ BUSCANDO AS LEGENDÁRIAS? USE O FILTRO DE MATCH</span> — 
-            <span>🇧🇷 RUMO AO HEXA! COMPLETE SEU ÁLBUM HOJE</span>
-        </div>
+    <div class="bg-black text-white py-2 text-center text-xs font-bold tracking-widest uppercase">
+        ⚠️ Troque e compre com segurança. Prefira encontros em locais públicos.
     </div>
 
-    <div style="text-align:center; font-size:11px; padding:15px; color:var(--text-muted); font-weight:700;" id="txtLocation">📍 Buscando colecionadores próximos...</div>
+    <nav class="sticky top-0 z-50 glass-effect border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <h1 class="text-2xl font-black tracking-tighter text-green-600 italic">FigurinhasCup</h1>
 
-    <section style="padding:10px 20px; max-width:600px; margin:0 auto;">
-        <div class="search-box">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:15px;">
-                <div id="mCircle" style="width:10px; height:10px; border-radius:50%; background:var(--gold);"></div>
-                <span style="font-size:10px; font-weight:900; color:var(--dark);">ENCONTRAR FIGURINHA</span>
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#buscar" class="hover:text-green-600">Buscar</a>
+                <a href="#anunciar" class="hover:text-green-600">Anunciar</a>
+                <a href="#repetidas" class="hover:text-green-600">Repetidas</a>
+                <a href="#seguranca" class="text-gray-400 hover:text-green-600">Segurança</a>
             </div>
-            <input type="text" id="matchNumero" placeholder="Ex: BRA 10 ou 150" style="width:100%; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:10px; outline:none;">
-            <select id="matchTipo" style="width:100%; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:15px; background:white;">
-                <option value="todos">Qualquer tipo</option>
-                <option value="normal">Normal</option>
-                <option value="brilhante">Brilhante / Especial</option>
-            </select>
-            <button onclick="fazerMatch()" style="width:100%; background:var(--dark); color:white; padding:16px; border:none; border-radius:15px; font-weight:900; cursor:pointer;">BUSCAR AGORA</button>
+
+            <button class="bg-black text-white px-5 py-2 rounded-full text-sm font-bold">Entrar</button>
+        </div>
+    </nav>
+
+    <section id="buscar" class="relative py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">
+                🏆 Marketplace de troca e venda de figurinhas
+            </span>
+
+            <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">
+                Encontre a figurinha que falta no seu álbum.
+            </h2>
+
+            <p class="text-gray-500 max-w-2xl mx-auto mb-8 text-lg">
+                Busque por número, seleção, jogador ou tipo de figurinha. Combine troca, venda ou compra direto com outros colecionadores.
+            </p>
+
+            <div class="bg-white p-4 rounded-3xl shadow-2xl border border-gray-100 grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" placeholder="Número ou jogador" class="md:col-span-2 p-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-green-500 outline-none">
+
+                <select class="p-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-green-500 outline-none">
+                    <option>Quero comprar</option>
+                    <option>Quero trocar</option>
+                    <option>Quero vender</option>
+                </select>
+
+                <button class="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold text-lg match-glow">
+                    BUSCAR
+                </button>
+            </div>
         </div>
     </section>
 
-    <main id="radarGrid" class="feed"></main>
+    <section class="px-4 pb-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 card-hover">
+                <div class="text-4xl mb-4">🔎</div>
+                <h3 class="text-xl font-black mb-2">Ache as que faltam</h3>
+                <p class="text-gray-500 text-sm">Pesquise por número da figurinha, jogador, país ou raridade.</p>
+            </div>
 
-    <footer class="rephone-footer">
-        <div style="color:var(--dark); font-size:10px; font-weight:800;">PROJETO TEMPORÁRIO — COPA 2026</div>
-        <div style="color:var(--text-muted); font-size:9px;">Troque, venda ou compre figurinhas com a comunidade.</div>
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 card-hover">
+                <div class="text-4xl mb-4">🔁</div>
+                <h3 class="text-xl font-black mb-2">Troque repetidas</h3>
+                <p class="text-gray-500 text-sm">Cadastre suas repetidas e encontre quem precisa delas.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 border border-gray-100 card-hover">
+                <div class="text-4xl mb-4">💰</div>
+                <h3 class="text-xl font-black mb-2">Venda com facilidade</h3>
+                <p class="text-gray-500 text-sm">Anuncie figurinhas comuns, especiais, brilhantes ou pacotes fechados.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="repetidas" class="px-4 py-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+                <div>
+                    <span class="text-green-600 text-sm font-bold uppercase">Figurinhas disponíveis</span>
+                    <h2 class="text-3xl font-black tracking-tight">Ofertas recentes</h2>
+                </div>
+                <button id="openModal" class="bg-black text-white px-6 py-3 rounded-full text-sm font-bold">
+                    + Anunciar figurinha
+                </button>
+            </div>
+
+            <div id="cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-3xl p-5 border border-gray-100 card-hover">
+                    <div class="h-40 rounded-2xl bg-gradient-to-br from-green-100 to-yellow-100 flex items-center justify-center text-5xl mb-4">🇧🇷</div>
+                    <p class="text-xs font-bold text-green-600 uppercase">Troca</p>
+                    <h3 class="text-xl font-black">Brasil #127</h3>
+                    <p class="text-gray-500 text-sm mt-1">Figurinha repetida em ótimo estado.</p>
+                    <div class="flex items-center justify-between mt-5">
+                        <span class="font-black">R$ 3,00</span>
+                        <button class="text-sm bg-green-600 text-white px-4 py-2 rounded-full font-bold">Ver</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-gray-100 card-hover">
+                    <div class="h-40 rounded-2xl bg-gradient-to-br from-blue-100 to-white flex items-center justify-center text-5xl mb-4">🇦🇷</div>
+                    <p class="text-xs font-bold text-green-600 uppercase">Venda</p>
+                    <h3 class="text-xl font-black">Argentina #044</h3>
+                    <p class="text-gray-500 text-sm mt-1">Aceito PIX ou troca por faltantes.</p>
+                    <div class="flex items-center justify-between mt-5">
+                        <span class="font-black">R$ 4,00</span>
+                        <button class="text-sm bg-green-600 text-white px-4 py-2 rounded-full font-bold">Ver</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-gray-100 card-hover">
+                    <div class="h-40 rounded-2xl bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center text-5xl mb-4">✨</div>
+                    <p class="text-xs font-bold text-green-600 uppercase">Especial</p>
+                    <h3 class="text-xl font-black">Craque brilhante</h3>
+                    <p class="text-gray-500 text-sm mt-1">Figurinha especial para colecionador.</p>
+                    <div class="flex items-center justify-between mt-5">
+                        <span class="font-black">R$ 12,00</span>
+                        <button class="text-sm bg-green-600 text-white px-4 py-2 rounded-full font-bold">Ver</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-gray-100 card-hover">
+                    <div class="h-40 rounded-2xl bg-gradient-to-br from-red-100 to-yellow-100 flex items-center justify-center text-5xl mb-4">🇪🇸</div>
+                    <p class="text-xs font-bold text-green-600 uppercase">Pacote</p>
+                    <h3 class="text-xl font-black">Lote com 20</h3>
+                    <p class="text-gray-500 text-sm mt-1">Figurinhas variadas, algumas repetidas.</p>
+                    <div class="flex items-center justify-between mt-5">
+                        <span class="font-black">R$ 25,00</span>
+                        <button class="text-sm bg-green-600 text-white px-4 py-2 rounded-full font-bold">Ver</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="anunciar" class="px-4 py-16 bg-white border-y border-gray-100">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">Tem figurinha repetida?</h2>
+            <p class="text-gray-500 text-lg mb-8">Cadastre em poucos segundos e encontre compradores ou pessoas para trocar.</p>
+            <button id="openModal2" class="bg-green-600 text-white px-10 py-4 rounded-2xl font-bold text-lg match-glow">
+                ANUNCIAR AGORA
+            </button>
+        </div>
+    </section>
+
+    <section id="seguranca" class="px-4 py-14">
+        <div class="max-w-5xl mx-auto bg-black rounded-[2rem] p-8 md:p-12 text-white">
+            <span class="text-green-400 text-sm font-bold uppercase">Segurança</span>
+            <h2 class="text-3xl font-black mt-2 mb-6">Dicas para negociar melhor</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300">
+                <p>✅ Combine encontros em locais públicos e movimentados.</p>
+                <p>✅ Confira a figurinha antes de pagar ou trocar.</p>
+                <p>✅ Evite enviar dinheiro antes de confirmar a negociação.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-12 px-4 mt-10">
+        <div class="max-w-7xl mx-auto border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-sm">FigurinhasCup © 2026 — Marketplace independente de colecionadores.</p>
+
+            <div class="bg-black border border-green-900/50 p-3 rounded-lg font-mono text-[10px] w-full md:w-auto">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-green-500 uppercase tracking-tighter">Status do álbum: ativo</span>
+                </div>
+                <p id="ia-log-status">> [Busca]: Procurando figurinhas faltantes...</p>
+                <p id="ia-log-geo">> [Trocas]: Colecionadores próximos disponíveis.</p>
+            </div>
+        </div>
     </footer>
 
-    <script type="module">
-        // Simulação de Dados (Substitua pela sua config Firebase se for usar o DB)
-        const mockFigurinhas = [
-            { id: 1, numero: "BRA 10", selecao: "Brasil", tipo: "brilhante", preco: 50.00, statusVenda: "disponivel", vendedor: "particular", cidade: "São Paulo", lat: -23.55, lng: -46.63, foto: "https://via.placeholder.com/150?text=BRA+10" },
-            { id: 2, numero: "ARG 10", selecao: "Argentina", tipo: "brilhante", preco: 45.00, statusVenda: "disponivel", vendedor: "lojista", cidade: "São Paulo", lat: -23.56, lng: -46.64, foto: "https://via.placeholder.com/150?text=ARG+10" },
-            { id: 3, numero: "150", selecao: "Estádios", tipo: "normal", preco: 2.00, statusVenda: "disponivel", vendedor: "particular", cidade: "São Paulo", lat: -23.50, lng: -46.60, foto: "https://via.placeholder.com/150?text=150" }
-        ];
+    <div id="modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[100] px-4">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-lg relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">×</button>
+            <h2 class="text-2xl font-black mb-1">Anunciar figurinha</h2>
+            <p class="text-gray-500 text-sm mb-6">Preencha as informações básicas do anúncio.</p>
 
-        window.renderizar = (lista) => {
-            const grid = document.getElementById('radarGrid');
-            grid.innerHTML = "";
-            
-            lista.forEach(fig => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    ${fig.tipo === 'brilhante' ? '<div class="badge-raridade">ESPECIAL</div>' : ''}
-                    <div class="img-container">
-                        <img src="${fig.foto}" alt="Figurinha">
-                    </div>
-                    <div class="info-selecao">${fig.selecao}</div>
-                    <h3 style="font-size:16px; font-weight:900; margin:5px 0;">${fig.numero}</h3>
-                    <div style="font-size:10px; color:var(--green); font-weight:800; margin-bottom:10px;">
-                        📍 ${fig.cidade}
-                    </div>
-                    <div class="price-tag">
-                        R$ ${fig.preco.toLocaleString('pt-br', {minimumFractionDigits: 2})}
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        };
+            <form class="space-y-4">
+                <input type="text" placeholder="Número da figurinha" class="w-full p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
+                <input type="text" placeholder="Jogador, seleção ou descrição" class="w-full p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
 
-        // Inicializar
-        renderizar(mockFigurinhas);
+                <div class="grid grid-cols-2 gap-4">
+                    <select class="p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
+                        <option>Venda</option>
+                        <option>Troca</option>
+                        <option>Venda ou troca</option>
+                    </select>
+                    <input type="number" placeholder="Valor R$" class="p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
+                </div>
 
-        window.fazerMatch = () => {
-            const num = document.getElementById('matchNumero').value.toLowerCase().trim();
-            const tipo = document.getElementById('matchTipo').value;
-            
-            let filtrados = mockFigurinhas.filter(f => {
-                const matchNum = num === "" || f.numero.toLowerCase().includes(num);
-                const matchTipo = tipo === "todos" || f.tipo === tipo;
-                return matchNum && matchTipo;
-            });
+                <input type="text" placeholder="Cidade / bairro" class="w-full p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-green-500">
 
-            if(filtrados.length > 0) {
-                renderizar(filtrados);
-            } else {
-                alert("Nenhuma figurinha encontrada com esses critérios.");
+                <button type="button" class="w-full bg-green-600 text-white p-4 rounded-2xl font-bold match-glow">
+                    Publicar anúncio
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const openModal = document.getElementById('openModal');
+        const openModal2 = document.getElementById('openModal2');
+        const closeModal = document.getElementById('closeModal');
+
+        function showModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        openModal.addEventListener('click', showModal);
+        openModal2.addEventListener('click', showModal);
+        closeModal.addEventListener('click', hideModal);
+
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                hideModal();
             }
-        };
+        });
     </script>
+
 </body>
 </html>
