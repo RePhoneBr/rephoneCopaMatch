@@ -53,9 +53,46 @@ body{
     animation:spin 1s linear infinite;
 }
 
+.security-ticker{
+    background:#dc2626;
+    color:white;
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:2px solid #991b1b;
+}
+
+.security-ticker-track{
+    display:inline-block;
+    padding:0.75rem 0;
+    font-size:0.78rem;
+    font-weight:900;
+    text-transform:uppercase;
+    animation:ticker 28s linear infinite;
+}
+
+.security-ticker span{
+    margin-right:3rem;
+}
+
 @keyframes spin{
     100%{
         transform:rotate(360deg);
+    }
+}
+
+@keyframes ticker{
+    0%{
+        transform:translateX(100%);
+    }
+
+    100%{
+        transform:translateX(-100%);
+    }
+}
+
+@media (min-width:768px){
+    .security-ticker-track{
+        font-size:0.9rem;
     }
 }
 
@@ -65,7 +102,9 @@ body{
 
 <body class="bg-gray-100 text-gray-900">
 
-<header class="sticky top-0 z-50 glass border-b border-gray-200">
+<div class="sticky top-0 z-50">
+
+<header class="glass border-b border-gray-200">
 
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
 
@@ -111,6 +150,19 @@ body{
     </div>
 
 </header>
+
+<div class="security-ticker">
+    <div class="security-ticker-track">
+        <span>ALERTA DE SEGURANÇA: negocie em locais públicos e movimentados.</span>
+        <span>Nunca envie dinheiro adiantado sem confirmar o produto e o vendedor.</span>
+        <span>Desconfie de preços muito abaixo do normal.</span>
+        <span>Em caso de emergência policial, ligue 190.</span>
+        <span>Para denúncias, ligue 181 ou procure a delegacia mais próxima.</span>
+        <span>Preserve conversas, comprovantes e dados do anúncio em caso de golpe.</span>
+    </div>
+</div>
+
+</div>
 
 <section class="py-8 md:py-14 px-4">
 
