@@ -1,0 +1,434 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Admin | FigurinhasCup</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+body{
+    font-family:'Inter', sans-serif;
+}
+
+.glass{
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+}
+
+.card-hover{
+    transition:0.3s;
+}
+
+.card-hover:hover{
+    transform:translateY(-4px);
+}
+
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<header class="sticky top-0 z-50 glass border-b border-gray-200">
+
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        <a
+            href="index.html"
+            class="text-3xl font-black text-green-600 italic"
+        >
+            FigurinhasCup
+        </a>
+
+        <div class="flex items-center gap-4">
+
+            <a
+                href="dashboard.html"
+                class="bg-black text-white px-5 py-2 rounded-full text-sm font-black"
+            >
+                Dashboard
+            </a>
+
+            <button
+                id="logoutBtn"
+                class="bg-red-500 text-white px-5 py-2 rounded-full text-sm font-black"
+            >
+                Sair
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section class="max-w-7xl mx-auto px-4 py-10">
+
+    <div class="mb-10">
+
+        <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-xs font-black uppercase">
+            Painel administrativo
+        </span>
+
+        <h1 class="text-5xl font-black mt-5">
+            Controle da plataforma
+        </h1>
+
+        <p class="text-gray-500 mt-3">
+            Gerencie anúncios, moderação e destaques.
+        </p>
+
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-6 mb-10">
+
+        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
+
+            <p class="text-gray-400 font-bold text-sm uppercase">
+                Total anúncios
+            </p>
+
+            <h2
+                id="totalAds"
+                class="text-5xl font-black mt-3"
+            >
+                0
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
+
+            <p class="text-gray-400 font-bold text-sm uppercase">
+                Pendentes
+            </p>
+
+            <h2
+                id="pendentesAds"
+                class="text-5xl font-black mt-3 text-yellow-500"
+            >
+                0
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
+
+            <p class="text-gray-400 font-bold text-sm uppercase">
+                Aprovados
+            </p>
+
+            <h2
+                id="aprovadosAds"
+                class="text-5xl font-black mt-3 text-green-600"
+            >
+                0
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
+
+            <p class="text-gray-400 font-bold text-sm uppercase">
+                Destaques
+            </p>
+
+            <h2
+                id="destaquesAds"
+                class="text-5xl font-black mt-3 text-blue-500"
+            >
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div
+        id="cards"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    ></div>
+
+</section>
+
+<script type="module">
+
+import {
+    auth,
+    db
+} from './firebase.js';
+
+import {
+
+    onAuthStateChanged,
+    signOut
+
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+import {
+
+    collection,
+    onSnapshot,
+    deleteDoc,
+    doc,
+    updateDoc
+
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const ADMIN_EMAIL =
+    "rp.rephone@gmail.com";
+
+document
+.getElementById('logoutBtn')
+.addEventListener('click', ()=>{
+
+    signOut(auth);
+
+});
+
+onAuthStateChanged(auth, (user)=>{
+
+    if(
+        !user ||
+        user.email !== ADMIN_EMAIL
+    ){
+
+        alert("Acesso negado");
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+    carregar();
+
+});
+
+function carregar(){
+
+    onSnapshot(
+        collection(db, "anuncios"),
+        (snapshot)=>{
+
+            const anuncios =
+                snapshot.docs.map(doc=>({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+            renderizar(anuncios);
+
+        }
+    );
+
+}
+
+function renderizar(lista){
+
+    const cards =
+        document.getElementById('cards');
+
+    cards.innerHTML = "";
+
+    const pendentes =
+        lista.filter(a=>a.status === 'pendente');
+
+    const aprovados =
+        lista.filter(a=>a.status === 'aprovado');
+
+    const destaques =
+        lista.filter(a=>a.destaque);
+
+    document.getElementById('totalAds').innerHTML =
+        lista.length;
+
+    document.getElementById('pendentesAds').innerHTML =
+        pendentes.length;
+
+    document.getElementById('aprovadosAds').innerHTML =
+        aprovados.length;
+
+    document.getElementById('destaquesAds').innerHTML =
+        destaques.length;
+
+    lista.reverse().forEach(ad=>{
+
+        cards.innerHTML += `
+
+        <div class="bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden card-hover">
+
+            ${
+                ad.destaque ?
+
+                `
+                    <div class="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-xs font-black">
+                        DESTAQUE
+                    </div>
+                `
+
+                :
+
+                ''
+            }
+
+            <img
+                src="${ad.foto}"
+                class="w-full h-56 object-cover rounded-2xl"
+            >
+
+            <div class="mt-5">
+
+                <div class="flex items-center justify-between">
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black uppercase">
+
+                        ${ad.tipo}
+
+                    </span>
+
+                    <span class="text-xs font-bold uppercase">
+
+                        ${ad.status || 'ativo'}
+
+                    </span>
+
+                </div>
+
+                <h2 class="text-2xl font-black mt-4">
+
+                    ${ad.jogador}
+
+                </h2>
+
+                <p class="text-gray-500 text-sm mt-1">
+
+                    ${ad.selecao} • #${ad.numero}
+
+                </p>
+
+                <div class="mt-4 text-sm text-green-700 font-bold">
+
+                    📍 ${ad.cidade}
+
+                </div>
+
+                <div class="mt-5 text-3xl font-black">
+
+                    R$ ${parseFloat(ad.preco).toFixed(2)}
+
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-6">
+
+                    <button
+                        onclick="aprovar('${ad.id}')"
+                        class="bg-green-600 text-white p-3 rounded-2xl font-black text-sm"
+                    >
+                        APROVAR
+                    </button>
+
+                    <button
+                        onclick="reprovar('${ad.id}')"
+                        class="bg-yellow-500 text-white p-3 rounded-2xl font-black text-sm"
+                    >
+                        REPROVAR
+                    </button>
+
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-3">
+
+                    <button
+                        onclick="toggleDestaque('${ad.id}', ${ad.destaque})"
+                        class="bg-blue-500 text-white p-3 rounded-2xl font-black text-sm"
+                    >
+                        ${ad.destaque ? 'REMOVER' : 'DESTAQUE'}
+                    </button>
+
+                    <button
+                        onclick="excluir('${ad.id}')"
+                        class="bg-red-500 text-white p-3 rounded-2xl font-black text-sm"
+                    >
+                        EXCLUIR
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+window.aprovar = async(id)=>{
+
+    await updateDoc(
+        doc(db, "anuncios", id),
+        {
+            status: "aprovado"
+        }
+    );
+
+};
+
+window.reprovar = async(id)=>{
+
+    await updateDoc(
+        doc(db, "anuncios", id),
+        {
+            status: "reprovado"
+        }
+    );
+
+};
+
+window.toggleDestaque = async(id, destaque)=>{
+
+    await updateDoc(
+        doc(db, "anuncios", id),
+        {
+            destaque: !destaque
+        }
+    );
+
+};
+
+window.excluir = async(id)=>{
+
+    const confirmar =
+        confirm("Excluir anúncio?");
+
+    if(!confirmar) return;
+
+    await deleteDoc(
+        doc(db, "anuncios", id)
+    );
+
+};
+
+</script>
+
+</body>
+</html>
+```
