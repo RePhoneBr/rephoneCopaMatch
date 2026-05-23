@@ -284,14 +284,7 @@ body{
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        <button
-                        onclick="salvarPedido()"
-                        class="bg-black hover:bg-gray-800 transition text-white p-5 rounded-[2rem] font-black"
-                        >
-                            Finalizar pedido
-                        </button>
-
-                        <button
+                      <button
                         onclick="pedidoWhatsapp()"
                         class="bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
                         >
@@ -527,7 +520,7 @@ Entrega: ${entrega}
 Valor total: R$ ${total.toFixed(2)}`;
 
     const url =
-`https://wa.me/5527999999999?text=${encodeURIComponent(msg)}`;
+`https://wa.me/5527995291669?text=${encodeURIComponent(msg)}`;
 
     window.open(url,'_blank');
 
