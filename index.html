@@ -20,8 +20,17 @@ rel="stylesheet"
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
+html{
+    font-size:clamp(14px,1vw,16px);
+}
+
 body{
     font-family:'Inter', sans-serif;
+    overflow-x:hidden;
 }
 
 .glass{
@@ -59,20 +68,24 @@ body{
 
 <body class="bg-gray-100">
 
+<!-- HEADER -->
+
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
 
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         <a
             href="index.html"
-            class="text-3xl font-black text-green-600 italic"
+            class="text-2xl md:text-3xl font-black text-green-600 italic"
         >
             FigurinhasCup
         </a>
 
         <div class="hidden md:flex gap-8 text-sm font-bold">
 
-            <a href="#feed">Feed</a>
+            <a href="#feed">
+                Feed
+            </a>
 
             <a href="#" id="btnAnunciar">
                 Anunciar
@@ -95,23 +108,27 @@ body{
 
 </header>
 
-<section class="py-16 px-4">
+<!-- HERO -->
+
+<section class="py-12 md:py-16 px-4">
 
     <div class="max-w-5xl mx-auto text-center">
 
-        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase">
+        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
             Marketplace inteligente de figurinhas
         </span>
 
-        <h1 class="text-5xl md:text-7xl font-black mt-6 tracking-tight leading-none">
-            Encontre sua figurinha faltante.
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-black mt-6 tracking-tight leading-none">
+            Complete seu álbum.
         </h1>
 
-        <p class="text-gray-500 max-w-2xl mx-auto mt-6 text-lg">
+        <p class="text-gray-500 max-w-2xl mx-auto mt-6 text-base md:text-lg">
             Troque, compre e venda figurinhas com colecionadores próximos.
         </p>
 
-        <div class="bg-white rounded-[2rem] p-4 shadow-2xl mt-10 grid md:grid-cols-4 gap-4">
+        <!-- BUSCA -->
+
+        <div class="bg-white rounded-[2rem] p-4 shadow-2xl mt-10 grid grid-cols-1 md:grid-cols-4 gap-4">
 
             <input
                 type="text"
@@ -122,7 +139,7 @@ body{
 
             <button
                 onclick="buscar()"
-                class="bg-green-600 text-white rounded-2xl font-black"
+                class="bg-green-600 hover:bg-green-700 transition text-white rounded-2xl font-black p-4"
             >
                 BUSCAR
             </button>
@@ -139,6 +156,8 @@ body{
     </div>
 
 </section>
+
+<!-- FEED -->
 
 <section
     id="feed"
@@ -158,6 +177,25 @@ body{
     ></div>
 
 </section>
+
+<!-- BOTÃO LOJA -->
+
+<a
+href="loja.html"
+class="fixed bottom-24 right-5 z-50 bg-gradient-to-r from-yellow-400 to-green-500 hover:scale-105 transition-all duration-300 text-black px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 font-black text-sm"
+>
+
+    <span class="text-2xl">
+        🛒
+    </span>
+
+    <span>
+        Loja Oficial
+    </span>
+
+</a>
+
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -182,10 +220,20 @@ import {
 
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
+
+// ========================================
+// VARIÁVEIS
+// ========================================
+
 let anuncios = [];
 
 let userLat = null;
 let userLng = null;
+
+
+// ========================================
+// DISTÂNCIA
+// ========================================
 
 function calcularDistancia(lat1, lon1, lat2, lon2){
 
@@ -217,6 +265,11 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
 
 }
 
+
+// ========================================
+// GEOLOCALIZAÇÃO
+// ========================================
+
 navigator.geolocation.getCurrentPosition(async(pos)=>{
 
     userLat = pos.coords.latitude;
@@ -232,11 +285,21 @@ navigator.geolocation.getCurrentPosition(async(pos)=>{
         const data = await res.json();
 
         document.getElementById('locationText').innerHTML =
-            `📍 Ofertas próximas de ${data.address.city || data.address.town}`;
+            `📍 Ofertas próximas de ${data.address.city || data.address.town || 'sua região'}`;
 
-    }catch(error){}
+    }catch(error){
+
+        document.getElementById('locationText').innerHTML =
+            `📍 Navegando pelo marketplace`;
+
+    }
 
 });
+
+
+// ========================================
+// LOGIN
+// ========================================
 
 onAuthStateChanged(auth, async(user)=>{
 
@@ -279,6 +342,11 @@ onAuthStateChanged(auth, async(user)=>{
 
 });
 
+
+// ========================================
+// LISTAR ANÚNCIOS
+// ========================================
+
 const q =
     query(
         collection(db, "anuncios"),
@@ -296,6 +364,11 @@ onSnapshot(q, (snapshot)=>{
     renderizar(anuncios);
 
 });
+
+
+// ========================================
+// RENDERIZAR
+// ========================================
 
 function renderizar(lista){
 
@@ -327,9 +400,28 @@ function renderizar(lista){
 
         }
 
+        const verificado =
+            ad.localizacaoVerificada;
+
         cards.innerHTML += `
 
         <div class="card bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden">
+
+            ${
+                !verificado
+                ?
+                `
+                <div class="absolute top-4 left-4 z-10 bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
+                    ⚠ NÃO VERIFICADO
+                </div>
+                `
+                :
+                `
+                <div class="absolute top-4 left-4 z-10 bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
+                    ✔ VERIFICADO
+                </div>
+                `
+            }
 
             <img
                 src="${ad.foto}"
@@ -338,11 +430,11 @@ function renderizar(lista){
 
             <div class="mt-4">
 
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between gap-2">
 
                     <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black uppercase">
 
-                        ${ad.tipo}
+                        ${ad.tipo || 'Figurinha'}
 
                     </span>
 
@@ -354,36 +446,36 @@ function renderizar(lista){
 
                 </div>
 
-                <h2 class="text-2xl font-black mt-3">
+                <h2 class="text-xl md:text-2xl font-black mt-3 break-words">
 
-                    ${ad.jogador}
+                    ${ad.jogador || 'Pack Figurinhas'}
 
                 </h2>
 
-                <p class="text-gray-500 text-sm mt-1">
+                <p class="text-gray-500 text-sm mt-1 break-words">
 
-                    ${ad.selecao} • #${ad.numero}
+                    ${ad.selecao || 'Coleção'} • #${ad.numero || '000'}
 
                 </p>
 
                 <div class="mt-4 text-sm text-green-700 font-bold">
 
-                    📍 ${ad.cidade}
+                    📍 ${ad.cidade || 'Não informado'}
                     ${distancia ? '• ' + distancia : ''}
 
                 </div>
 
-                <div class="flex items-center justify-between mt-6">
+                <div class="flex items-center justify-between mt-6 gap-3">
 
-                    <span class="text-2xl font-black">
+                    <span class="text-xl md:text-2xl font-black">
 
-                        R$ ${parseFloat(ad.preco).toFixed(2)}
+                        R$ ${parseFloat(ad.preco || 0).toFixed(2)}
 
                     </span>
 
                     <a
                         href="anuncio.html?id=${ad.id}"
-                        class="bg-black text-white px-5 py-3 rounded-full text-sm font-black"
+                        class="bg-black hover:bg-gray-800 transition text-white px-5 py-3 rounded-full text-sm font-black whitespace-nowrap"
                     >
                         VER
                     </a>
@@ -400,6 +492,11 @@ function renderizar(lista){
 
 }
 
+
+// ========================================
+// BUSCA
+// ========================================
+
 window.buscar = ()=>{
 
     const value =
@@ -411,19 +508,24 @@ window.buscar = ()=>{
     const filtrados =
         anuncios.filter(ad=>
 
-            ad.jogador.toLowerCase().includes(value)
+            (ad.jogador || '').toLowerCase().includes(value)
             ||
 
-            ad.selecao.toLowerCase().includes(value)
+            (ad.selecao || '').toLowerCase().includes(value)
             ||
 
-            ad.numero.includes(value)
+            (ad.numero || '').toString().includes(value)
 
         );
 
     renderizar(filtrados);
 
 };
+
+
+// ========================================
+// BOTÃO ANUNCIAR
+// ========================================
 
 document
     .getElementById('btnAnunciar')
@@ -442,185 +544,8 @@ document
             "anunciar.html";
 
     });
-// =========================================
-// ENVELOPES OFICIAIS
-// =========================================
 
-import {
-    addDoc,
-    collection,
-    serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-
-let qtdEnvelope = 1;
-
-const precoEnvelope = 4;
-
-
-// =========================================
-// QUANTIDADE
-// =========================================
-
-window.alterarQtd = (valor)=>{
-
-    qtdEnvelope += valor;
-
-    if(qtdEnvelope < 1){
-
-        qtdEnvelope = 1;
-
-    }
-
-    atualizarTotal();
-
-};
-
-
-// =========================================
-// TOTAL
-// =========================================
-
-function atualizarTotal(){
-
-    document.getElementById('qtdEnvelope')
-    .innerHTML = qtdEnvelope;
-
-    const total =
-        qtdEnvelope * precoEnvelope;
-
-    document.getElementById('valorTotal')
-    .innerHTML =
-    `
-    R$ ${total.toLocaleString('pt-br',{
-        minimumFractionDigits:2
-    })}
-    `;
-
-}
-
-atualizarTotal();
-
-
-// =========================================
-// FIREBASE
-// =========================================
-
-window.salvarPedido = async()=>{
-
-    const nome =
-        document.getElementById('pedidoNome').value;
-
-    const whatsapp =
-        document.getElementById('pedidoWhatsapp').value;
-
-    const cidade =
-        document.getElementById('pedidoCidade').value;
-
-    const entrega =
-        document.getElementById('formaEntrega').value;
-
-    if(!nome || !whatsapp){
-
-        alert('Preencha nome e WhatsApp.');
-
-        return;
-
-    }
-
-    try{
-
-        await addDoc(
-            collection(db, 'pedidos'),
-            {
-
-                nome,
-
-                whatsapp,
-
-                cidade,
-
-                entrega,
-
-                quantidade:
-                    qtdEnvelope,
-
-                valorTotal:
-                    qtdEnvelope * precoEnvelope,
-
-                status:
-                    'novo',
-
-                criadoEm:
-                    serverTimestamp()
-
-            }
-        );
-
-        alert('Pedido enviado com sucesso.');
-
-    }
-
-    catch(e){
-
-        console.error(e);
-
-        alert('Erro ao enviar pedido.');
-
-    }
-
-};
-
-
-// =========================================
-// WHATSAPP
-// =========================================
-
-window.pedidoWhatsapp = ()=>{
-
-    const nome =
-        document.getElementById('pedidoNome').value;
-
-    const cidade =
-        document.getElementById('pedidoCidade').value;
-
-    const entrega =
-        document.getElementById('formaEntrega').value;
-
-    const total =
-        qtdEnvelope * precoEnvelope;
-
-    const msg =
-`Olá, quero comprar ${qtdEnvelope} envelopes oficiais.
-
-Nome: ${nome}
-
-Cidade: ${cidade}
-
-Entrega: ${entrega}
-
-Valor total: R$ ${total.toFixed(2)}`;
-
-    const url =
-`https://wa.me/55SEUNUMERO?text=${encodeURIComponent(msg)}`;
-
-    window.open(url,'_blank');
-
-};
 </script>
-<a
-href="loja.html"
-class="fixed bottom-24 right-5 z-50 bg-gradient-to-r from-yellow-400 to-green-500 hover:scale-105 transition-all duration-300 text-black px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 font-black text-sm"
->
 
-    <span class="text-2xl">
-        🛒
-    </span>
-
-    <span>
-        Loja Oficial
-    </span>
-
-</a>
 </body>
 </html>
