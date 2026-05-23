@@ -1,0 +1,460 @@
+```html id="6kv8qg"
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Figurinha</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+body{
+    font-family:'Inter', sans-serif;
+}
+
+.glass{
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+}
+
+.card-hover{
+    transition:0.3s;
+}
+
+.card-hover:hover{
+    transform:translateY(-4px);
+}
+
+.loader{
+    border:4px solid #f3f3f3;
+    border-top:4px solid #16a34a;
+    border-radius:50%;
+    width:45px;
+    height:45px;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<header class="sticky top-0 z-50 glass border-b border-gray-200">
+
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        <a
+            href="index.html"
+            class="text-3xl font-black text-green-600 italic"
+        >
+            FigurinhasCup
+        </a>
+
+        <a
+            href="index.html"
+            class="text-sm font-bold"
+        >
+            Voltar
+        </a>
+
+    </div>
+
+</header>
+
+<div
+    id="loaderArea"
+    class="flex justify-center py-24"
+>
+    <div class="loader"></div>
+</div>
+
+<main
+    id="content"
+    class="hidden"
+>
+
+<section class="max-w-7xl mx-auto px-4 py-10">
+
+    <div class="grid lg:grid-cols-2 gap-10">
+
+        <div>
+
+            <img
+                id="foto"
+                class="w-full rounded-[2rem] shadow-2xl object-cover"
+            >
+
+        </div>
+
+        <div>
+
+            <div class="flex items-center gap-3 mb-5">
+
+                <span
+                    id="tipo"
+                    class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase"
+                ></span>
+
+                <span
+                    id="raridade"
+                    class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-xs font-black uppercase"
+                ></span>
+
+            </div>
+
+            <h1
+                id="titulo"
+                class="text-5xl font-black leading-tight"
+            ></h1>
+
+            <p
+                id="subtitulo"
+                class="text-gray-500 mt-4 text-lg"
+            ></p>
+
+            <div
+                id="localizacao"
+                class="mt-6 text-green-700 font-bold"
+            ></div>
+
+            <div
+                id="descricao"
+                class="mt-8 bg-white rounded-[2rem] p-6 border border-gray-100 text-gray-600 leading-relaxed"
+            ></div>
+
+            <div class="mt-10 flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-gray-400 font-bold uppercase">
+                        Valor
+                    </p>
+
+                    <h2
+                        id="preco"
+                        class="text-5xl font-black"
+                    ></h2>
+
+                </div>
+
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mt-10">
+
+                <a
+                    id="btnWhatsapp"
+                    target="_blank"
+                    class="bg-green-600 text-white p-5 rounded-2xl text-center font-black text-lg hover:scale-[1.02] transition-all"
+                >
+                    WhatsApp
+                </a>
+
+                <button
+                    id="btnCompartilhar"
+                    class="bg-black text-white p-5 rounded-2xl font-black text-lg"
+                >
+                    Compartilhar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="px-4 pb-20">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div class="flex items-center justify-between mb-8">
+
+            <div>
+
+                <span class="text-green-600 font-black uppercase text-sm">
+                    Marketplace
+                </span>
+
+                <h2 class="text-4xl font-black">
+                    Relacionados
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div
+            id="relacionados"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        ></div>
+
+    </div>
+
+</section>
+
+</main>
+
+<script type="module">
+
+import {
+    db
+} from './firebase.js';
+
+import {
+
+    doc,
+    getDoc,
+    collection,
+    getDocs
+
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const id =
+    params.get('id');
+
+let userLat = null;
+let userLng = null;
+
+function calcularDistancia(lat1, lon1, lat2, lon2){
+
+    const R = 6371;
+
+    const dLat =
+        (lat2-lat1) * Math.PI/180;
+
+    const dLon =
+        (lon2-lon1) * Math.PI/180;
+
+    const a =
+        Math.sin(dLat/2) *
+        Math.sin(dLat/2) +
+
+        Math.cos(lat1 * Math.PI/180) *
+        Math.cos(lat2 * Math.PI/180) *
+
+        Math.sin(dLon/2) *
+        Math.sin(dLon/2);
+
+    return (
+        R * 2 *
+        Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1-a)
+        )
+    ).toFixed(1);
+
+}
+
+navigator.geolocation.getCurrentPosition((pos)=>{
+
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+
+});
+
+async function carregarAnuncio(){
+
+    const anuncioRef =
+        doc(db, "anuncios", id);
+
+    const anuncioSnap =
+        await getDoc(anuncioRef);
+
+    if(!anuncioSnap.exists()){
+
+        alert("Anúncio não encontrado");
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+    const ad =
+        anuncioSnap.data();
+
+    document.title =
+        ad.jogador;
+
+    document.getElementById('foto').src =
+        ad.foto;
+
+    document.getElementById('tipo').innerHTML =
+        ad.tipo;
+
+    document.getElementById('raridade').innerHTML =
+        ad.raridade;
+
+    document.getElementById('titulo').innerHTML =
+        ad.jogador;
+
+    document.getElementById('subtitulo').innerHTML =
+        `${ad.selecao} • #${ad.numero}`;
+
+    let distancia = "";
+
+    if(
+        userLat &&
+        ad.lat
+    ){
+
+        distancia =
+            " • " +
+            calcularDistancia(
+                userLat,
+                userLng,
+                ad.lat,
+                ad.lng
+            ) +
+            " km";
+
+    }
+
+    document.getElementById('localizacao').innerHTML =
+        `📍 ${ad.cidade} - ${ad.estado}${distancia}`;
+
+    document.getElementById('descricao').innerHTML =
+        ad.descricao || "Sem descrição";
+
+    document.getElementById('preco').innerHTML =
+        `R$ ${parseFloat(ad.preco).toFixed(2)}`;
+
+    document.getElementById('btnWhatsapp').href =
+        `https://wa.me/55${ad.whatsapp.replace(/\D/g,'')}?text=Olá! Tenho interesse na figurinha ${ad.jogador} #${ad.numero}`;
+
+    document.getElementById('btnCompartilhar')
+    .addEventListener('click', ()=>{
+
+        navigator.share({
+
+            title: ad.jogador,
+
+            text:
+                `Confira esta figurinha no FigurinhasCup`,
+
+            url: window.location.href
+
+        });
+
+    });
+
+    carregarRelacionados(ad.selecao);
+
+    document
+        .getElementById('loaderArea')
+        .style.display = 'none';
+
+    document
+        .getElementById('content')
+        .classList.remove('hidden');
+
+}
+
+async function carregarRelacionados(selecao){
+
+    const snap =
+        await getDocs(
+            collection(db, "anuncios")
+        );
+
+    const relacionados =
+        snap.docs
+        .map(doc=>({
+            id: doc.id,
+            ...doc.data()
+        }))
+        .filter(a=>
+            a.selecao === selecao &&
+            a.id !== id
+        )
+        .slice(0,4);
+
+    const area =
+        document.getElementById('relacionados');
+
+    area.innerHTML = "";
+
+    relacionados.forEach(ad=>{
+
+        area.innerHTML += `
+
+        <div class="bg-white rounded-[2rem] p-4 border border-gray-100 card-hover">
+
+            <img
+                src="${ad.foto}"
+                class="w-full h-48 object-cover rounded-2xl"
+            >
+
+            <div class="mt-4">
+
+                <h3 class="text-xl font-black">
+
+                    ${ad.jogador}
+
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-1">
+
+                    #${ad.numero}
+
+                </p>
+
+                <div class="flex items-center justify-between mt-5">
+
+                    <span class="font-black text-xl">
+
+                        R$ ${parseFloat(ad.preco).toFixed(2)}
+
+                    </span>
+
+                    <a
+                        href="anuncio.html?id=${ad.id}"
+                        class="bg-black text-white px-4 py-2 rounded-full text-sm font-black"
+                    >
+                        Ver
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+carregarAnuncio();
+
+</script>
+
+</body>
+</html>
+```
