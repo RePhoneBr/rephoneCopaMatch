@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -20,9 +19,13 @@ rel="stylesheet"
 >
 
 <style>
+*{
+    box-sizing:border-box;
+}
 
 body{
     font-family:'Inter', sans-serif;
+    overflow-x:hidden;
 }
 
 .glass{
@@ -38,35 +41,50 @@ body{
     transform:translateY(-4px);
 }
 
+.loader{
+    border:4px solid #f3f3f3;
+    border-top:4px solid #16a34a;
+    border-radius:50%;
+    width:42px;
+    height:42px;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
 </style>
 
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 text-gray-900">
 
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
 
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
         <a
             href="index.html"
-            class="text-3xl font-black text-green-600 italic"
+            class="text-2xl md:text-3xl font-black text-green-600 italic"
         >
             FigurinhasCup
         </a>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 md:gap-4">
 
             <a
                 href="dashboard.html"
-                class="bg-black text-white px-5 py-2 rounded-full text-sm font-black"
+                class="bg-black text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-black"
             >
                 Dashboard
             </a>
 
             <button
                 id="logoutBtn"
-                class="bg-red-500 text-white px-5 py-2 rounded-full text-sm font-black"
+                type="button"
+                class="bg-red-500 text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-black"
             >
                 Sair
             </button>
@@ -77,86 +95,58 @@ body{
 
 </header>
 
-<section class="max-w-7xl mx-auto px-4 py-10">
+<section class="max-w-7xl mx-auto px-4 py-8 md:py-10">
 
-    <div class="mb-10">
+    <div class="mb-8 md:mb-10">
 
-        <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-xs font-black uppercase">
+        <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
             Painel administrativo
         </span>
 
-        <h1 class="text-5xl font-black mt-5">
+        <h1 class="text-3xl md:text-5xl font-black mt-5 leading-tight">
             Controle da plataforma
         </h1>
 
-        <p class="text-gray-500 mt-3">
+        <p class="text-gray-500 mt-3 text-sm md:text-base">
             Gerencie anúncios, moderação e destaques.
         </p>
 
     </div>
 
-    <div class="grid md:grid-cols-4 gap-6 mb-10">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mb-8 md:mb-10">
 
-        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
-
-            <p class="text-gray-400 font-bold text-sm uppercase">
-                Total anúncios
-            </p>
-
-            <h2
-                id="totalAds"
-                class="text-5xl font-black mt-3"
-            >
-                0
-            </h2>
-
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100">
+            <p class="text-gray-400 font-bold text-xs md:text-sm uppercase">Total</p>
+            <h2 id="totalAds" class="text-4xl md:text-5xl font-black mt-3">0</h2>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
-
-            <p class="text-gray-400 font-bold text-sm uppercase">
-                Pendentes
-            </p>
-
-            <h2
-                id="pendentesAds"
-                class="text-5xl font-black mt-3 text-yellow-500"
-            >
-                0
-            </h2>
-
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100">
+            <p class="text-gray-400 font-bold text-xs md:text-sm uppercase">Pendentes</p>
+            <h2 id="pendentesAds" class="text-4xl md:text-5xl font-black mt-3 text-yellow-500">0</h2>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
-
-            <p class="text-gray-400 font-bold text-sm uppercase">
-                Aprovados
-            </p>
-
-            <h2
-                id="aprovadosAds"
-                class="text-5xl font-black mt-3 text-green-600"
-            >
-                0
-            </h2>
-
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100">
+            <p class="text-gray-400 font-bold text-xs md:text-sm uppercase">Aprovados</p>
+            <h2 id="aprovadosAds" class="text-4xl md:text-5xl font-black mt-3 text-green-600">0</h2>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-6 border border-gray-100">
-
-            <p class="text-gray-400 font-bold text-sm uppercase">
-                Destaques
-            </p>
-
-            <h2
-                id="destaquesAds"
-                class="text-5xl font-black mt-3 text-blue-500"
-            >
-                0
-            </h2>
-
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100">
+            <p class="text-gray-400 font-bold text-xs md:text-sm uppercase">Reprovados</p>
+            <h2 id="reprovadosAds" class="text-4xl md:text-5xl font-black mt-3 text-red-500">0</h2>
         </div>
 
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100">
+            <p class="text-gray-400 font-bold text-xs md:text-sm uppercase">Destaques</p>
+            <h2 id="destaquesAds" class="text-4xl md:text-5xl font-black mt-3 text-blue-500">0</h2>
+        </div>
+
+    </div>
+
+    <div
+        id="loaderArea"
+        class="flex justify-center py-20"
+    >
+        <div class="loader"></div>
     </div>
 
     <div
@@ -174,39 +164,33 @@ import {
 } from './firebase.js';
 
 import {
-
     onAuthStateChanged,
     signOut
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import {
-
     collection,
     onSnapshot,
     deleteDoc,
     doc,
-    updateDoc
-
+    updateDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const ADMIN_EMAIL =
-    "nortecolor@gmail.com";
+const ADMIN_EMAIL = "nortecolor@gmail.com";
 
-document
-.getElementById('logoutBtn')
-.addEventListener('click', ()=>{
+const cards = document.getElementById('cards');
+const loaderArea = document.getElementById('loaderArea');
+const logoutBtn = document.getElementById('logoutBtn');
 
-    signOut(auth);
-
+logoutBtn.addEventListener('click', async()=>{
+    await signOut(auth);
+    window.location.href = "index.html";
 });
 
 onAuthStateChanged(auth, (user)=>{
 
-    if(
-        !user ||
-        user.email !== ADMIN_EMAIL
-    ){
+    if(!user || user.email !== ADMIN_EMAIL){
 
         alert("Acesso negado");
 
@@ -221,6 +205,51 @@ onAuthStateChanged(auth, (user)=>{
 
 });
 
+function formatarPreco(valor){
+
+    const numero =
+        Number(valor);
+
+    if(!Number.isFinite(numero)){
+        return "R$ 0,00";
+    }
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+function texto(valor, fallback = ""){
+
+    if(valor === undefined || valor === null || valor === ""){
+        return fallback;
+    }
+
+    return String(valor);
+
+}
+
+function ordenarPorData(lista){
+
+    return lista.sort((a,b)=>{
+
+        const dataA =
+            a.criadoEm?.seconds || 0;
+
+        const dataB =
+            b.criadoEm?.seconds || 0;
+
+        return dataB - dataA;
+
+    });
+
+}
+
 function carregar(){
 
     onSnapshot(
@@ -228,12 +257,34 @@ function carregar(){
         (snapshot)=>{
 
             const anuncios =
-                snapshot.docs.map(doc=>({
-                    id: doc.id,
-                    ...doc.data()
+                snapshot.docs.map((documento)=>({
+                    id: documento.id,
+                    ...documento.data()
                 }));
 
-            renderizar(anuncios);
+            renderizar(
+                ordenarPorData(anuncios)
+            );
+
+        },
+        (error)=>{
+
+            console.error(error);
+
+            loaderArea.style.display =
+                'none';
+
+            cards.innerHTML = `
+                <div class="col-span-full bg-white rounded-[2rem] p-8 text-center border border-gray-100">
+                    <h2 class="text-2xl md:text-3xl font-black">
+                        Erro ao carregar anúncios
+                    </h2>
+
+                    <p class="text-gray-500 mt-3 text-sm md:text-base">
+                        Verifique as permissões do Firestore.
+                    </p>
+                </div>
+            `;
 
         }
     );
@@ -242,111 +293,149 @@ function carregar(){
 
 function renderizar(lista){
 
-    const cards =
-        document.getElementById('cards');
+    loaderArea.style.display =
+        'none';
 
-    cards.innerHTML = "";
+    cards.innerHTML =
+        "";
 
     const pendentes =
-        lista.filter(a=>a.status === 'pendente');
+        lista.filter((a)=>a.status === 'pendente');
 
     const aprovados =
-        lista.filter(a=>a.status === 'aprovado');
+        lista.filter((a)=>a.status === 'aprovado');
+
+    const reprovados =
+        lista.filter((a)=>a.status === 'reprovado');
 
     const destaques =
-        lista.filter(a=>a.destaque);
+        lista.filter((a)=>a.destaque);
 
-    document.getElementById('totalAds').innerHTML =
+    document.getElementById('totalAds').textContent =
         lista.length;
 
-    document.getElementById('pendentesAds').innerHTML =
+    document.getElementById('pendentesAds').textContent =
         pendentes.length;
 
-    document.getElementById('aprovadosAds').innerHTML =
+    document.getElementById('aprovadosAds').textContent =
         aprovados.length;
 
-    document.getElementById('destaquesAds').innerHTML =
+    document.getElementById('reprovadosAds').textContent =
+        reprovados.length;
+
+    document.getElementById('destaquesAds').textContent =
         destaques.length;
 
-    lista.reverse().forEach(ad=>{
+    if(lista.length === 0){
 
-        cards.innerHTML += `
+        cards.innerHTML = `
+            <div class="col-span-full bg-white rounded-[2rem] p-8 text-center border border-gray-100">
+                <h2 class="text-2xl md:text-3xl font-black">
+                    Nenhum anúncio encontrado
+                </h2>
+            </div>
+        `;
 
-        <div class="bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden card-hover">
+        return;
 
-            ${
-                ad.destaque ?
+    }
 
-                `
-                    <div class="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-xs font-black">
-                        DESTAQUE
-                    </div>
-                `
+    lista.forEach((ad)=>{
 
-                :
+        const verificado =
+            Boolean(ad.verificado || ad.localizacaoVerificada);
 
-                ''
-            }
+        const vendido =
+            ad.status === "vendido";
+
+        const reprovado =
+            ad.status === "reprovado";
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            `bg-white rounded-[2rem] p-5 border border-gray-100 relative overflow-hidden card-hover ${reprovado ? 'opacity-70 grayscale' : ''}`;
+
+        card.innerHTML = `
+            <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+                ${
+                    ad.destaque
+                    ?
+                    '<div class="bg-blue-500 text-white px-4 py-2 rounded-full text-[10px] md:text-xs font-black">DESTAQUE</div>'
+                    :
+                    ''
+                }
+
+                ${
+                    verificado
+                    ?
+                    '<div class="bg-green-500 text-white px-4 py-2 rounded-full text-[10px] md:text-xs font-black">VERIFICADO</div>'
+                    :
+                    '<div class="bg-yellow-400 text-black px-4 py-2 rounded-full text-[10px] md:text-xs font-black">NÃO VERIFICADO</div>'
+                }
+
+                ${
+                    vendido
+                    ?
+                    '<div class="bg-red-500 text-white px-4 py-2 rounded-full text-[10px] md:text-xs font-black">VENDIDO</div>'
+                    :
+                    ''
+                }
+            </div>
 
             <img
-                src="${ad.foto}"
-                class="w-full h-56 object-cover rounded-2xl"
+                src="${texto(ad.foto, 'https://placehold.co/600x400?text=Sem+foto')}"
+                alt="Foto da figurinha"
+                class="w-full h-52 md:h-56 object-cover rounded-2xl"
             >
 
             <div class="mt-5">
 
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between gap-3">
 
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-black uppercase">
-
-                        ${ad.tipo}
-
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase truncate max-w-[60%]">
+                        ${texto(ad.tipo, 'Figurinha')}
                     </span>
 
-                    <span class="text-xs font-bold uppercase">
-
-                        ${ad.status || 'ativo'}
-
+                    <span class="text-[10px] md:text-xs font-bold uppercase text-gray-500">
+                        ${texto(ad.status, 'sem status')}
                     </span>
 
                 </div>
 
-                <h2 class="text-2xl font-black mt-4">
-
-                    ${ad.jogador}
-
+                <h2 class="text-xl md:text-2xl font-black mt-4 break-words">
+                    ${texto(ad.jogador, 'Sem título')}
                 </h2>
 
-                <p class="text-gray-500 text-sm mt-1">
-
-                    ${ad.selecao} • #${ad.numero}
-
+                <p class="text-gray-500 text-xs md:text-sm mt-1 break-words">
+                    ${texto(ad.selecao, 'Coleção não informada')}${ad.numero ? ' • #' + ad.numero : ''}
                 </p>
 
-                <div class="mt-4 text-sm text-green-700 font-bold">
-
-                    📍 ${ad.cidade}
-
+                <div class="mt-4 text-xs md:text-sm text-green-700 font-bold break-words">
+                    ${texto(ad.cidade, 'Cidade não informada')}
                 </div>
 
-                <div class="mt-5 text-3xl font-black">
-
-                    R$ ${parseFloat(ad.preco).toFixed(2)}
-
+                <div class="mt-5 text-2xl md:text-3xl font-black">
+                    ${formatarPreco(ad.preco)}
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mt-6">
 
                     <button
-                        onclick="aprovar('${ad.id}')"
-                        class="bg-green-600 text-white p-3 rounded-2xl font-black text-sm"
+                        type="button"
+                        data-action="aprovar"
+                        data-id="${ad.id}"
+                        class="bg-green-600 text-white p-3 rounded-2xl font-black text-xs md:text-sm"
                     >
                         APROVAR
                     </button>
 
                     <button
-                        onclick="reprovar('${ad.id}')"
-                        class="bg-yellow-500 text-white p-3 rounded-2xl font-black text-sm"
+                        type="button"
+                        data-action="reprovar"
+                        data-id="${ad.id}"
+                        class="bg-yellow-500 text-white p-3 rounded-2xl font-black text-xs md:text-sm"
                     >
                         REPROVAR
                     </button>
@@ -356,79 +445,158 @@ function renderizar(lista){
                 <div class="grid grid-cols-2 gap-3 mt-3">
 
                     <button
-                        onclick="toggleDestaque('${ad.id}', ${ad.destaque})"
-                        class="bg-blue-500 text-white p-3 rounded-2xl font-black text-sm"
+                        type="button"
+                        data-action="destaque"
+                        data-id="${ad.id}"
+                        data-destaque="${ad.destaque ? 'true' : 'false'}"
+                        class="bg-blue-500 text-white p-3 rounded-2xl font-black text-xs md:text-sm"
                     >
                         ${ad.destaque ? 'REMOVER' : 'DESTAQUE'}
                     </button>
 
                     <button
-                        onclick="excluir('${ad.id}')"
-                        class="bg-red-500 text-white p-3 rounded-2xl font-black text-sm"
+                        type="button"
+                        data-action="excluir"
+                        data-id="${ad.id}"
+                        class="bg-red-500 text-white p-3 rounded-2xl font-black text-xs md:text-sm"
                     >
                         EXCLUIR
                     </button>
 
                 </div>
 
+                <a
+                    href="anuncio.html?id=${encodeURIComponent(ad.id)}"
+                    target="_blank"
+                    class="block w-full mt-3 bg-black text-white p-3 rounded-2xl font-black text-xs md:text-sm text-center"
+                >
+                    ABRIR ANÚNCIO
+                </a>
+
             </div>
-
-        </div>
-
         `;
+
+        cards.appendChild(card);
 
     });
 
 }
 
-window.aprovar = async(id)=>{
+document.addEventListener('click', async(event)=>{
 
-    await updateDoc(
-        doc(db, "anuncios", id),
-        {
-            status: "aprovado"
+    const button =
+        event.target.closest('button[data-action]');
+
+    if(!button){
+        return;
+    }
+
+    const action =
+        button.dataset.action;
+
+    const id =
+        button.dataset.id;
+
+    const anuncioRef =
+        doc(db, "anuncios", id);
+
+    button.disabled =
+        true;
+
+    const textoOriginal =
+        button.textContent;
+
+    button.textContent =
+        "PROCESSANDO...";
+
+    try{
+
+        if(action === "aprovar"){
+
+            await updateDoc(
+                anuncioRef,
+                {
+                    status: "aprovado",
+                    aprovadoEm: serverTimestamp(),
+                    aprovadoPor: ADMIN_EMAIL
+                }
+            );
+
         }
-    );
 
-};
+        if(action === "reprovar"){
 
-window.reprovar = async(id)=>{
+            const confirmar =
+                confirm("Reprovar este anúncio? Ele deixará de aparecer no marketplace.");
 
-    await updateDoc(
-        doc(db, "anuncios", id),
-        {
-            status: "reprovado"
+            if(!confirmar){
+                return;
+            }
+
+            await updateDoc(
+                anuncioRef,
+                {
+                    status: "reprovado",
+                    destaque: false,
+                    reprovadoEm: serverTimestamp(),
+                    reprovadoPor: ADMIN_EMAIL
+                }
+            );
+
         }
-    );
 
-};
+        if(action === "destaque"){
 
-window.toggleDestaque = async(id, destaque)=>{
+            const destaqueAtual =
+                button.dataset.destaque === "true";
 
-    await updateDoc(
-        doc(db, "anuncios", id),
-        {
-            destaque: !destaque
+            await updateDoc(
+                anuncioRef,
+                {
+                    destaque: !destaqueAtual,
+                    destaqueAtualizadoEm: serverTimestamp(),
+                    destaqueAtualizadoPor: ADMIN_EMAIL
+                }
+            );
+
         }
-    );
 
-};
+        if(action === "excluir"){
 
-window.excluir = async(id)=>{
+            const confirmar =
+                confirm("Excluir este anúncio permanentemente?");
 
-    const confirmar =
-        confirm("Excluir anúncio?");
+            if(!confirmar){
+                return;
+            }
 
-    if(!confirmar) return;
+            await deleteDoc(
+                anuncioRef
+            );
 
-    await deleteDoc(
-        doc(db, "anuncios", id)
-    );
+        }
 
-};
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Não foi possível concluir a ação. Se o anúncio for verificado, confira se as regras do Firestore permitem update/delete para o admin nortecolor@gmail.com."
+        );
+
+    }finally{
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            textoOriginal;
+
+    }
+
+});
 
 </script>
 
 </body>
 </html>
-```
