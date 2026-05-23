@@ -223,177 +223,245 @@ body{
 
 <script type="module">
 
-import {
-    auth,
-    db,
-    storage
-} from './firebase.js';
+import { auth, db, storage } from './firebase.js';
 
 import {
-
     onAuthStateChanged
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import {
-
     collection,
     addDoc,
     serverTimestamp
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import {
-
     ref,
     uploadBytes,
     getDownloadURL
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
-let cidade = "";
-let estado = "";
-let lat = null;
-let lng = null;
+
+// ======================================
+// ELEMENTOS
+// ======================================
+
+const btn =
+    document.getElementById('publicarBtn');
+
+const numero =
+    document.getElementById('numero');
+
+const jogador =
+    document.getElementById('jogador');
+
+const selecao =
+    document.getElementById('selecao');
+
+const tipo =
+    document.getElementById('tipo');
+
+const preco =
+    document.getElementById('preco');
+
+const cidade =
+    document.getElementById('cidade');
+
+const fotoInput =
+    document.getElementById('foto');
+
+
+// ======================================
+// GPS
+// ======================================
+
+let uLat = null;
+let uLng = null;
+
+let localizacaoAtiva = false;
+
+let tentativaSemGPS =
+    parseInt(
+        localStorage.getItem('tentativaSemGPS')
+    ) || 0;
+
+
+// ======================================
+// GEOLOCALIZAÇÃO
+// ======================================
+
+navigator.geolocation.getCurrentPosition(
+
+    (pos)=>{
+
+        uLat = pos.coords.latitude;
+        uLng = pos.coords.longitude;
+
+        localizacaoAtiva = true;
+
+        console.log("GPS ATIVO");
+
+    },
+
+    (err)=>{
+
+        console.log("GPS NÃO ATIVADO");
+
+    }
+
+);
+
+
+// ======================================
+// AUTH
+// ======================================
 
 onAuthStateChanged(auth, (user)=>{
 
     if(!user){
 
-        window.location.href = "login.html";
+        alert("Faça login.");
+
+        window.location.href =
+            "login.html";
 
     }
 
 });
 
-navigator.geolocation.getCurrentPosition(async(pos)=>{
 
-    lat = pos.coords.latitude;
-    lng = pos.coords.longitude;
+// ======================================
+// PUBLICAR
+// ======================================
 
-    try{
+window.publicar = async function(){
 
-        const res =
-            await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+    if (!auth.currentUser) {
+
+        alert("Faça login.");
+
+        return;
+
+    }
+
+    // ======================================
+    // GPS NÃO ATIVADO
+    // ======================================
+
+    if (!localizacaoAtiva) {
+
+        tentativaSemGPS++;
+
+        localStorage.setItem(
+            'tentativaSemGPS',
+            tentativaSemGPS
+        );
+
+        // PRIMEIRA TENTATIVA
+        if (tentativaSemGPS <= 1) {
+
+            alert(
+                "Ative sua localização para aumentar a segurança das negociações e receber selo verificado."
             );
 
-        const data = await res.json();
-
-        cidade =
-            data.address.city ||
-            data.address.town;
-
-        estado =
-            data.address.state;
-
-        document.getElementById('locationInfo').innerHTML = `
-            📍 ${cidade} - ${estado}
-        `;
-
-    }catch(error){
-
-        document.getElementById('locationInfo').innerHTML =
-            "❌ Não foi possível obter localização";
+            return;
+        }
 
     }
 
-});
-
-const fotoInput =
-    document.getElementById('foto');
-
-const preview =
-    document.getElementById('preview');
-
-fotoInput.addEventListener('change', ()=>{
-
-    const file =
-        fotoInput.files[0];
-
-    if(file){
-
-        preview.src =
-            URL.createObjectURL(file);
-
-        preview.classList.remove('hidden');
-
-    }
-
-});
-
-document
-.getElementById('formAnuncio')
-.addEventListener('submit', async(e)=>{
-
-    e.preventDefault();
-
-    const btn =
-        document.getElementById('btnPublicar');
-
-    btn.innerHTML =
-        "PUBLICANDO...";
+    btn.innerHTML = "PUBLICANDO...";
 
     btn.disabled = true;
 
-    try{
+    try {
 
-        const file =
-            fotoInput.files[0];
+        let fotoURL = "";
 
-        const storageRef =
-            ref(
-                storage,
-                'figurinhas/' +
-                Date.now() +
-                "_" +
-                file.name
+        // ======================================
+        // UPLOAD FOTO
+        // ======================================
+
+        if (fotoInput.files[0]) {
+
+            const arquivo =
+                fotoInput.files[0];
+
+            const storageRef =
+                ref(
+                    storage,
+                    `figurinhas/${Date.now()}`
+                );
+
+            await uploadBytes(
+                storageRef,
+                arquivo
             );
 
-        await uploadBytes(
-            storageRef,
-            file
-        );
+            fotoURL =
+                await getDownloadURL(storageRef);
 
-        const fotoURL =
-            await getDownloadURL(storageRef);
+        }
+
+        // ======================================
+        // FIRESTORE
+        // ======================================
 
         await addDoc(
             collection(db, "anuncios"),
             {
 
+                uid:
+                    auth.currentUser.uid,
+
+                nome:
+                    auth.currentUser.displayName || "",
+
                 numero:
-                    document.getElementById('numero').value,
+                    numero.value,
 
                 jogador:
-                    document.getElementById('jogador').value,
+                    jogador.value,
 
                 selecao:
-                    document.getElementById('selecao').value,
-
-                descricao:
-                    document.getElementById('descricao').value,
+                    selecao.value,
 
                 tipo:
-                    document.getElementById('tipo').value,
-
-                raridade:
-                    document.getElementById('raridade').value,
+                    tipo.value,
 
                 preco:
-                    document.getElementById('preco').value,
+                    preco.value,
 
-                whatsapp:
-                    document.getElementById('whatsapp').value,
+                cidade:
+                    cidade.value,
 
-                cidade,
-                estado,
-                lat,
-                lng,
+                foto:
+                    fotoURL,
 
-                foto: fotoURL,
+                lat:
+                    uLat || null,
 
-                uid: auth.currentUser.uid,
+                lng:
+                    uLng || null,
+
+                // ==================================
+                // VERIFICAÇÃO
+                // ==================================
+
+                verificado:
+                    localizacaoAtiva,
+
+                alerta:
+                    !localizacaoAtiva,
+
+                // ==================================
+                // STATUS
+                // ==================================
+
+                status:
+                    "aprovado",
+
+                destaque:
+                    false,
 
                 criadoEm:
                     serverTimestamp()
@@ -401,23 +469,47 @@ document
             }
         );
 
-        alert("Anúncio publicado!");
+        // ======================================
+        // RESET
+        // ======================================
+
+        localStorage.removeItem(
+            'tentativaSemGPS'
+        );
+
+        alert(
+
+            localizacaoAtiva
+
+            ?
+
+            "Figurinha publicada com selo verificado."
+
+            :
+
+            "Figurinha publicada como NÃO VERIFICADA."
+
+        );
 
         window.location.href =
-            "index.html";
-
-    }catch(error){
-
-        alert(error.message);
-
-        btn.innerHTML =
-            "PUBLICAR ANÚNCIO";
-
-        btn.disabled = false;
+            "dashboard.html";
 
     }
 
-});
+    catch (e) {
+
+        console.error(e);
+
+        alert("Erro ao publicar.");
+
+    }
+
+    btn.innerHTML =
+        "PUBLICAR FIGURINHA";
+
+    btn.disabled = false;
+
+}
 
 </script>
 
