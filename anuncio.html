@@ -308,59 +308,102 @@ navigator.geolocation.getCurrentPosition((pos)=>{
 
 async function registrarInteresse(ad){
 
-    try{
+    function limparTelefone(valor){
+    return String(valor || "").replace(/\D/g, "");
+}
 
-        await addDoc(
-            collection(db, "interesses"),
-            {
+function obterWhatsappInteressado(){
+    let telefone =
+        limparTelefone(auth.currentUser?.phoneNumber);
 
-                anuncioId:
-                    id,
-
-                vendedorUid:
-                    ad.uid || "",
-
-                jogador:
-                    ad.jogador || "",
-
-                selecao:
-                    ad.selecao || "",
-
-                numero:
-                    ad.numero || "",
-
-                foto:
-                    ad.foto || "",
-
-                compradorUid:
-                    auth.currentUser?.uid || null,
-
-                compradorNome:
-                    auth.currentUser?.displayName || "",
-
-                compradorEmail:
-                    auth.currentUser?.email || "",
-
-                compradorWhatsApp:
-                    auth.currentUser?.phoneNumber || "",
-
-                vendedorWhatsApp:
-                    ad.whatsapp || "",
-
-                status:
-                    "pendente",
-
-                criadoEm:
-                    serverTimestamp()
-
-            }
-        );
-
-    }catch(error){
-
-        console.error("Erro ao registrar interesse:", error);
-
+    if(telefone.startsWith("55") && telefone.length > 11){
+        telefone = telefone.slice(2);
     }
+
+    if(!telefone){
+        telefone =
+            limparTelefone(
+                localStorage.getItem("compradorWhatsApp")
+            );
+    }
+
+    if(!telefone){
+        telefone =
+            limparTelefone(
+                prompt("Informe seu WhatsApp com DDD para registrar seu interesse:")
+            );
+    }
+
+    if(telefone.length < 10 || telefone.length > 11){
+        throw new Error("WHATSAPP_INVALIDO");
+    }
+
+    localStorage.setItem(
+        "compradorWhatsApp",
+        telefone
+    );
+
+    return telefone;
+}
+
+async function registrarInteresse(ad){
+
+    const user =
+        auth.currentUser;
+
+    if(!user){
+        throw new Error("LOGIN_REQUIRED");
+    }
+
+    const compradorWhatsApp =
+        obterWhatsappInteressado();
+
+    await addDoc(
+        collection(db, "interesses"),
+        {
+            anuncioId:
+                id,
+
+            vendedorUid:
+                ad.uid || ad.vendedorId || "",
+
+            vendedorId:
+                ad.vendedorId || ad.uid || "",
+
+            jogador:
+                ad.jogador || "",
+
+            selecao:
+                ad.selecao || "",
+
+            numero:
+                ad.numero || "",
+
+            foto:
+                ad.foto || "",
+
+            compradorUid:
+                user.uid,
+
+            compradorNome:
+                user.displayName || "",
+
+            compradorEmail:
+                user.email || "",
+
+            compradorWhatsApp:
+                compradorWhatsApp,
+
+            vendedorWhatsApp:
+                ad.whatsapp || "",
+
+            status:
+                "pendente",
+
+            criadoEm:
+                serverTimestamp()
+        }
+    );
 
 }
 
