@@ -4,39 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Comprar Envelopes | FigurinhasCup</title>
+<title>Loja Oficial | FigurinhasCup</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-
 *{
+    box-sizing:border-box;
     font-family:'Inter',sans-serif;
 }
 
 body{
     background:#f8fafc;
     color:#111827;
+    overflow-x:hidden;
+}
+
+.glass{
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(14px);
+}
+
+.glow{
+    transition:0.25s;
 }
 
 .glow:hover{
     transform:translateY(-3px);
-    transition:0.3s;
     box-shadow:0 20px 40px rgba(0,0,0,0.12);
 }
 
+.product-card{
+    transition:0.25s;
+}
+
+.product-card:hover{
+    transform:translateY(-2px);
+}
+
+.product-card.active{
+    border-color:#16a34a;
+    box-shadow:0 0 0 3px rgba(22,163,74,0.16);
+}
 </style>
-
 </head>
-<body>
 
-<!-- HEADER -->
+<body>
 
 <header class="sticky top-0 z-50 bg-black text-white">
 
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
         <a href="index.html" class="text-2xl font-black italic">
             Figurinhas<span class="text-green-500">Cup</span>
@@ -53,71 +72,55 @@ body{
 
 </header>
 
-<!-- HERO -->
+<section class="px-4 py-10 md:py-14">
 
-<section class="px-4 py-14">
+    <div class="max-w-7xl mx-auto">
 
-    <div class="max-w-6xl mx-auto">
+        <div class="bg-white border border-gray-100 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl">
 
-        <div class="bg-gradient-to-br from-yellow-100 via-white to-green-100 border border-yellow-200 rounded-[2.5rem] overflow-hidden shadow-2xl">
-
-            <div class="grid lg:grid-cols-2 gap-10 items-center p-8 md:p-12">
-
-                <!-- ESQUERDA -->
+            <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 md:gap-10 items-start p-5 md:p-10 lg:p-12">
 
                 <div>
 
-                    <span class="bg-yellow-400 text-black px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide">
-                        🏆 Loja oficial FigurinhasCup
+                    <span class="bg-yellow-400 text-black px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wide">
+                        Loja oficial FigurinhasCup
                     </span>
 
-                    <h1 class="text-4xl md:text-6xl font-black leading-tight mt-5">
-                        Compre envelopes novos e lacrados.
+                    <h1 class="text-3xl md:text-6xl font-black leading-tight mt-5">
+                        Envelopes e produtos oficiais.
                     </h1>
 
-                    <p class="text-gray-600 text-lg mt-5 leading-relaxed">
-                        Receba envelopes oficiais para completar seu álbum mais rápido.
+                    <p class="text-gray-600 text-sm md:text-lg mt-5 leading-relaxed">
+                        Compre produtos cadastrados pela administração e escolha entrega ou retirada em lojas oficiais.
                     </p>
-
-                    <!-- BENEFÍCIOS -->
 
                     <div class="grid grid-cols-2 gap-4 mt-8">
 
-                        <div class="bg-white rounded-3xl p-5 border border-yellow-100 glow">
+                        <div class="bg-gray-50 rounded-3xl p-5 border border-gray-100 glow">
+                            <div class="text-4xl mb-3">📦</div>
 
-                            <div class="text-4xl mb-3">
-                                📦
+                            <div class="font-black text-base md:text-lg">
+                                Produtos oficiais
                             </div>
 
-                            <div class="font-black text-lg">
-                                5 figurinhas
+                            <div class="text-xs md:text-sm text-gray-500">
+                                cadastrados pelo admin
                             </div>
-
-                            <div class="text-sm text-gray-500">
-                                por envelope
-                            </div>
-
                         </div>
 
-                        <div class="bg-white rounded-3xl p-5 border border-yellow-100 glow">
+                        <div class="bg-gray-50 rounded-3xl p-5 border border-gray-100 glow">
+                            <div class="text-4xl mb-3">🏪</div>
 
-                            <div class="text-4xl mb-3">
-                                🚚
+                            <div class="font-black text-base md:text-lg">
+                                Retirada segura
                             </div>
 
-                            <div class="font-black text-lg">
-                                Entrega rápida
+                            <div class="text-xs md:text-sm text-gray-500">
+                                em lojas oficiais
                             </div>
-
-                            <div class="text-sm text-gray-500">
-                                ou retirada
-                            </div>
-
                         </div>
 
                     </div>
-
-                    <!-- SEGURANÇA -->
 
                     <div class="bg-black text-white rounded-3xl p-6 mt-8">
 
@@ -126,58 +129,86 @@ body{
                         </div>
 
                         <div class="space-y-3 text-sm text-gray-300">
+                            <p>Atendimento via WhatsApp oficial.</p>
+                            <p>Pedido registrado no sistema antes do contato.</p>
+                            <p>Retirada somente em locais cadastrados pela administração.</p>
+                        </div>
 
-                            <p>
-                                ✅ Negociações protegidas
-                            </p>
+                    </div>
 
-                            <p>
-                                ✅ Atendimento via WhatsApp
-                            </p>
+                    <div class="mt-8">
 
-                            <p>
-                                ✅ Retirada em local seguro
-                            </p>
+                        <div class="flex items-center justify-between gap-4 mb-4">
 
+                            <div>
+                                <h2 class="text-2xl md:text-3xl font-black">
+                                    Produtos disponíveis
+                                </h2>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Escolha o produto antes de finalizar o pedido.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div
+                        id="produtosLista"
+                        class="grid sm:grid-cols-2 gap-4"
+                        >
+                            <div class="bg-gray-50 rounded-3xl p-5 border border-gray-100 text-sm font-bold text-gray-500">
+                                Carregando produtos...
+                            </div>
                         </div>
 
                     </div>
 
                 </div>
 
-                <!-- DIREITA -->
+                <div class="bg-gray-50 rounded-[2rem] p-5 md:p-8 shadow-xl border border-gray-100 sticky top-24">
 
-                <div class="bg-white rounded-[2rem] p-8 shadow-xl border border-gray-100">
-
-                    <!-- IMAGEM -->
-
-                    <div class="bg-gradient-to-br from-green-100 to-yellow-100 rounded-[2rem] h-56 flex items-center justify-center text-8xl mb-6">
+                    <div
+                    id="produtoVisual"
+                    class="bg-gradient-to-br from-green-100 to-yellow-100 rounded-[2rem] h-52 md:h-56 flex items-center justify-center text-7xl md:text-8xl mb-6 overflow-hidden"
+                    >
                         📦
                     </div>
 
-                    <!-- INFO -->
+                    <div class="flex items-start justify-between gap-4 mb-5">
 
-                    <div class="flex items-center justify-between mb-5">
+                        <div class="min-w-0">
 
-                        <div>
-
-                            <div class="text-sm text-gray-500 font-bold uppercase">
-                                Envelope Oficial
+                            <div
+                            id="produtoNomeAtual"
+                            class="text-sm text-gray-500 font-bold uppercase break-words"
+                            >
+                                Produto
                             </div>
 
-                            <div class="text-4xl font-black">
-                                R$ 8,00
+                            <div
+                            id="produtoPrecoAtual"
+                            class="text-4xl font-black mt-1"
+                            >
+                                R$ 0,00
+                            </div>
+
+                            <div
+                            id="produtoDescricaoAtual"
+                            class="text-sm text-gray-500 mt-2 leading-relaxed"
+                            >
+                                Selecione um produto.
                             </div>
 
                         </div>
 
-                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase">
-                            Em estoque
+                        <div
+                        id="produtoEstoqueAtual"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-xs font-black uppercase shrink-0"
+                        >
+                            -
                         </div>
 
                     </div>
-
-                    <!-- QUANTIDADE -->
 
                     <div class="mb-6">
 
@@ -188,20 +219,22 @@ body{
                         <div class="flex items-center gap-4">
 
                             <button
+                            type="button"
                             onclick="alterarQtd(-1)"
-                            class="w-14 h-14 rounded-2xl bg-gray-100 text-2xl font-black"
+                            class="w-14 h-14 rounded-2xl bg-white text-2xl font-black border border-gray-200"
                             >
-                                −
+                                -
                             </button>
 
                             <div
                             id="qtdEnvelope"
-                            class="flex-1 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl font-black"
+                            class="flex-1 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-2xl font-black"
                             >
                                 1
                             </div>
 
                             <button
+                            type="button"
                             onclick="alterarQtd(1)"
                             class="w-14 h-14 rounded-2xl bg-green-600 text-white text-2xl font-black"
                             >
@@ -212,71 +245,69 @@ body{
 
                     </div>
 
-                    <!-- ENTREGA -->
-
                     <div class="mb-6">
 
                         <div class="text-sm font-black uppercase mb-3">
-                            Forma entrega
+                            Forma de entrega
                         </div>
 
                         <select
                         id="formaEntrega"
                         onchange="atualizarTotal()"
-                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none"
+                        class="w-full p-4 rounded-2xl bg-white border border-gray-200 outline-none"
                         >
                             <option value="Entrega">
-                                🚚 Entrega Motoboy (+ R$ 8,00)
+                                Entrega Motoboy (+ R$ 8,00)
                             </option>
 
                             <option value="Retirada">
-                                🏪 Retirada no local
+                                Retirada em loja oficial
                             </option>
-
                         </select>
 
                     </div>
-
-                    <!-- LOCAL RETIRADA -->
 
                     <div
                     id="retiradaBox"
                     class="bg-green-50 border border-green-200 rounded-3xl p-5 mb-6 hidden"
                     >
 
-                        <div class="text-sm font-black uppercase text-green-700 mb-2">
-                            Local retirada
+                        <div class="text-sm font-black uppercase text-green-700 mb-3">
+                            Local de retirada
                         </div>
 
-                        <div class="text-lg font-black">
-                            RePhone
-                        </div>
+                        <select
+                        id="lojaRetiradaSelect"
+                        onchange="atualizarTotal()"
+                        class="w-full p-4 rounded-2xl bg-white border border-green-100 outline-none"
+                        >
+                            <option value="">
+                                Carregando lojas...
+                            </option>
+                        </select>
 
-                        <div class="text-sm text-gray-600 mt-1">
-                            Bairro Jequitibá - Aracruz
-                        </div>
+                        <div
+                        id="retiradaDetalhe"
+                        class="text-sm text-gray-600 mt-3 leading-relaxed"
+                        ></div>
 
                     </div>
-
-                    <!-- TAXA ENTREGA -->
 
                     <div
                     id="taxaEntregaBox"
                     class="bg-yellow-50 border border-yellow-200 rounded-3xl p-5 mb-6"
                     >
 
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between gap-4">
 
                             <div>
-
                                 <div class="text-sm font-black uppercase text-yellow-700">
                                     Taxa motoboy
                                 </div>
 
                                 <div class="text-sm text-gray-600">
-                                    Entrega rápida em Aracruz
+                                    Entrega rápida na região.
                                 </div>
-
                             </div>
 
                             <div class="text-2xl font-black">
@@ -287,8 +318,6 @@ body{
 
                     </div>
 
-                    <!-- TOTAL -->
-
                     <div class="bg-black rounded-[2rem] p-6 text-white mb-6">
 
                         <div class="text-sm uppercase text-gray-400 font-bold mb-2">
@@ -297,14 +326,12 @@ body{
 
                         <div
                         id="valorTotal"
-                        class="text-5xl md:text-6xl font-black"
+                        class="text-4xl md:text-6xl font-black"
                         >
-                            R$ 16,00
+                            R$ 0,00
                         </div>
 
                     </div>
-
-                    <!-- FORM -->
 
                     <div class="space-y-4 mb-6">
 
@@ -312,37 +339,34 @@ body{
                         id="pedidoNome"
                         type="text"
                         placeholder="Seu nome"
-                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full p-4 rounded-2xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-green-500"
                         >
 
                         <input
                         id="pedidoWhatsapp"
-                        type="text"
-                        placeholder="WhatsApp"
-                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        type="tel"
+                        inputmode="numeric"
+                        placeholder="WhatsApp com DDD"
+                        class="w-full p-4 rounded-2xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-green-500"
                         >
 
                         <input
                         id="pedidoCidade"
                         type="text"
                         placeholder="Cidade"
-                        class="w-full p-4 rounded-2xl bg-gray-100 outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full p-4 rounded-2xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-green-500"
                         >
 
                     </div>
 
-                    <!-- BOTÃO -->
-
-                    <div class="grid grid-cols-1 gap-4">
-
-                        <button
-                        onclick="pedidoWhatsapp()"
-                        class="bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
-                        >
-                            WhatsApp
-                        </button>
-
-                    </div>
+                    <button
+                    id="btnPedidoWhatsapp"
+                    type="button"
+                    onclick="pedidoWhatsapp()"
+                    class="w-full bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
+                    >
+                        Finalizar pelo WhatsApp
+                    </button>
 
                 </div>
 
@@ -353,8 +377,6 @@ body{
     </div>
 
 </section>
-
-<!-- RODAPÉ -->
 
 <footer class="bg-black text-gray-400 py-10 px-4 mt-10">
 
@@ -376,246 +398,714 @@ body{
 
 </footer>
 
-<!-- FIREBASE -->
-
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {
+    db
+} from './firebase.js';
 
 import {
-    getFirestore,
     collection,
     addDoc,
+    onSnapshot,
     serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-const firebaseConfig = {
+const TAXA_ENTREGA = 8;
+const WHATSAPP_PADRAO = "5527995291669";
 
-    apiKey: "AIzaSyBiN8FqX8UZeyAh1cG2GHZtQWiQH0xPBV4",
+let produtosLoja = [];
+let lojasRetirada = [];
+let produtoSelecionado = null;
+let qtdProduto = 1;
 
-    authDomain: "rephone-a0a80.firebaseapp.com",
+const produtosLista =
+    document.getElementById('produtosLista');
 
-    projectId: "rephone-a0a80",
+const produtoVisual =
+    document.getElementById('produtoVisual');
 
-    storageBucket: "rephone-a0a80.firebasestorage.app",
+const produtoNomeAtual =
+    document.getElementById('produtoNomeAtual');
 
-    appId: "1:431497247030:web:a943715e4acc04b8995b97"
+const produtoPrecoAtual =
+    document.getElementById('produtoPrecoAtual');
 
-};
+const produtoDescricaoAtual =
+    document.getElementById('produtoDescricaoAtual');
 
-const app = initializeApp(firebaseConfig);
+const produtoEstoqueAtual =
+    document.getElementById('produtoEstoqueAtual');
 
-const db = getFirestore(app);
+const formaEntrega =
+    document.getElementById('formaEntrega');
 
+const lojaRetiradaSelect =
+    document.getElementById('lojaRetiradaSelect');
 
-// CONFIG
+const retiradaBox =
+    document.getElementById('retiradaBox');
 
-let qtdEnvelope = 1;
+const retiradaDetalhe =
+    document.getElementById('retiradaDetalhe');
 
-const precoEnvelope = 8;
+const taxaEntregaBox =
+    document.getElementById('taxaEntregaBox');
 
+const valorTotal =
+    document.getElementById('valorTotal');
 
-// TOTAL FINAL
+const btnPedidoWhatsapp =
+    document.getElementById('btnPedidoWhatsapp');
 
-function totalFinal(){
-
-    const entrega =
-        document.getElementById('formaEntrega').value;
-
-    let taxaEntrega = 0;
-
-    if(entrega === 'Entrega'){
-
-        taxaEntrega = 8;
-
+function texto(valor, fallback = ""){
+    if(valor === undefined || valor === null || valor === ""){
+        return fallback;
     }
 
-    return (
-        qtdEnvelope * precoEnvelope
-    ) + taxaEntrega;
-
+    return String(valor);
 }
 
+function limparTelefone(valor){
+    return String(valor || "").replace(/\D/g, "");
+}
 
-// TOTAL
+function formatarPreco(valor){
+    const numero = Number(valor);
+
+    if(!Number.isFinite(numero)){
+        return "R$ 0,00";
+    }
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            style:"currency",
+            currency:"BRL"
+        }
+    );
+}
+
+function ordenarPorOrdem(lista){
+    return lista.sort((a,b)=>
+        Number(a.ordem || 0) - Number(b.ordem || 0)
+    );
+}
+
+function imagemEhUrl(valor){
+    return String(valor || "").startsWith("http");
+}
+
+function renderizarImagemProduto(produto){
+    const imagem =
+        texto(produto?.imagem, "📦");
+
+    if(imagemEhUrl(imagem)){
+        return `
+            <img
+                src="${imagem}"
+                alt="${texto(produto?.nome, 'Produto')}"
+                class="w-full h-full object-cover"
+            >
+        `;
+    }
+
+    return imagem;
+}
+
+function estoqueProduto(produto){
+    return Number(produto?.estoque || 0);
+}
+
+function produtoDisponivel(produto){
+    return produto && produto.ativo !== false && estoqueProduto(produto) > 0;
+}
+
+function produtoPreco(){
+    return Number(produtoSelecionado?.preco || 0);
+}
+
+function lojaSelecionada(){
+    const id =
+        lojaRetiradaSelect.value;
+
+    return lojasRetirada.find((loja)=>loja.id === id) || null;
+}
+
+function totalFinal(){
+    const entrega =
+        formaEntrega.value;
+
+    const taxa =
+        entrega === "Entrega"
+            ? TAXA_ENTREGA
+            : 0;
+
+    return (qtdProduto * produtoPreco()) + taxa;
+}
 
 window.atualizarTotal = ()=>{
 
-    document.getElementById('qtdEnvelope')
-    .innerHTML = qtdEnvelope;
+    document.getElementById('qtdEnvelope').textContent =
+        qtdProduto;
 
-    const entrega =
-        document.getElementById('formaEntrega').value;
+    if(formaEntrega.value === "Entrega"){
 
-    let taxaEntrega = 0;
+        taxaEntregaBox.classList.remove('hidden');
+        retiradaBox.classList.add('hidden');
 
-    if(entrega === 'Entrega'){
+    }else{
 
-        taxaEntrega = 8;
+        taxaEntregaBox.classList.add('hidden');
+        retiradaBox.classList.remove('hidden');
 
-        document
-        .getElementById('taxaEntregaBox')
-        .classList.remove('hidden');
+        const loja =
+            lojaSelecionada();
 
-        document
-        .getElementById('retiradaBox')
-        .classList.add('hidden');
-
-    }
-
-    else{
-
-        document
-        .getElementById('taxaEntregaBox')
-        .classList.add('hidden');
-
-        document
-        .getElementById('retiradaBox')
-        .classList.remove('hidden');
+        retiradaDetalhe.innerHTML =
+            loja
+                ? `
+                    <strong>${texto(loja.nome)}</strong><br>
+                    ${texto(loja.endereco)}<br>
+                    ${texto(loja.cidade)}
+                `
+                : "Selecione uma loja de retirada.";
 
     }
 
-    const total =
-        (qtdEnvelope * precoEnvelope)
-        + taxaEntrega;
-
-    document.getElementById('valorTotal')
-    .innerHTML =
-    `
-    R$ ${total.toLocaleString('pt-br',{
-        minimumFractionDigits:2
-    })}
-    `;
+    valorTotal.textContent =
+        formatarPreco(totalFinal());
 
 };
 
-atualizarTotal();
+function renderizarProdutos(){
 
+    produtosLista.innerHTML =
+        "";
 
-// QUANTIDADE
+    if(produtosLoja.length === 0){
+
+        produtosLista.innerHTML = `
+            <div class="col-span-full bg-gray-50 rounded-3xl p-5 border border-gray-100 text-sm font-bold text-gray-500">
+                Nenhum produto disponível no momento.
+            </div>
+        `;
+
+        produtoSelecionado = null;
+        renderizarProdutoSelecionado();
+
+        return;
+
+    }
+
+    produtosLoja.forEach((produto)=>{
+
+        const ativo =
+            produtoSelecionado?.id === produto.id;
+
+        const estoque =
+            estoqueProduto(produto);
+
+        produtosLista.innerHTML += `
+            <button
+                type="button"
+                onclick="selecionarProduto('${produto.id}')"
+                class="product-card ${ativo ? 'active' : ''} text-left bg-gray-50 rounded-3xl p-5 border border-gray-100"
+            >
+                <div class="h-28 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-5xl overflow-hidden mb-4">
+                    ${renderizarImagemProduto(produto)}
+                </div>
+
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="font-black text-lg">
+                            ${texto(produto.nome, 'Produto')}
+                        </div>
+
+                        <div class="text-xs text-gray-500 mt-1 line-clamp-2">
+                            ${texto(produto.descricao, 'Sem descrição')}
+                        </div>
+                    </div>
+
+                    <div class="font-black text-green-700 whitespace-nowrap">
+                        ${formatarPreco(produto.preco)}
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="${estoque > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-3 py-1 rounded-full text-[10px] font-black uppercase">
+                        ${estoque > 0 ? estoque + ' em estoque' : 'Esgotado'}
+                    </span>
+
+                    <span class="text-[10px] font-black text-gray-400 uppercase">
+                        Selecionar
+                    </span>
+                </div>
+            </button>
+        `;
+
+    });
+
+}
+
+function renderizarProdutoSelecionado(){
+
+    if(!produtoSelecionado){
+
+        produtoVisual.innerHTML =
+            "📦";
+
+        produtoNomeAtual.textContent =
+            "Produto indisponível";
+
+        produtoPrecoAtual.textContent =
+            "R$ 0,00";
+
+        produtoDescricaoAtual.textContent =
+            "Cadastre um produto ativo no painel admin.";
+
+        produtoEstoqueAtual.textContent =
+            "-";
+
+        produtoEstoqueAtual.className =
+            "bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-xs font-black uppercase shrink-0";
+
+        btnPedidoWhatsapp.disabled =
+            true;
+
+        btnPedidoWhatsapp.className =
+            "w-full bg-gray-400 text-white p-5 rounded-[2rem] font-black cursor-not-allowed";
+
+        atualizarTotal();
+
+        return;
+
+    }
+
+    const estoque =
+        estoqueProduto(produtoSelecionado);
+
+    if(qtdProduto > estoque && estoque > 0){
+        qtdProduto = estoque;
+    }
+
+    if(qtdProduto < 1){
+        qtdProduto = 1;
+    }
+
+    produtoVisual.innerHTML =
+        renderizarImagemProduto(produtoSelecionado);
+
+    produtoNomeAtual.textContent =
+        texto(produtoSelecionado.nome, "Produto");
+
+    produtoPrecoAtual.textContent =
+        formatarPreco(produtoSelecionado.preco);
+
+    produtoDescricaoAtual.textContent =
+        texto(produtoSelecionado.descricao, "Sem descrição.");
+
+    produtoEstoqueAtual.textContent =
+        estoque > 0
+            ? "Em estoque"
+            : "Esgotado";
+
+    produtoEstoqueAtual.className =
+        estoque > 0
+            ? "bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-black uppercase shrink-0"
+            : "bg-red-100 text-red-700 px-4 py-2 rounded-full text-xs font-black uppercase shrink-0";
+
+    btnPedidoWhatsapp.disabled =
+        estoque <= 0;
+
+    btnPedidoWhatsapp.className =
+        estoque > 0
+            ? "w-full bg-green-600 hover:bg-green-700 transition text-white p-5 rounded-[2rem] font-black"
+            : "w-full bg-gray-400 text-white p-5 rounded-[2rem] font-black cursor-not-allowed";
+
+    atualizarTotal();
+
+}
+
+window.selecionarProduto = (id)=>{
+
+    const produto =
+        produtosLoja.find((item)=>item.id === id);
+
+    if(!produto){
+        return;
+    }
+
+    produtoSelecionado =
+        produto;
+
+    qtdProduto =
+        1;
+
+    renderizarProdutos();
+    renderizarProdutoSelecionado();
+
+};
+
+function renderizarLojas(){
+
+    const lojasAtivas =
+        lojasRetirada.filter((loja)=>loja.ativo !== false);
+
+    const opcaoRetirada =
+        Array.from(formaEntrega.options).find((option)=>option.value === "Retirada");
+
+    if(lojasAtivas.length === 0 && opcaoRetirada){
+        opcaoRetirada.remove();
+
+        if(formaEntrega.value === "Retirada"){
+            formaEntrega.value = "Entrega";
+        }
+    }
+
+    if(lojasAtivas.length > 0 && !opcaoRetirada){
+        const option =
+            document.createElement('option');
+
+        option.value =
+            "Retirada";
+
+        option.textContent =
+            "Retirada em loja oficial";
+
+        formaEntrega.appendChild(option);
+    }
+
+    lojaRetiradaSelect.innerHTML =
+        "";
+
+    if(lojasAtivas.length === 0){
+
+        lojaRetiradaSelect.innerHTML =
+            '<option value="">Nenhuma loja disponível</option>';
+
+        lojaRetiradaSelect.disabled =
+            true;
+
+        atualizarTotal();
+
+        return;
+
+    }
+
+    lojaRetiradaSelect.disabled =
+        false;
+
+    lojasAtivas.forEach((loja)=>{
+
+        const option =
+            document.createElement('option');
+
+        option.value =
+            loja.id;
+
+        option.textContent =
+            `${texto(loja.nome)} - ${texto(loja.cidade)}`;
+
+        lojaRetiradaSelect.appendChild(option);
+
+    });
+
+    atualizarTotal();
+
+}
 
 window.alterarQtd = (valor)=>{
 
-    qtdEnvelope += valor;
+    if(!produtoSelecionado){
+        return;
+    }
 
-    if(qtdEnvelope < 1){
+    const estoque =
+        estoqueProduto(produtoSelecionado);
 
-        qtdEnvelope = 1;
+    qtdProduto += valor;
 
+    if(qtdProduto < 1){
+        qtdProduto = 1;
+    }
+
+    if(estoque > 0 && qtdProduto > estoque){
+        qtdProduto = estoque;
     }
 
     atualizarTotal();
 
 };
 
+function numeroWhatsAppDestino(){
 
-// FIREBASE
+    let numero =
+        WHATSAPP_PADRAO;
 
-window.salvarPedido = async()=>{
+    if(formaEntrega.value === "Retirada"){
+        const loja =
+            lojaSelecionada();
 
-    const nome =
-        document.getElementById('pedidoNome').value;
+        if(loja?.whatsapp){
+            numero = loja.whatsapp;
+        }
+    }
 
-    const whatsapp =
-        document.getElementById('pedidoWhatsapp').value;
+    numero =
+        limparTelefone(numero);
 
-    const cidade =
-        document.getElementById('pedidoCidade').value;
+    if(!numero.startsWith("55")){
+        numero =
+            "55" + numero;
+    }
 
-    const entrega =
-        document.getElementById('formaEntrega').value;
+    return numero;
 
-    if(!nome || !whatsapp){
+}
 
-        alert('Preencha nome e WhatsApp.');
+window.pedidoWhatsapp = async()=>{
+
+    if(!produtoDisponivel(produtoSelecionado)){
+
+        alert("Produto indisponível no momento.");
 
         return;
 
     }
 
-    try{
+    const nome =
+        document.getElementById('pedidoNome').value.trim();
 
-        await addDoc(
-            collection(db, 'pedidos'),
-            {
-
-                nome,
-
-                whatsapp,
-
-                cidade,
-
-                entrega,
-
-                quantidade:
-                    qtdEnvelope,
-
-                valorTotal:
-                    totalFinal(),
-
-                status:
-                    'novo',
-
-                criadoEm:
-                    serverTimestamp()
-
-            }
+    const whatsapp =
+        limparTelefone(
+            document.getElementById('pedidoWhatsapp').value
         );
 
-        alert('Pedido enviado com sucesso.');
-
-    }
-
-    catch(e){
-
-        console.error(e);
-
-        alert('Erro ao enviar pedido.');
-
-    }
-
-};
-
-
-// WHATSAPP
-
-window.pedidoWhatsapp = ()=>{
-
-    const nome =
-        document.getElementById('pedidoNome').value;
-
     const cidade =
-        document.getElementById('pedidoCidade').value;
+        document.getElementById('pedidoCidade').value.trim();
 
     const entrega =
-        document.getElementById('formaEntrega').value;
+        formaEntrega.value;
 
-    const total =
-        totalFinal();
+    const loja =
+        lojaSelecionada();
 
-    const msg =
-`Olá, quero comprar ${qtdEnvelope} envelopes oficiais.
+    if(!nome || !whatsapp || !cidade){
+
+        alert("Preencha nome, WhatsApp e cidade.");
+
+        return;
+
+    }
+
+    if(whatsapp.length < 10 || whatsapp.length > 13){
+
+        alert("Informe um WhatsApp válido com DDD.");
+
+        return;
+
+    }
+
+    if(entrega === "Retirada" && !loja){
+
+        alert("Selecione uma loja de retirada.");
+
+        return;
+
+    }
+
+    btnPedidoWhatsapp.disabled =
+        true;
+
+    const textoBotao =
+        btnPedidoWhatsapp.textContent;
+
+    btnPedidoWhatsapp.textContent =
+        "REGISTRANDO PEDIDO...";
+
+    try{
+
+        const total =
+            totalFinal();
+
+        const pedido = {
+            nome,
+            whatsapp,
+            cidade,
+            entrega,
+
+            produtoId:
+                produtoSelecionado.id,
+
+            produtoNome:
+                produtoSelecionado.nome || "",
+
+            produtoDescricao:
+                produtoSelecionado.descricao || "",
+
+            produtoImagem:
+                produtoSelecionado.imagem || "",
+
+            produtoPreco:
+                Number(produtoSelecionado.preco || 0),
+
+            quantidade:
+                qtdProduto,
+
+            taxaEntrega:
+                entrega === "Entrega" ? TAXA_ENTREGA : 0,
+
+            valorTotal:
+                total,
+
+            lojaRetiradaId:
+                entrega === "Retirada" ? loja.id : "",
+
+            lojaRetiradaNome:
+                entrega === "Retirada" ? loja.nome || "" : "",
+
+            lojaRetiradaEndereco:
+                entrega === "Retirada" ? loja.endereco || "" : "",
+
+            lojaRetiradaCidade:
+                entrega === "Retirada" ? loja.cidade || "" : "",
+
+            status:
+                "novo",
+
+            origem:
+                "loja",
+
+            criadoEm:
+                serverTimestamp()
+        };
+
+        await addDoc(
+            collection(db, "pedidos"),
+            pedido
+        );
+
+        const msg =
+`Olá, quero comprar na Loja Oficial FigurinhasCup.
+
+Produto: ${produtoSelecionado.nome}
+Quantidade: ${qtdProduto}
+Valor unitário: ${formatarPreco(produtoSelecionado.preco)}
+Forma de entrega: ${entrega}
+${entrega === "Retirada"
+? `Local de retirada: ${loja.nome} - ${loja.endereco} - ${loja.cidade}`
+: `Entrega motoboy: ${formatarPreco(TAXA_ENTREGA)}`}
 
 Nome: ${nome}
-
+WhatsApp: ${whatsapp}
 Cidade: ${cidade}
 
-Forma entrega: ${entrega}
+Valor total: ${formatarPreco(total)}`;
 
-${entrega === 'Retirada'
-? 'Local retirada: RePhone - Bairro Jequitibá - Aracruz'
-: 'Entrega motoboy: R$ 8,00'}
+        const url =
+            `https://wa.me/${numeroWhatsAppDestino()}?text=${encodeURIComponent(msg)}`;
 
-Valor total: R$ ${total.toFixed(2)}`;
+        window.open(
+            url,
+            "_blank"
+        );
 
-    const url =
-`https://wa.me/5527995291669?text=${encodeURIComponent(msg)}`;
+    }catch(error){
 
-    window.open(url,'_blank');
+        console.error(error);
+
+        alert("Erro ao registrar pedido. Tente novamente.");
+
+    }finally{
+
+        btnPedidoWhatsapp.disabled =
+            false;
+
+        btnPedidoWhatsapp.textContent =
+            textoBotao;
+
+    }
 
 };
+
+onSnapshot(
+    collection(db, "produtosLoja"),
+    (snapshot)=>{
+
+        produtosLoja =
+            ordenarPorOrdem(
+                snapshot.docs
+                .map((documento)=>({
+                    id: documento.id,
+                    ...documento.data()
+                }))
+                .filter((produto)=>produto.ativo !== false)
+            );
+
+        if(
+            !produtoSelecionado ||
+            !produtosLoja.some((produto)=>produto.id === produtoSelecionado.id)
+        ){
+
+            produtoSelecionado =
+                produtosLoja[0] || null;
+
+            qtdProduto =
+                1;
+
+        }else{
+
+            produtoSelecionado =
+                produtosLoja.find((produto)=>produto.id === produtoSelecionado.id);
+
+        }
+
+        renderizarProdutos();
+        renderizarProdutoSelecionado();
+
+    },
+    (error)=>{
+
+        console.error(error);
+
+        produtosLista.innerHTML = `
+            <div class="col-span-full bg-red-50 text-red-700 rounded-3xl p-5 border border-red-100 text-sm font-bold">
+                Erro ao carregar produtos da loja.
+            </div>
+        `;
+
+    }
+);
+
+onSnapshot(
+    collection(db, "lojasRetirada"),
+    (snapshot)=>{
+
+        lojasRetirada =
+            ordenarPorOrdem(
+                snapshot.docs
+                .map((documento)=>({
+                    id: documento.id,
+                    ...documento.data()
+                }))
+                .filter((loja)=>loja.ativo !== false)
+            );
+
+        renderizarLojas();
+
+    },
+    (error)=>{
+
+        console.error(error);
+
+        lojaRetiradaSelect.innerHTML =
+            '<option value="">Erro ao carregar lojas</option>';
+
+    }
+);
+
+atualizarTotal();
 
 </script>
 
