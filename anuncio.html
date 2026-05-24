@@ -19,9 +19,13 @@ rel="stylesheet"
 >
 
 <style>
+*{
+    box-sizing:border-box;
+}
 
 body{
     font-family:'Inter', sans-serif;
+    overflow-x:hidden;
 }
 
 .glass{
@@ -51,20 +55,19 @@ body{
         transform:rotate(360deg);
     }
 }
-
 </style>
 
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 text-gray-900">
 
 <header class="sticky top-0 z-50 glass border-b border-gray-200">
 
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
         <a
             href="index.html"
-            class="text-3xl font-black text-green-600 italic"
+            class="text-2xl md:text-3xl font-black text-green-600 italic"
         >
             FigurinhasCup
         </a>
@@ -92,15 +95,16 @@ body{
     class="hidden"
 >
 
-<section class="max-w-7xl mx-auto px-4 py-10">
+<section class="max-w-7xl mx-auto px-4 py-8 md:py-10">
 
-    <div class="grid lg:grid-cols-2 gap-10">
+    <div class="grid lg:grid-cols-2 gap-8 md:gap-10">
 
         <div>
 
             <img
                 id="foto"
                 class="w-full rounded-[2rem] shadow-2xl object-cover"
+                alt="Foto da figurinha"
             >
 
         </div>
@@ -130,17 +134,17 @@ body{
 
             <h1
                 id="titulo"
-                class="text-5xl font-black leading-tight"
+                class="text-3xl md:text-5xl font-black leading-tight"
             ></h1>
 
             <p
                 id="subtitulo"
-                class="text-gray-500 mt-4 text-lg"
+                class="text-gray-500 mt-4 text-base md:text-lg"
             ></p>
 
             <div
                 id="localizacao"
-                class="mt-6 text-green-700 font-bold"
+                class="mt-6 text-green-700 font-bold text-sm md:text-base"
             ></div>
 
             <div
@@ -158,7 +162,7 @@ body{
 
                     <h2
                         id="preco"
-                        class="text-5xl font-black"
+                        class="text-4xl md:text-5xl font-black"
                     ></h2>
 
                 </div>
@@ -177,6 +181,7 @@ body{
 
                 <button
                     id="btnCompartilhar"
+                    type="button"
                     class="bg-black text-white p-5 rounded-2xl font-black text-lg"
                 >
                     Compartilhar
@@ -202,7 +207,7 @@ body{
                     Marketplace
                 </span>
 
-                <h2 class="text-4xl font-black">
+                <h2 class="text-3xl md:text-4xl font-black">
                     Relacionados
                 </h2>
 
@@ -229,14 +234,12 @@ import {
 } from './firebase.js';
 
 import {
-
     doc,
     getDoc,
     collection,
     getDocs,
-    addDoc,
+    setDoc,
     serverTimestamp
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const params =
@@ -248,22 +251,34 @@ const id =
 let userLat = null;
 let userLng = null;
 
+function texto(valor, fallback = ""){
+    if(valor === undefined || valor === null || valor === ""){
+        return fallback;
+    }
+
+    return String(valor);
+}
+
+function limparTelefone(valor){
+    return String(valor || "").replace(/\D/g, "");
+}
+
 function calcularDistancia(lat1, lon1, lat2, lon2){
 
     const R = 6371;
 
     const dLat =
-        (lat2-lat1) * Math.PI/180;
+        (Number(lat2)-Number(lat1)) * Math.PI/180;
 
     const dLon =
-        (lon2-lon1) * Math.PI/180;
+        (Number(lon2)-Number(lon1)) * Math.PI/180;
 
     const a =
         Math.sin(dLat/2) *
         Math.sin(dLat/2) +
 
-        Math.cos(lat1 * Math.PI/180) *
-        Math.cos(lat2 * Math.PI/180) *
+        Math.cos(Number(lat1) * Math.PI/180) *
+        Math.cos(Number(lat2) * Math.PI/180) *
 
         Math.sin(dLon/2) *
         Math.sin(dLon/2);
@@ -299,25 +314,14 @@ function formatarPreco(valor){
 
 }
 
-navigator.geolocation.getCurrentPosition((pos)=>{
-
-    userLat = pos.coords.latitude;
-    userLng = pos.coords.longitude;
-
-});
-
-async function registrarInteresse(ad){
-
-    function limparTelefone(valor){
-    return String(valor || "").replace(/\D/g, "");
-}
-
 function obterWhatsappInteressado(){
+
     let telefone =
         limparTelefone(auth.currentUser?.phoneNumber);
 
     if(telefone.startsWith("55") && telefone.length > 11){
-        telefone = telefone.slice(2);
+        telefone =
+            telefone.slice(2);
     }
 
     if(!telefone){
@@ -344,6 +348,7 @@ function obterWhatsappInteressado(){
     );
 
     return telefone;
+
 }
 
 async function registrarInteresse(ad){
@@ -358,8 +363,11 @@ async function registrarInteresse(ad){
     const compradorWhatsApp =
         obterWhatsappInteressado();
 
-    await addDoc(
-        collection(db, "interesses"),
+    const interesseId =
+        `${id}_${compradorWhatsApp}`;
+
+    await setDoc(
+        doc(db, "interesses", interesseId),
         {
             anuncioId:
                 id,
@@ -400,12 +408,36 @@ async function registrarInteresse(ad){
             status:
                 "pendente",
 
+            atualizadoEm:
+                serverTimestamp(),
+
             criadoEm:
                 serverTimestamp()
+        },
+        {
+            merge: true
         }
     );
 
 }
+
+navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+
+        userLat =
+            pos.coords.latitude;
+
+        userLng =
+            pos.coords.longitude;
+
+    },
+    ()=>{},
+    {
+        enableHighAccuracy:true,
+        timeout:8000,
+        maximumAge:60000
+    }
+);
 
 async function carregarAnuncio(){
 
@@ -449,17 +481,17 @@ async function carregarAnuncio(){
     document.getElementById('foto').src =
         ad.foto || "https://placehold.co/800x600?text=Sem+foto";
 
-    document.getElementById('tipo').innerHTML =
-        ad.tipo || "Figurinha";
+    document.getElementById('tipo').textContent =
+        ad.categoriaFigurinha || ad.tipo || "Figurinha";
 
-    document.getElementById('raridade').innerHTML =
+    document.getElementById('raridade').textContent =
         ad.raridade || "Normal";
 
-    document.getElementById('titulo').innerHTML =
+    document.getElementById('titulo').textContent =
         ad.jogador || "Sem nome";
 
-    document.getElementById('subtitulo').innerHTML =
-        `${ad.selecao || "Seleção não informada"} • #${ad.numero || "--"}`;
+    document.getElementById('subtitulo').textContent =
+        `${ad.selecao || "Coleção não informada"}${ad.numero ? " • #" + ad.numero : ""}`;
 
     if(vendido){
 
@@ -491,13 +523,13 @@ async function carregarAnuncio(){
 
     }
 
-    document.getElementById('localizacao').innerHTML =
+    document.getElementById('localizacao').textContent =
         `${ad.cidade || "Cidade não informada"}${ad.estado ? " - " + ad.estado : ""}${distancia}`;
 
-    document.getElementById('descricao').innerHTML =
-        ad.descricao || "Sem descrição";
+    document.getElementById('descricao').textContent =
+        ad.descricao || ad.raridadeDescricao || "Sem descrição";
 
-    document.getElementById('preco').innerHTML =
+    document.getElementById('preco').textContent =
         formatarPreco(ad.preco);
 
     const btnWhatsapp =
@@ -509,7 +541,7 @@ async function carregarAnuncio(){
 
         btnWhatsapp.removeAttribute('target');
 
-        btnWhatsapp.innerHTML =
+        btnWhatsapp.textContent =
             "FIGURINHA VENDIDA";
 
         btnWhatsapp.className =
@@ -518,21 +550,73 @@ async function carregarAnuncio(){
     }else{
 
         const whatsapp =
-            String(ad.whatsapp || "").replace(/\D/g,'');
+            limparTelefone(ad.whatsapp);
 
         btnWhatsapp.href =
-            `https://wa.me/55${whatsapp}?text=Olá! Tenho interesse na figurinha ${ad.jogador || ""} #${ad.numero || ""}`;
+            `https://wa.me/55${whatsapp}?text=${encodeURIComponent(`Olá! Tenho interesse na figurinha ${ad.jogador || ""}${ad.numero ? " #" + ad.numero : ""}`)}`;
 
         btnWhatsapp.addEventListener('click', async (event)=>{
 
             event.preventDefault();
 
-            await registrarInteresse(ad);
+            if(btnWhatsapp.dataset.loading === "true"){
+                return;
+            }
 
-            window.open(
-                btnWhatsapp.href,
-                "_blank"
+            const textoOriginal =
+                btnWhatsapp.textContent;
+
+            btnWhatsapp.dataset.loading =
+                "true";
+
+            btnWhatsapp.textContent =
+                "REGISTRANDO...";
+
+            btnWhatsapp.classList.add(
+                "opacity-70",
+                "pointer-events-none"
             );
+
+            try{
+
+                await registrarInteresse(ad);
+
+                window.open(
+                    btnWhatsapp.href,
+                    "_blank"
+                );
+
+            }catch(error){
+
+                console.error("Erro ao registrar interesse:", error);
+
+                if(error.message === "WHATSAPP_INVALIDO"){
+
+                    alert("Informe um WhatsApp válido com DDD para registrar seu interesse.");
+
+                }else{
+
+                    alert("Não foi possível registrar seu interesse. Faça login novamente.");
+
+                    window.location.href =
+                        `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+
+                }
+
+            }finally{
+
+                btnWhatsapp.dataset.loading =
+                    "false";
+
+                btnWhatsapp.textContent =
+                    textoOriginal;
+
+                btnWhatsapp.classList.remove(
+                    "opacity-70",
+                    "pointer-events-none"
+                );
+
+            }
 
         });
 
@@ -541,18 +625,30 @@ async function carregarAnuncio(){
     document.getElementById('btnCompartilhar')
     .addEventListener('click', ()=>{
 
-        navigator.share({
+        if(navigator.share){
 
-            title:
-                ad.jogador || "Figurinha",
+            navigator.share({
 
-            text:
-                `Confira esta figurinha no FigurinhasCup`,
+                title:
+                    ad.jogador || "Figurinha",
 
-            url:
-                window.location.href
+                text:
+                    `Confira esta figurinha no FigurinhasCup`,
 
-        });
+                url:
+                    window.location.href
+
+            });
+
+            return;
+
+        }
+
+        navigator.clipboard.writeText(
+            window.location.href
+        );
+
+        alert("Link copiado.");
 
     });
 
@@ -577,11 +673,12 @@ async function carregarRelacionados(selecao){
 
     const relacionados =
         snap.docs
-        .map(doc=>({
-            id: doc.id,
-            ...doc.data()
+        .map((documento)=>({
+            id: documento.id,
+            ...documento.data()
         }))
-        .filter(a=>
+        .filter((a)=>
+            a.status === "aprovado" &&
             a.selecao === selecao &&
             a.id !== id
         )
@@ -592,7 +689,16 @@ async function carregarRelacionados(selecao){
 
     area.innerHTML = "";
 
-    relacionados.forEach(ad=>{
+    if(relacionados.length === 0){
+
+        area.innerHTML =
+            '<div class="col-span-full bg-white rounded-[2rem] p-6 border border-gray-100 text-gray-500 font-bold">Nenhum relacionado encontrado.</div>';
+
+        return;
+
+    }
+
+    relacionados.forEach((ad)=>{
 
         area.innerHTML += `
 
@@ -601,11 +707,12 @@ async function carregarRelacionados(selecao){
             <img
                 src="${ad.foto || 'https://placehold.co/600x400?text=Sem+foto'}"
                 class="w-full h-48 object-cover rounded-2xl"
+                alt="Foto da figurinha"
             >
 
             <div class="mt-4">
 
-                <h3 class="text-xl font-black">
+                <h3 class="text-xl font-black break-words">
 
                     ${ad.jogador || "Sem nome"}
 
@@ -613,11 +720,11 @@ async function carregarRelacionados(selecao){
 
                 <p class="text-gray-500 text-sm mt-1">
 
-                    #${ad.numero || "--"}
+                    ${ad.selecao || "Coleção"}${ad.numero ? " • #" + ad.numero : ""}
 
                 </p>
 
-                <div class="flex items-center justify-between mt-5">
+                <div class="flex items-center justify-between mt-5 gap-3">
 
                     <span class="font-black text-xl">
 
@@ -626,7 +733,7 @@ async function carregarRelacionados(selecao){
                     </span>
 
                     <a
-                        href="anuncio.html?id=${ad.id}"
+                        href="anuncio.html?id=${encodeURIComponent(ad.id)}"
                         class="bg-black text-white px-4 py-2 rounded-full text-sm font-black"
                     >
                         Ver
