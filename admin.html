@@ -50,6 +50,19 @@ body{
     animation:spin 1s linear infinite;
 }
 
+.input-admin{
+    width:100%;
+    padding:1rem;
+    border-radius:1rem;
+    background:#f3f4f6;
+    outline:none;
+    font-size:0.95rem;
+}
+
+.input-admin:focus{
+    box-shadow:0 0 0 3px rgba(22,163,74,0.18);
+}
+
 @keyframes spin{
     100%{
         transform:rotate(360deg);
@@ -73,6 +86,13 @@ body{
         </a>
 
         <div class="flex items-center gap-2 md:gap-4">
+
+            <a
+                href="loja.html"
+                class="bg-green-600 text-white px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-black"
+            >
+                Loja
+            </a>
 
             <a
                 href="dashboard.html"
@@ -108,7 +128,7 @@ body{
         </h1>
 
         <p class="text-gray-500 mt-3 text-sm md:text-base">
-            Gerencie anúncios, moderação e destaques.
+            Gerencie anúncios, loja oficial, produtos e pontos de retirada.
         </p>
 
     </div>
@@ -142,6 +162,215 @@ body{
 
     </div>
 
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-10">
+
+    <div class="mb-6">
+
+        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
+            Gestão da loja oficial
+        </span>
+
+        <h2 class="text-3xl md:text-4xl font-black mt-4">
+            Produtos e retirada
+        </h2>
+
+        <p class="text-gray-500 mt-2 text-sm md:text-base">
+            Cadastre produtos e lojas oficiais. A página da loja poderá ler essas informações direto do Firestore.
+        </p>
+
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mb-12">
+
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100 shadow-sm">
+
+            <div class="flex items-center justify-between gap-4 mb-5">
+
+                <div>
+                    <h3 class="text-2xl font-black">Produtos</h3>
+                    <p class="text-sm text-gray-500 mt-1">Envelopes, combos e itens oficiais.</p>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="limparProdutoLoja()"
+                    class="bg-gray-100 px-4 py-2 rounded-full text-xs font-black"
+                >
+                    NOVO
+                </button>
+
+            </div>
+
+            <input type="hidden" id="produtoId">
+
+            <div class="space-y-4">
+
+                <input
+                    id="produtoNome"
+                    placeholder="Nome do produto"
+                    class="input-admin"
+                >
+
+                <textarea
+                    id="produtoDescricao"
+                    placeholder="Descrição do produto"
+                    class="input-admin h-28 resize-none"
+                ></textarea>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <input
+                        id="produtoPreco"
+                        type="number"
+                        step="0.01"
+                        placeholder="Preço"
+                        class="input-admin"
+                    >
+
+                    <input
+                        id="produtoEstoque"
+                        type="number"
+                        placeholder="Estoque"
+                        class="input-admin"
+                    >
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <input
+                        id="produtoImagem"
+                        placeholder="Emoji ou URL da imagem"
+                        class="input-admin"
+                    >
+
+                    <input
+                        id="produtoOrdem"
+                        type="number"
+                        placeholder="Ordem"
+                        class="input-admin"
+                    >
+                </div>
+
+                <label class="flex items-center gap-3 font-bold text-sm">
+                    <input id="produtoAtivo" type="checkbox" checked class="w-5 h-5 accent-green-600">
+                    Produto ativo na loja
+                </label>
+
+                <button
+                    type="button"
+                    onclick="salvarProdutoLoja()"
+                    class="w-full bg-green-600 text-white p-4 rounded-2xl font-black"
+                >
+                    SALVAR PRODUTO
+                </button>
+
+            </div>
+
+            <div
+                id="listaProdutosLoja"
+                class="mt-6 space-y-3"
+            ></div>
+
+        </div>
+
+        <div class="bg-white rounded-[2rem] p-5 md:p-6 border border-gray-100 shadow-sm">
+
+            <div class="flex items-center justify-between gap-4 mb-5">
+
+                <div>
+                    <h3 class="text-2xl font-black">Lojas de retirada</h3>
+                    <p class="text-sm text-gray-500 mt-1">Locais oficiais para retirar encomendas.</p>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="limparLojaRetirada()"
+                    class="bg-gray-100 px-4 py-2 rounded-full text-xs font-black"
+                >
+                    NOVA
+                </button>
+
+            </div>
+
+            <input type="hidden" id="lojaId">
+
+            <div class="space-y-4">
+
+                <input
+                    id="lojaNome"
+                    placeholder="Nome da loja"
+                    class="input-admin"
+                >
+
+                <input
+                    id="lojaEndereco"
+                    placeholder="Endereço / bairro"
+                    class="input-admin"
+                >
+
+                <div class="grid grid-cols-2 gap-4">
+                    <input
+                        id="lojaCidade"
+                        placeholder="Cidade"
+                        class="input-admin"
+                    >
+
+                    <input
+                        id="lojaWhatsapp"
+                        placeholder="WhatsApp da loja"
+                        class="input-admin"
+                    >
+                </div>
+
+                <input
+                    id="lojaOrdem"
+                    type="number"
+                    placeholder="Ordem"
+                    class="input-admin"
+                >
+
+                <label class="flex items-center gap-3 font-bold text-sm">
+                    <input id="lojaAtiva" type="checkbox" checked class="w-5 h-5 accent-green-600">
+                    Loja ativa para retirada
+                </label>
+
+                <button
+                    type="button"
+                    onclick="salvarLojaRetirada()"
+                    class="w-full bg-black text-white p-4 rounded-2xl font-black"
+                >
+                    SALVAR LOJA
+                </button>
+
+            </div>
+
+            <div
+                id="listaLojasRetirada"
+                class="mt-6 space-y-3"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="max-w-7xl mx-auto px-4 pb-12">
+
+    <div class="flex items-center justify-between gap-4 mb-6">
+
+        <div>
+            <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase">
+                Moderação
+            </span>
+
+            <h2 class="text-3xl md:text-4xl font-black mt-4">
+                Anúncios
+            </h2>
+        </div>
+
+    </div>
+
     <div
         id="loaderArea"
         class="flex justify-center py-20"
@@ -171,6 +400,7 @@ import {
 import {
     collection,
     onSnapshot,
+    addDoc,
     deleteDoc,
     doc,
     updateDoc,
@@ -182,6 +412,9 @@ const ADMIN_EMAIL = "nortecolor@gmail.com";
 const cards = document.getElementById('cards');
 const loaderArea = document.getElementById('loaderArea');
 const logoutBtn = document.getElementById('logoutBtn');
+
+let produtosLoja = [];
+let lojasRetirada = [];
 
 logoutBtn.addEventListener('click', async()=>{
     await signOut(auth);
@@ -201,7 +434,9 @@ onAuthStateChanged(auth, (user)=>{
 
     }
 
-    carregar();
+    carregarAnuncios();
+    carregarProdutosLoja();
+    carregarLojasRetirada();
 
 });
 
@@ -250,7 +485,23 @@ function ordenarPorData(lista){
 
 }
 
-function carregar(){
+function ordenarPorOrdem(lista){
+
+    return lista.sort((a,b)=>{
+
+        const ordemA =
+            Number(a.ordem || 0);
+
+        const ordemB =
+            Number(b.ordem || 0);
+
+        return ordemA - ordemB;
+
+    });
+
+}
+
+function carregarAnuncios(){
 
     onSnapshot(
         collection(db, "anuncios"),
@@ -262,7 +513,7 @@ function carregar(){
                     ...documento.data()
                 }));
 
-            renderizar(
+            renderizarAnuncios(
                 ordenarPorData(anuncios)
             );
 
@@ -291,7 +542,519 @@ function carregar(){
 
 }
 
-function renderizar(lista){
+function carregarProdutosLoja(){
+
+    onSnapshot(
+        collection(db, "produtosLoja"),
+        (snapshot)=>{
+
+            produtosLoja =
+                snapshot.docs.map((documento)=>({
+                    id: documento.id,
+                    ...documento.data()
+                }));
+
+            renderizarProdutosLoja();
+
+        },
+        (error)=>{
+
+            console.error(error);
+
+            document.getElementById('listaProdutosLoja').innerHTML =
+                '<div class="bg-red-50 text-red-700 p-4 rounded-2xl font-bold text-sm">Erro ao carregar produtos.</div>';
+
+        }
+    );
+
+}
+
+function carregarLojasRetirada(){
+
+    onSnapshot(
+        collection(db, "lojasRetirada"),
+        (snapshot)=>{
+
+            lojasRetirada =
+                snapshot.docs.map((documento)=>({
+                    id: documento.id,
+                    ...documento.data()
+                }));
+
+            renderizarLojasRetirada();
+
+        },
+        (error)=>{
+
+            console.error(error);
+
+            document.getElementById('listaLojasRetirada').innerHTML =
+                '<div class="bg-red-50 text-red-700 p-4 rounded-2xl font-bold text-sm">Erro ao carregar lojas.</div>';
+
+        }
+    );
+
+}
+
+function renderizarProdutosLoja(){
+
+    const area =
+        document.getElementById('listaProdutosLoja');
+
+    area.innerHTML =
+        "";
+
+    if(produtosLoja.length === 0){
+
+        area.innerHTML =
+            '<div class="bg-gray-100 rounded-2xl p-4 text-sm font-bold text-gray-500">Nenhum produto cadastrado.</div>';
+
+        return;
+
+    }
+
+    ordenarPorOrdem(produtosLoja).forEach((produto)=>{
+
+        const ativo =
+            produto.ativo !== false;
+
+        area.innerHTML += `
+            <div class="bg-gray-100 rounded-2xl p-4 border border-gray-200">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="font-black text-lg">
+                            ${texto(produto.imagem, '📦')} ${texto(produto.nome, 'Produto sem nome')}
+                        </div>
+
+                        <div class="text-sm text-gray-500 mt-1">
+                            ${texto(produto.descricao, 'Sem descrição')}
+                        </div>
+                    </div>
+
+                    <span class="${ativo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-3 py-1 rounded-full text-[10px] font-black uppercase">
+                        ${ativo ? 'Ativo' : 'Inativo'}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 mt-4 text-sm">
+                    <div>
+                        <div class="text-gray-400 font-bold uppercase text-[10px]">Preço</div>
+                        <div class="font-black">${formatarPreco(produto.preco)}</div>
+                    </div>
+
+                    <div>
+                        <div class="text-gray-400 font-bold uppercase text-[10px]">Estoque</div>
+                        <div class="font-black">${Number(produto.estoque || 0)}</div>
+                    </div>
+
+                    <div>
+                        <div class="text-gray-400 font-bold uppercase text-[10px]">Ordem</div>
+                        <div class="font-black">${Number(produto.ordem || 0)}</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <button
+                        type="button"
+                        onclick="editarProdutoLoja('${produto.id}')"
+                        class="bg-black text-white p-3 rounded-xl font-black text-xs"
+                    >
+                        EDITAR
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="excluirProdutoLoja('${produto.id}')"
+                        class="bg-red-500 text-white p-3 rounded-xl font-black text-xs"
+                    >
+                        EXCLUIR
+                    </button>
+                </div>
+            </div>
+        `;
+
+    });
+
+}
+
+function renderizarLojasRetirada(){
+
+    const area =
+        document.getElementById('listaLojasRetirada');
+
+    area.innerHTML =
+        "";
+
+    if(lojasRetirada.length === 0){
+
+        area.innerHTML =
+            '<div class="bg-gray-100 rounded-2xl p-4 text-sm font-bold text-gray-500">Nenhuma loja cadastrada.</div>';
+
+        return;
+
+    }
+
+    ordenarPorOrdem(lojasRetirada).forEach((loja)=>{
+
+        const ativa =
+            loja.ativo !== false;
+
+        area.innerHTML += `
+            <div class="bg-gray-100 rounded-2xl p-4 border border-gray-200">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="font-black text-lg">
+                            ${texto(loja.nome, 'Loja sem nome')}
+                        </div>
+
+                        <div class="text-sm text-gray-500 mt-1">
+                            ${texto(loja.endereco, 'Endereço não informado')}
+                        </div>
+
+                        <div class="text-sm text-gray-500">
+                            ${texto(loja.cidade, 'Cidade não informada')}
+                        </div>
+
+                        <div class="text-sm text-green-700 font-bold mt-1">
+                            ${texto(loja.whatsapp, 'WhatsApp não informado')}
+                        </div>
+                    </div>
+
+                    <span class="${ativa ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-3 py-1 rounded-full text-[10px] font-black uppercase">
+                        ${ativa ? 'Ativa' : 'Inativa'}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <button
+                        type="button"
+                        onclick="editarLojaRetirada('${loja.id}')"
+                        class="bg-black text-white p-3 rounded-xl font-black text-xs"
+                    >
+                        EDITAR
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="excluirLojaRetirada('${loja.id}')"
+                        class="bg-red-500 text-white p-3 rounded-xl font-black text-xs"
+                    >
+                        EXCLUIR
+                    </button>
+                </div>
+            </div>
+        `;
+
+    });
+
+}
+
+window.salvarProdutoLoja = async()=>{
+
+    const id =
+        document.getElementById('produtoId').value;
+
+    const dados = {
+        nome:
+            document.getElementById('produtoNome').value.trim(),
+
+        descricao:
+            document.getElementById('produtoDescricao').value.trim(),
+
+        preco:
+            Number(document.getElementById('produtoPreco').value || 0),
+
+        imagem:
+            document.getElementById('produtoImagem').value.trim() || "📦",
+
+        estoque:
+            Number(document.getElementById('produtoEstoque').value || 0),
+
+        ordem:
+            Number(document.getElementById('produtoOrdem').value || 0),
+
+        ativo:
+            document.getElementById('produtoAtivo').checked,
+
+        atualizadoEm:
+            serverTimestamp(),
+
+        atualizadoPor:
+            ADMIN_EMAIL
+    };
+
+    if(!dados.nome || dados.preco <= 0){
+
+        alert("Informe nome e preço válido do produto.");
+
+        return;
+
+    }
+
+    try{
+
+        if(id){
+
+            await updateDoc(
+                doc(db, "produtosLoja", id),
+                dados
+            );
+
+        }else{
+
+            await addDoc(
+                collection(db, "produtosLoja"),
+                {
+                    ...dados,
+                    criadoEm: serverTimestamp(),
+                    criadoPor: ADMIN_EMAIL
+                }
+            );
+
+        }
+
+        limparProdutoLoja();
+
+        alert("Produto salvo com sucesso.");
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Não foi possível salvar o produto. Verifique as regras do Firestore.");
+
+    }
+
+};
+
+window.salvarLojaRetirada = async()=>{
+
+    const id =
+        document.getElementById('lojaId').value;
+
+    const dados = {
+        nome:
+            document.getElementById('lojaNome').value.trim(),
+
+        endereco:
+            document.getElementById('lojaEndereco').value.trim(),
+
+        cidade:
+            document.getElementById('lojaCidade').value.trim(),
+
+        whatsapp:
+            document.getElementById('lojaWhatsapp').value.trim(),
+
+        ordem:
+            Number(document.getElementById('lojaOrdem').value || 0),
+
+        ativo:
+            document.getElementById('lojaAtiva').checked,
+
+        atualizadoEm:
+            serverTimestamp(),
+
+        atualizadoPor:
+            ADMIN_EMAIL
+    };
+
+    if(!dados.nome || !dados.endereco){
+
+        alert("Informe nome e endereço da loja.");
+
+        return;
+
+    }
+
+    try{
+
+        if(id){
+
+            await updateDoc(
+                doc(db, "lojasRetirada", id),
+                dados
+            );
+
+        }else{
+
+            await addDoc(
+                collection(db, "lojasRetirada"),
+                {
+                    ...dados,
+                    criadoEm: serverTimestamp(),
+                    criadoPor: ADMIN_EMAIL
+                }
+            );
+
+        }
+
+        limparLojaRetirada();
+
+        alert("Loja salva com sucesso.");
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Não foi possível salvar a loja. Verifique as regras do Firestore.");
+
+    }
+
+};
+
+window.editarProdutoLoja = (id)=>{
+
+    const produto =
+        produtosLoja.find((item)=>item.id === id);
+
+    if(!produto){
+        return;
+    }
+
+    document.getElementById('produtoId').value =
+        produto.id;
+
+    document.getElementById('produtoNome').value =
+        produto.nome || "";
+
+    document.getElementById('produtoDescricao').value =
+        produto.descricao || "";
+
+    document.getElementById('produtoPreco').value =
+        produto.preco || "";
+
+    document.getElementById('produtoImagem').value =
+        produto.imagem || "";
+
+    document.getElementById('produtoEstoque').value =
+        produto.estoque || "";
+
+    document.getElementById('produtoOrdem').value =
+        produto.ordem || "";
+
+    document.getElementById('produtoAtivo').checked =
+        produto.ativo !== false;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+};
+
+window.editarLojaRetirada = (id)=>{
+
+    const loja =
+        lojasRetirada.find((item)=>item.id === id);
+
+    if(!loja){
+        return;
+    }
+
+    document.getElementById('lojaId').value =
+        loja.id;
+
+    document.getElementById('lojaNome').value =
+        loja.nome || "";
+
+    document.getElementById('lojaEndereco').value =
+        loja.endereco || "";
+
+    document.getElementById('lojaCidade').value =
+        loja.cidade || "";
+
+    document.getElementById('lojaWhatsapp').value =
+        loja.whatsapp || "";
+
+    document.getElementById('lojaOrdem').value =
+        loja.ordem || "";
+
+    document.getElementById('lojaAtiva').checked =
+        loja.ativo !== false;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+};
+
+window.excluirProdutoLoja = async(id)=>{
+
+    const confirmar =
+        confirm("Excluir produto da loja?");
+
+    if(!confirmar){
+        return;
+    }
+
+    try{
+
+        await deleteDoc(
+            doc(db, "produtosLoja", id)
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Não foi possível excluir o produto.");
+
+    }
+
+};
+
+window.excluirLojaRetirada = async(id)=>{
+
+    const confirmar =
+        confirm("Excluir loja de retirada?");
+
+    if(!confirmar){
+        return;
+    }
+
+    try{
+
+        await deleteDoc(
+            doc(db, "lojasRetirada", id)
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Não foi possível excluir a loja.");
+
+    }
+
+};
+
+window.limparProdutoLoja = ()=>{
+
+    document.getElementById('produtoId').value = "";
+    document.getElementById('produtoNome').value = "";
+    document.getElementById('produtoDescricao').value = "";
+    document.getElementById('produtoPreco').value = "";
+    document.getElementById('produtoImagem').value = "";
+    document.getElementById('produtoEstoque').value = "";
+    document.getElementById('produtoOrdem').value = "";
+    document.getElementById('produtoAtivo').checked = true;
+
+};
+
+window.limparLojaRetirada = ()=>{
+
+    document.getElementById('lojaId').value = "";
+    document.getElementById('lojaNome').value = "";
+    document.getElementById('lojaEndereco').value = "";
+    document.getElementById('lojaCidade').value = "";
+    document.getElementById('lojaWhatsapp').value = "";
+    document.getElementById('lojaOrdem').value = "";
+    document.getElementById('lojaAtiva').checked = true;
+
+};
+
+function renderizarAnuncios(lista){
 
     loaderArea.style.display =
         'none';
@@ -581,7 +1344,7 @@ document.addEventListener('click', async(event)=>{
         console.error(error);
 
         alert(
-            "Não foi possível concluir a ação. Se o anúncio for verificado, confira se as regras do Firestore permitem update/delete para o admin nortecolor@gmail.com."
+            "Não foi possível concluir a ação. Confira se as regras do Firestore permitem update/delete para o admin nortecolor@gmail.com."
         );
 
     }finally{
