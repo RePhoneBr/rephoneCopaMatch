@@ -19,7 +19,6 @@
 >
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -36,11 +35,11 @@ body{
 }
 
 .card{
-    transition:0.3s;
+    transition:0.25s;
 }
 
 .card:hover{
-    transform:translateY(-4px);
+    transform:translateY(-3px);
     box-shadow:0 20px 35px rgba(0,0,0,0.08);
 }
 
@@ -77,16 +76,16 @@ body{
     display:flex;
 }
 
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
 @media (min-width:768px){
     .security-alert-message{
         min-height:3rem;
         font-size:0.9rem;
-    }
-}
-
-    @keyframes spin{
-    100%{
-        transform:rotate(360deg);
     }
 }
 </style>
@@ -185,7 +184,7 @@ body{
         </h1>
 
         <p class="text-gray-500 max-w-2xl mx-auto mt-4 md:mt-6 text-sm md:text-lg leading-relaxed">
-            Troque, compre e venda figurinhas com colecionadores próximos.
+            Troque, compre e venda figurinhas com colecionadores próximos e pontos oficiais de retirada.
         </p>
 
         <div class="bg-white rounded-[2rem] p-3 md:p-4 shadow-xl mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
@@ -246,9 +245,75 @@ body{
 </section>
 
 <section
+    id="lojasParceirasSection"
+    class="px-4 pb-8"
+>
+    <div class="max-w-7xl mx-auto">
+
+        <div class="bg-black text-white rounded-[2rem] p-6 md:p-8">
+
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-6">
+
+                <div>
+                    <span class="text-green-400 font-black uppercase text-xs">
+                        Retirada segura
+                    </span>
+
+                    <h2 class="text-2xl md:text-4xl font-black mt-2">
+                        Lojas parceiras oficiais
+                    </h2>
+
+                    <p class="text-gray-300 text-sm md:text-base mt-2 max-w-2xl">
+                        Pontos cadastrados para retirada de encomendas, trocas combinadas e atendimento com mais segurança.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <a
+                        href="loja.html"
+                        class="bg-green-600 hover:bg-green-700 transition text-white px-5 py-3 rounded-full font-black text-sm text-center"
+                    >
+                        Comprar na loja oficial
+                    </a>
+
+                    <a
+                        id="ctaLojista"
+                        href="#"
+                        target="_blank"
+                        class="bg-white text-black px-5 py-3 rounded-full font-black text-sm text-center"
+                    >
+                        Quer ser ponto oficial?
+                    </a>
+                </div>
+
+            </div>
+
+            <div
+                id="lojasParceirasHome"
+                class="grid grid-cols-1 md:grid-cols-3 gap-4"
+            ></div>
+
+        </div>
+
+    </div>
+</section>
+
+<section
     id="feed"
     class="px-4 pb-8"
 >
+
+    <div class="max-w-7xl mx-auto mb-6">
+
+        <span class="bg-white text-gray-500 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase border border-gray-100">
+            Feed
+        </span>
+
+        <h2 class="text-2xl md:text-4xl font-black mt-4">
+            Figurinhas disponíveis
+        </h2>
+
+    </div>
 
     <div
         id="loaderArea"
@@ -272,10 +337,6 @@ body{
             href="loja.html"
             class="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-yellow-400 to-green-500 text-black px-6 py-4 rounded-2xl shadow-xl font-black text-sm md:text-base"
         >
-            <span class="text-xl">
-                🛒
-            </span>
-
             <span>
                 Loja Oficial
             </span>
@@ -293,25 +354,25 @@ import {
 } from './firebase.js';
 
 import {
-
     collection,
     onSnapshot,
     query,
     orderBy
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 import {
-
     onAuthStateChanged,
     signOut
-
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
+const WHATSAPP_PARCEIRO = "5527995291669";
+
 let anuncios = [];
+let lojasParceiras = [];
 let userLat = null;
 let userLng = null;
 let locationName = "sua região";
+let userCity = "";
 
 const cards =
     document.getElementById('cards');
@@ -333,6 +394,22 @@ const orderText =
 
 const headerLocationText =
     document.getElementById('headerLocationText');
+
+const lojasParceirasHome =
+    document.getElementById('lojasParceirasHome');
+
+const ctaLojista =
+    document.getElementById('ctaLojista');
+
+function escapeHtml(valor){
+    const div =
+        document.createElement('div');
+
+    div.textContent =
+        String(valor || "");
+
+    return div.innerHTML;
+}
 
 function calcularDistancia(lat1, lon1, lat2, lon2){
 
@@ -404,6 +481,106 @@ function normalizarTexto(valor){
 
 }
 
+function telefoneUrl(valor){
+
+    let numero =
+        String(valor || "").replace(/\D/g,'');
+
+    if(!numero){
+        return "#";
+    }
+
+    if(!numero.startsWith("55")){
+        numero =
+            "55" + numero;
+    }
+
+    return `https://wa.me/${numero}`;
+
+}
+
+function lojasAtivas(){
+
+    return lojasParceiras
+        .filter((loja)=>loja.ativo !== false)
+        .sort((a,b)=>Number(a.ordem || 0) - Number(b.ordem || 0));
+
+}
+
+function encontrarLojaParceira(ad){
+
+    const cidadeAnuncio =
+        normalizarTexto(ad.cidade);
+
+    const lojas =
+        lojasAtivas();
+
+    if(!cidadeAnuncio){
+        return null;
+    }
+
+    return lojas.find((loja)=>
+        normalizarTexto(loja.cidade) === cidadeAnuncio
+    ) || null;
+
+}
+
+function montarSelos(ad){
+
+    const verificado =
+        Boolean(ad.verificado || ad.localizacaoVerificada);
+
+    const lojaParceira =
+        encontrarLojaParceira(ad);
+
+    const retiradaDisponivel =
+        Boolean(lojaParceira || ad.retiradaDisponivel || ad.lojaRetiradaId);
+
+    let html =
+        "";
+
+    if(verificado){
+
+        html += `
+            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
+                Vendedor verificado
+            </span>
+        `;
+
+    }else{
+
+        html += `
+            <span class="bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
+                Não verificado
+            </span>
+        `;
+
+    }
+
+    if(retiradaDisponivel){
+
+        html += `
+            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
+                Retirada disponível
+            </span>
+        `;
+
+    }
+
+    if(lojaParceira){
+
+        html += `
+            <span class="bg-black text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
+                Loja parceira próxima
+            </span>
+        `;
+
+    }
+
+    return html;
+
+}
+
 function prepararLista(){
 
     const termo =
@@ -411,7 +588,7 @@ function prepararLista(){
 
     let lista =
         anuncios.filter((ad)=>
-            ad.status !== "vendido"
+            (ad.status || "aprovado") === "aprovado"
         );
 
     if(termo){
@@ -421,7 +598,10 @@ function prepararLista(){
                 normalizarTexto(ad.jogador).includes(termo) ||
                 normalizarTexto(ad.selecao).includes(termo) ||
                 normalizarTexto(ad.numero).includes(termo) ||
-                normalizarTexto(ad.cidade).includes(termo)
+                normalizarTexto(ad.cidade).includes(termo) ||
+                normalizarTexto(ad.tipo).includes(termo) ||
+                normalizarTexto(ad.raridade).includes(termo) ||
+                normalizarTexto(ad.categoriaFigurinha).includes(termo)
             );
 
     }
@@ -488,7 +668,7 @@ function prepararLista(){
 function atualizarResumo(lista){
 
     const total =
-        anuncios.filter((ad)=>ad.status !== "vendido").length;
+        anuncios.filter((ad)=>(ad.status || "aprovado") === "aprovado").length;
 
     totalText.textContent =
         total === 1
@@ -533,7 +713,7 @@ function renderizar(){
                 </h2>
 
                 <p class="text-gray-500 mt-3 text-sm md:text-base">
-                    Tente buscar por outro jogador, seleção ou número.
+                    Tente buscar por outro jogador, seleção, cidade ou tipo.
                 </p>
             </div>
         `;
@@ -547,77 +727,86 @@ function renderizar(){
         const distanciaTexto =
             formatarDistancia(ad.distancia);
 
-        const verificado =
-            Boolean(ad.verificado || ad.localizacaoVerificada);
-
         const foto =
             ad.foto || "https://placehold.co/600x400?text=Sem+foto";
 
+        const categoria =
+            ad.categoriaFigurinha || ad.tipo || "Figurinha";
+
+        const subtitulo =
+            `${ad.selecao || 'Coleção'}${ad.numero ? ' • #' + ad.numero : ''}`;
+
         const card =
-            document.createElement('div');
+            document.createElement('article');
 
         card.className =
-            "card bg-white rounded-[2rem] p-4 md:p-5 border border-gray-100 relative overflow-hidden";
+            "card bg-white rounded-[1.75rem] border border-gray-100 relative overflow-hidden";
 
         card.innerHTML = `
-            ${
-                verificado
-                    ?
-                    `
-                    <div class="absolute top-4 left-4 z-10 bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
-                        VERIFICADO
-                    </div>
-                    `
-                    :
-                    `
-                    <div class="absolute top-4 left-4 z-10 bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black shadow-lg">
-                        NÃO VERIFICADO
-                    </div>
-                    `
-            }
+            <div class="relative">
 
-            <img
-                src="${foto}"
-                alt="Foto da figurinha"
-                class="w-full h-44 sm:h-52 object-cover rounded-2xl"
-            >
+                <img
+                    src="${escapeHtml(foto)}"
+                    alt="Foto da figurinha"
+                    class="w-full h-48 sm:h-52 object-cover"
+                >
 
-            <div class="mt-4">
+                <div class="absolute top-3 left-3 right-3 flex flex-wrap gap-2">
+                    ${montarSelos(ad)}
+                </div>
 
-                <div class="flex items-center justify-between gap-2">
+            </div>
 
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase truncate max-w-[60%]">
-                        ${ad.tipo || 'Figurinha'}
+            <div class="p-4 md:p-5">
+
+                <div class="flex items-center justify-between gap-2 mb-3">
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase truncate max-w-[62%]">
+                        ${escapeHtml(categoria)}
                     </span>
 
-                    <span class="text-[10px] md:text-xs font-bold text-gray-400 truncate">
-                        ${ad.raridade || 'Comum'}
+                    <span class="text-[10px] md:text-xs font-black text-gray-400 uppercase truncate">
+                        ${escapeHtml(ad.raridade || 'Comum')}
                     </span>
 
                 </div>
 
-                <h2 class="text-lg md:text-2xl font-black mt-3 break-words leading-tight">
-                    ${ad.jogador || 'Pack Figurinhas'}
-                </h2>
+                <h3 class="text-lg md:text-xl font-black leading-tight break-words">
+                    ${escapeHtml(ad.jogador || 'Pack Figurinhas')}
+                </h3>
 
                 <p class="text-gray-500 text-xs md:text-sm mt-1 break-words">
-                    ${ad.selecao || 'Coleção'}${ad.numero ? ' • #' + ad.numero : ''}
+                    ${escapeHtml(subtitulo)}
                 </p>
 
-                <div class="mt-4 text-xs md:text-sm text-green-700 font-bold break-words">
-                    ${ad.cidade || 'Não informado'}
-                    ${distanciaTexto ? ' • ' + distanciaTexto : ''}
+                <div class="mt-4 bg-gray-50 rounded-2xl p-3">
+
+                    <div class="text-[10px] font-black text-gray-400 uppercase">
+                        Localização
+                    </div>
+
+                    <div class="text-xs md:text-sm text-green-700 font-black mt-1 break-words">
+                        ${escapeHtml(ad.cidade || 'Não informado')}
+                        ${distanciaTexto ? ' • ' + distanciaTexto : ''}
+                    </div>
+
                 </div>
 
                 <div class="flex items-center justify-between mt-5 gap-3">
 
-                    <span class="text-lg md:text-2xl font-black">
-                        ${formatarPreco(ad.preco)}
-                    </span>
+                    <div>
+                        <div class="text-[10px] font-black uppercase text-gray-400">
+                            Valor
+                        </div>
+
+                        <span class="text-xl md:text-2xl font-black">
+                            ${formatarPreco(ad.preco)}
+                        </span>
+                    </div>
 
                     <a
                         href="anuncio.html?id=${encodeURIComponent(ad.id)}"
-                        class="bg-black hover:bg-gray-800 transition text-white px-4 md:px-5 py-3 rounded-full text-xs md:text-sm font-black whitespace-nowrap"
+                        class="bg-black hover:bg-gray-800 transition text-white px-5 py-3 rounded-full text-xs md:text-sm font-black whitespace-nowrap"
                     >
                         VER
                     </a>
@@ -630,6 +819,83 @@ function renderizar(){
         cards.appendChild(card);
 
     });
+
+}
+
+function renderizarLojasParceiras(){
+
+    const lojas =
+        lojasAtivas().slice(0,3);
+
+    lojasParceirasHome.innerHTML =
+        "";
+
+    if(lojas.length === 0){
+
+        lojasParceirasHome.innerHTML = `
+            <div class="md:col-span-3 bg-white text-gray-900 rounded-[1.5rem] p-5 border border-white/10">
+                <div class="bg-yellow-100 text-yellow-700 inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase mb-3">
+                    Oportunidade para lojistas
+                </div>
+
+                <h3 class="text-xl font-black">
+                    Seja o primeiro ponto oficial da sua região
+                </h3>
+
+                <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                    Cadastre sua loja como ponto de retirada, receba colecionadores e aumente o movimento local.
+                </p>
+            </div>
+        `;
+
+        renderizar();
+
+        return;
+
+    }
+
+    lojas.forEach((loja)=>{
+
+        const whatsappUrl =
+            telefoneUrl(loja.whatsapp);
+
+        lojasParceirasHome.innerHTML += `
+            <div class="bg-white text-gray-900 rounded-[1.5rem] p-5 border border-white/10">
+
+                <div class="bg-green-100 text-green-700 inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase mb-3">
+                    Ponto oficial
+                </div>
+
+                <h3 class="text-xl font-black break-words">
+                    ${escapeHtml(loja.nome || "Loja parceira")}
+                </h3>
+
+                <p class="text-sm text-gray-500 mt-2 break-words">
+                    ${escapeHtml(loja.endereco || "Endereço não informado")}
+                </p>
+
+                <p class="text-sm text-gray-500 mt-1 break-words">
+                    ${escapeHtml(loja.cidade || "")}
+                </p>
+
+                <div class="grid grid-cols-1 gap-2 mt-5">
+
+                    <a
+                        href="${whatsappUrl}"
+                        target="_blank"
+                        class="bg-green-600 text-white p-3 rounded-2xl font-black text-sm text-center ${loja.whatsapp ? '' : 'pointer-events-none opacity-50'}"
+                    >
+                        WhatsApp
+                    </a>
+
+                </div>
+
+            </div>
+        `;
+
+    });
+
+    renderizar();
 
 }
 
@@ -656,6 +922,9 @@ async function atualizarNomeDaLocalizacao(){
             data.address?.municipality ||
             data.address?.county ||
             "sua região";
+
+        userCity =
+            locationName;
 
         headerLocationText.textContent =
             `Sua localização: ${locationName}`;
@@ -778,6 +1047,31 @@ onSnapshot(q, (snapshot)=>{
 
 });
 
+onSnapshot(
+    collection(db, "lojasRetirada"),
+    (snapshot)=>{
+
+        lojasParceiras =
+            snapshot.docs.map((documento)=>({
+                id: documento.id,
+                ...documento.data()
+            }));
+
+        renderizarLojasParceiras();
+
+    },
+    (error)=>{
+
+        console.error(error);
+
+        lojasParceiras =
+            [];
+
+        renderizarLojasParceiras();
+
+    }
+);
+
 searchInput.addEventListener('input', ()=>{
     renderizar();
 });
@@ -805,7 +1099,13 @@ document
             "anunciar.html";
 
     });
-    
+
+const parceiroMsg =
+    encodeURIComponent("Olá! Tenho interesse em cadastrar minha loja como ponto oficial de retirada do FigurinhasCup.");
+
+ctaLojista.href =
+    `${telefoneUrl(WHATSAPP_PARCEIRO)}?text=${parceiroMsg}`;
+
 const securityMessages =
     document.querySelectorAll('.security-alert-message');
 
@@ -829,7 +1129,7 @@ setInterval(()=>{
         .add('active');
 
 },6000);
-    
+
 reconhecerLocalizacao();
 
 </script>
