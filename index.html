@@ -171,6 +171,50 @@ body{
 
 </div>
 
+<div
+    id="novaFigurinhaToast"
+    class="hidden fixed top-28 left-4 right-4 md:left-auto md:right-6 md:w-96 z-[60]"
+>
+    <div class="bg-black text-white rounded-[2rem] p-5 shadow-2xl border border-white/10">
+
+        <div class="bg-green-500 text-white inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase mb-3">
+            Nova figurinha
+        </div>
+
+        <h3 class="text-lg font-black">
+            Figurinha nova adicionada
+        </h3>
+
+        <p
+            id="novaFigurinhaTexto"
+            class="text-sm text-gray-300 mt-2"
+        >
+            Uma nova figurinha apareceu no feed.
+        </p>
+
+        <div class="grid grid-cols-2 gap-3 mt-4">
+
+            <button
+                id="verNovasBtn"
+                type="button"
+                class="bg-green-600 text-white p-3 rounded-2xl font-black text-xs"
+            >
+                VER AGORA
+            </button>
+
+            <button
+                id="fecharToastBtn"
+                type="button"
+                class="bg-white text-black p-3 rounded-2xl font-black text-xs"
+            >
+                DEPOIS
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
 <section class="py-8 md:py-14 px-4">
 
     <div class="max-w-5xl mx-auto text-center">
@@ -303,15 +347,53 @@ body{
     class="px-4 pb-8"
 >
 
-    <div class="max-w-7xl mx-auto mb-6">
+    <div class="max-w-7xl mx-auto mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 
-        <span class="bg-white text-gray-500 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase border border-gray-100">
-            Feed
-        </span>
+        <div>
+            <span class="bg-white text-gray-500 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase border border-gray-100">
+                Feed
+            </span>
 
-        <h2 class="text-2xl md:text-4xl font-black mt-4">
-            Figurinhas disponíveis
-        </h2>
+            <h2 class="text-2xl md:text-4xl font-black mt-4">
+                Figurinhas disponíveis
+            </h2>
+        </div>
+
+        <button
+            id="btnNotificacoes"
+            type="button"
+            class="bg-black text-white px-5 py-3 rounded-full font-black text-xs md:text-sm"
+        >
+            Ativar notificações
+        </button>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto mb-6 grid grid-cols-2 md:grid-cols-5 gap-3">
+
+        <select id="filtroSelecao" class="p-3 rounded-2xl bg-white border border-gray-100 outline-none text-xs md:text-sm font-bold">
+            <option value="">Todas seleções</option>
+        </select>
+
+        <select id="filtroTipo" class="p-3 rounded-2xl bg-white border border-gray-100 outline-none text-xs md:text-sm font-bold">
+            <option value="">Todos tipos</option>
+        </select>
+
+        <select id="filtroRaridade" class="p-3 rounded-2xl bg-white border border-gray-100 outline-none text-xs md:text-sm font-bold">
+            <option value="">Todas raridades</option>
+        </select>
+
+        <select id="filtroCidade" class="p-3 rounded-2xl bg-white border border-gray-100 outline-none text-xs md:text-sm font-bold">
+            <option value="">Todas cidades</option>
+        </select>
+
+        <select id="ordenarPor" class="col-span-2 md:col-span-1 p-3 rounded-2xl bg-black text-white outline-none text-xs md:text-sm font-black">
+            <option value="distancia">Mais perto</option>
+            <option value="recente">Mais recentes</option>
+            <option value="selecao">Seleção</option>
+            <option value="tipo">Tipo</option>
+            <option value="preco">Menor preço</option>
+        </select>
 
     </div>
 
@@ -324,7 +406,7 @@ body{
 
     <div
         id="cards"
-        class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
+        class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5"
     ></div>
 
 </section>
@@ -372,62 +454,48 @@ let lojasParceiras = [];
 let userLat = null;
 let userLng = null;
 let locationName = "sua região";
-let userCity = "";
+let primeiraCargaAnuncios = true;
+let idsVisiveisConhecidos = new Set();
+let toastTimer = null;
 
-const cards =
-    document.getElementById('cards');
+const cards = document.getElementById('cards');
+const loaderArea = document.getElementById('loaderArea');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const totalText = document.getElementById('totalText');
+const orderText = document.getElementById('orderText');
+const headerLocationText = document.getElementById('headerLocationText');
+const lojasParceirasHome = document.getElementById('lojasParceirasHome');
+const ctaLojista = document.getElementById('ctaLojista');
 
-const loaderArea =
-    document.getElementById('loaderArea');
+const filtroSelecao = document.getElementById('filtroSelecao');
+const filtroTipo = document.getElementById('filtroTipo');
+const filtroRaridade = document.getElementById('filtroRaridade');
+const filtroCidade = document.getElementById('filtroCidade');
+const ordenarPor = document.getElementById('ordenarPor');
 
-const searchInput =
-    document.getElementById('searchInput');
-
-const searchBtn =
-    document.getElementById('searchBtn');
-
-const totalText =
-    document.getElementById('totalText');
-
-const orderText =
-    document.getElementById('orderText');
-
-const headerLocationText =
-    document.getElementById('headerLocationText');
-
-const lojasParceirasHome =
-    document.getElementById('lojasParceirasHome');
-
-const ctaLojista =
-    document.getElementById('ctaLojista');
+const btnNotificacoes = document.getElementById('btnNotificacoes');
+const novaFigurinhaToast = document.getElementById('novaFigurinhaToast');
+const novaFigurinhaTexto = document.getElementById('novaFigurinhaTexto');
+const verNovasBtn = document.getElementById('verNovasBtn');
+const fecharToastBtn = document.getElementById('fecharToastBtn');
 
 function escapeHtml(valor){
-    const div =
-        document.createElement('div');
-
-    div.textContent =
-        String(valor || "");
-
+    const div = document.createElement('div');
+    div.textContent = String(valor || "");
     return div.innerHTML;
 }
 
 function calcularDistancia(lat1, lon1, lat2, lon2){
-
     const R = 6371;
-
-    const dLat =
-        (Number(lat2) - Number(lat1)) * Math.PI / 180;
-
-    const dLon =
-        (Number(lon2) - Number(lon1)) * Math.PI / 180;
+    const dLat = (Number(lat2) - Number(lat1)) * Math.PI / 180;
+    const dLon = (Number(lon2) - Number(lon1)) * Math.PI / 180;
 
     const a =
         Math.sin(dLat / 2) *
         Math.sin(dLat / 2) +
-
         Math.cos(Number(lat1) * Math.PI / 180) *
         Math.cos(Number(lat2) * Math.PI / 180) *
-
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
 
@@ -436,11 +504,9 @@ function calcularDistancia(lat1, lon1, lat2, lon2){
             Math.sqrt(a),
             Math.sqrt(1 - a)
         );
-
 }
 
 function formatarDistancia(valor){
-
     if(!Number.isFinite(valor)){
         return "";
     }
@@ -450,13 +516,10 @@ function formatarDistancia(valor){
     }
 
     return `${valor.toFixed(1)} km`;
-
 }
 
 function formatarPreco(valor){
-
-    const numero =
-        Number(valor);
+    const numero = Number(valor);
 
     if(!Number.isFinite(numero)){
         return "R$ 0,00";
@@ -469,51 +532,38 @@ function formatarPreco(valor){
             currency: "BRL"
         }
     );
-
 }
 
 function normalizarTexto(valor){
-
     return String(valor || "")
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
-
 }
 
 function telefoneUrl(valor){
-
-    let numero =
-        String(valor || "").replace(/\D/g,'');
+    let numero = String(valor || "").replace(/\D/g,'');
 
     if(!numero){
         return "#";
     }
 
     if(!numero.startsWith("55")){
-        numero =
-            "55" + numero;
+        numero = "55" + numero;
     }
 
     return `https://wa.me/${numero}`;
-
 }
 
 function lojasAtivas(){
-
     return lojasParceiras
         .filter((loja)=>loja.ativo !== false)
         .sort((a,b)=>Number(a.ordem || 0) - Number(b.ordem || 0));
-
 }
 
 function encontrarLojaParceira(ad){
-
-    const cidadeAnuncio =
-        normalizarTexto(ad.cidade);
-
-    const lojas =
-        lojasAtivas();
+    const cidadeAnuncio = normalizarTexto(ad.cidade);
+    const lojas = lojasAtivas();
 
     if(!cidadeAnuncio){
         return null;
@@ -522,69 +572,108 @@ function encontrarLojaParceira(ad){
     return lojas.find((loja)=>
         normalizarTexto(loja.cidade) === cidadeAnuncio
     ) || null;
-
 }
 
 function montarSelos(ad){
+    const verificado = Boolean(ad.verificado || ad.localizacaoVerificada);
+    const lojaParceira = encontrarLojaParceira(ad);
+    const retiradaDisponivel = Boolean(lojaParceira || ad.retiradaDisponivel || ad.lojaRetiradaId);
 
-    const verificado =
-        Boolean(ad.verificado || ad.localizacaoVerificada);
-
-    const lojaParceira =
-        encontrarLojaParceira(ad);
-
-    const retiradaDisponivel =
-        Boolean(lojaParceira || ad.retiradaDisponivel || ad.lojaRetiradaId);
-
-    let html =
-        "";
+    let html = "";
 
     if(verificado){
-
         html += `
-            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
-                Vendedor verificado
+            <span class="bg-green-500 text-white px-2 py-1 rounded-full text-[9px] font-black uppercase shadow-sm">
+                Verificado
             </span>
         `;
-
     }else{
-
         html += `
-            <span class="bg-yellow-400 text-black px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
+            <span class="bg-yellow-400 text-black px-2 py-1 rounded-full text-[9px] font-black uppercase shadow-sm">
                 Não verificado
             </span>
         `;
-
     }
 
     if(retiradaDisponivel){
-
         html += `
-            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
-                Retirada disponível
+            <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-[9px] font-black uppercase shadow-sm">
+                Retirada
             </span>
         `;
-
     }
 
     if(lojaParceira){
-
         html += `
-            <span class="bg-black text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-sm">
-                Loja parceira próxima
+            <span class="bg-black text-white px-2 py-1 rounded-full text-[9px] font-black uppercase shadow-sm">
+                Loja próxima
             </span>
         `;
-
     }
 
     return html;
+}
 
+function preencherFiltro(select, valores, label){
+    const valorAtual = select.value;
+
+    select.innerHTML = "";
+
+    const optionInicial = document.createElement('option');
+    optionInicial.value = "";
+    optionInicial.textContent = label;
+    select.appendChild(optionInicial);
+
+    [...new Set(valores.filter(Boolean))]
+        .sort((a,b)=>String(a).localeCompare(String(b), 'pt-BR'))
+        .forEach((valor)=>{
+            const option = document.createElement('option');
+            option.value = valor;
+            option.textContent = valor;
+            select.appendChild(option);
+        });
+
+    const existeValor =
+        Array.from(select.options).some((option)=>option.value === valorAtual);
+
+    if(existeValor){
+        select.value = valorAtual;
+    }
+}
+
+function atualizarFiltros(){
+    const aprovados =
+        anuncios.filter((ad)=>
+            (ad.status || "aprovado") === "aprovado"
+        );
+
+    preencherFiltro(
+        filtroSelecao,
+        aprovados.map((ad)=>ad.selecao),
+        "Todas seleções"
+    );
+
+    preencherFiltro(
+        filtroTipo,
+        aprovados.map((ad)=>ad.categoriaFigurinha || ad.tipo),
+        "Todos tipos"
+    );
+
+    preencherFiltro(
+        filtroRaridade,
+        aprovados.map((ad)=>ad.raridade),
+        "Todas raridades"
+    );
+
+    preencherFiltro(
+        filtroCidade,
+        aprovados.map((ad)=>ad.cidade),
+        "Todas cidades"
+    );
 }
 
 function prepararLista(){
-
-    const termo =
-        normalizarTexto(searchInput.value.trim());
+    const termo = normalizarTexto(searchInput.value.trim());
 
     let lista =
         anuncios.filter((ad)=>
@@ -592,7 +681,6 @@ function prepararLista(){
         );
 
     if(termo){
-
         lista =
             lista.filter((ad)=>
                 normalizarTexto(ad.jogador).includes(termo) ||
@@ -603,12 +691,28 @@ function prepararLista(){
                 normalizarTexto(ad.raridade).includes(termo) ||
                 normalizarTexto(ad.categoriaFigurinha).includes(termo)
             );
+    }
 
+    if(filtroSelecao.value){
+        lista = lista.filter((ad)=>ad.selecao === filtroSelecao.value);
+    }
+
+    if(filtroTipo.value){
+        lista = lista.filter((ad)=>
+            (ad.categoriaFigurinha || ad.tipo) === filtroTipo.value
+        );
+    }
+
+    if(filtroRaridade.value){
+        lista = lista.filter((ad)=>ad.raridade === filtroRaridade.value);
+    }
+
+    if(filtroCidade.value){
+        lista = lista.filter((ad)=>ad.cidade === filtroCidade.value);
     }
 
     lista =
         lista.map((ad)=>{
-
             let distancia = null;
 
             if(
@@ -619,7 +723,6 @@ function prepararLista(){
                 ad.lat !== null &&
                 ad.lng !== null
             ){
-
                 distancia =
                     calcularDistancia(
                         userLat,
@@ -627,23 +730,33 @@ function prepararLista(){
                         ad.lat,
                         ad.lng
                     );
-
             }
 
             return {
                 ...ad,
                 distancia
             };
-
         });
 
     lista.sort((a,b)=>{
+        if(ordenarPor.value === "recente"){
+            return (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0);
+        }
 
-        const aTemDistancia =
-            Number.isFinite(a.distancia);
+        if(ordenarPor.value === "selecao"){
+            return String(a.selecao || "").localeCompare(String(b.selecao || ""), "pt-BR");
+        }
 
-        const bTemDistancia =
-            Number.isFinite(b.distancia);
+        if(ordenarPor.value === "tipo"){
+            return String(a.categoriaFigurinha || a.tipo || "").localeCompare(String(b.categoriaFigurinha || b.tipo || ""), "pt-BR");
+        }
+
+        if(ordenarPor.value === "preco"){
+            return Number(a.preco || 0) - Number(b.preco || 0);
+        }
+
+        const aTemDistancia = Number.isFinite(a.distancia);
+        const bTemDistancia = Number.isFinite(b.distancia);
 
         if(aTemDistancia && bTemDistancia){
             return a.distancia - b.distancia;
@@ -658,15 +771,12 @@ function prepararLista(){
         }
 
         return 0;
-
     });
 
     return lista;
-
 }
 
 function atualizarResumo(lista){
-
     const total =
         anuncios.filter((ad)=>(ad.status || "aprovado") === "aprovado").length;
 
@@ -675,37 +785,34 @@ function atualizarResumo(lista){
             ? "1 figurinha"
             : `${total} figurinhas`;
 
+    const labels = {
+        distancia: userLat !== null ? "Mais próximas primeiro" : "Mais recentes até liberar localização",
+        recente: "Mais recentes primeiro",
+        selecao: "Organizado por seleção",
+        tipo: "Organizado por tipo",
+        preco: "Menor preço primeiro"
+    };
+
     if(searchInput.value.trim()){
-
         orderText.textContent =
-            `${lista.length} resultado${lista.length === 1 ? "" : "s"} mais próximo${lista.length === 1 ? "" : "s"} primeiro`;
-
+            `${lista.length} resultado${lista.length === 1 ? "" : "s"} encontrado${lista.length === 1 ? "" : "s"}`;
         return;
-
     }
 
     orderText.textContent =
-        userLat !== null
-            ? "Mais próximas primeiro"
-            : "Mais recentes até liberar localização";
-
+        labels[ordenarPor.value] || "Mais próximas primeiro";
 }
 
 function renderizar(){
+    loaderArea.style.display = 'none';
 
-    loaderArea.style.display =
-        'none';
-
-    const lista =
-        prepararLista();
+    const lista = prepararLista();
 
     atualizarResumo(lista);
 
-    cards.innerHTML =
-        "";
+    cards.innerHTML = "";
 
     if(lista.length === 0){
-
         cards.innerHTML = `
             <div class="col-span-full bg-white rounded-[2rem] p-8 md:p-10 text-center border border-gray-100">
                 <h2 class="text-2xl md:text-3xl font-black">
@@ -717,30 +824,19 @@ function renderizar(){
                 </p>
             </div>
         `;
-
         return;
-
     }
 
     lista.forEach((ad)=>{
+        const distanciaTexto = formatarDistancia(ad.distancia);
+        const foto = ad.foto || "https://placehold.co/600x400?text=Sem+foto";
+        const categoria = ad.categoriaFigurinha || ad.tipo || "Figurinha";
+        const subtitulo = `${ad.selecao || 'Coleção'}${ad.numero ? ' • #' + ad.numero : ''}`;
 
-        const distanciaTexto =
-            formatarDistancia(ad.distancia);
-
-        const foto =
-            ad.foto || "https://placehold.co/600x400?text=Sem+foto";
-
-        const categoria =
-            ad.categoriaFigurinha || ad.tipo || "Figurinha";
-
-        const subtitulo =
-            `${ad.selecao || 'Coleção'}${ad.numero ? ' • #' + ad.numero : ''}`;
-
-        const card =
-            document.createElement('article');
+        const card = document.createElement('article');
 
         card.className =
-            "card bg-white rounded-[1.75rem] border border-gray-100 relative overflow-hidden";
+            "card bg-white rounded-[1.4rem] border border-gray-100 relative overflow-hidden";
 
         card.innerHTML = `
             <div class="relative">
@@ -748,65 +844,65 @@ function renderizar(){
                 <img
                     src="${escapeHtml(foto)}"
                     alt="Foto da figurinha"
-                    class="w-full h-48 sm:h-52 object-cover"
+                    class="w-full h-36 md:h-44 object-cover"
                 >
 
-                <div class="absolute top-3 left-3 right-3 flex flex-wrap gap-2">
+                <div class="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
                     ${montarSelos(ad)}
                 </div>
 
             </div>
 
-            <div class="p-4 md:p-5">
+            <div class="p-3 md:p-4">
 
-                <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center justify-between gap-2 mb-2">
 
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] md:text-xs font-black uppercase truncate max-w-[62%]">
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase truncate max-w-[60%]">
                         ${escapeHtml(categoria)}
                     </span>
 
-                    <span class="text-[10px] md:text-xs font-black text-gray-400 uppercase truncate">
+                    <span class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase truncate">
                         ${escapeHtml(ad.raridade || 'Comum')}
                     </span>
 
                 </div>
 
-                <h3 class="text-lg md:text-xl font-black leading-tight break-words">
+                <h3 class="text-sm md:text-lg font-black leading-tight break-words">
                     ${escapeHtml(ad.jogador || 'Pack Figurinhas')}
                 </h3>
 
-                <p class="text-gray-500 text-xs md:text-sm mt-1 break-words">
+                <p class="text-gray-500 text-[11px] md:text-xs mt-1 break-words">
                     ${escapeHtml(subtitulo)}
                 </p>
 
-                <div class="mt-4 bg-gray-50 rounded-2xl p-3">
+                <div class="mt-3 bg-gray-50 rounded-xl p-2">
 
-                    <div class="text-[10px] font-black text-gray-400 uppercase">
-                        Localização
+                    <div class="text-[9px] font-black text-gray-400 uppercase">
+                        Local
                     </div>
 
-                    <div class="text-xs md:text-sm text-green-700 font-black mt-1 break-words">
+                    <div class="text-[11px] md:text-xs text-green-700 font-black mt-1 break-words">
                         ${escapeHtml(ad.cidade || 'Não informado')}
                         ${distanciaTexto ? ' • ' + distanciaTexto : ''}
                     </div>
 
                 </div>
 
-                <div class="flex items-center justify-between mt-5 gap-3">
+                <div class="flex items-center justify-between mt-4 gap-2">
 
                     <div>
-                        <div class="text-[10px] font-black uppercase text-gray-400">
+                        <div class="text-[9px] font-black uppercase text-gray-400">
                             Valor
                         </div>
 
-                        <span class="text-xl md:text-2xl font-black">
+                        <span class="text-base md:text-xl font-black">
                             ${formatarPreco(ad.preco)}
                         </span>
                     </div>
 
                     <a
                         href="anuncio.html?id=${encodeURIComponent(ad.id)}"
-                        class="bg-black hover:bg-gray-800 transition text-white px-5 py-3 rounded-full text-xs md:text-sm font-black whitespace-nowrap"
+                        class="bg-black hover:bg-gray-800 transition text-white px-4 py-2.5 rounded-full text-[10px] md:text-xs font-black whitespace-nowrap"
                     >
                         VER
                     </a>
@@ -817,21 +913,15 @@ function renderizar(){
         `;
 
         cards.appendChild(card);
-
     });
-
 }
 
 function renderizarLojasParceiras(){
+    const lojas = lojasAtivas().slice(0,3);
 
-    const lojas =
-        lojasAtivas().slice(0,3);
-
-    lojasParceirasHome.innerHTML =
-        "";
+    lojasParceirasHome.innerHTML = "";
 
     if(lojas.length === 0){
-
         lojasParceirasHome.innerHTML = `
             <div class="md:col-span-3 bg-white text-gray-900 rounded-[1.5rem] p-5 border border-white/10">
                 <div class="bg-yellow-100 text-yellow-700 inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase mb-3">
@@ -849,15 +939,11 @@ function renderizarLojasParceiras(){
         `;
 
         renderizar();
-
         return;
-
     }
 
     lojas.forEach((loja)=>{
-
-        const whatsappUrl =
-            telefoneUrl(loja.whatsapp);
+        const whatsappUrl = telefoneUrl(loja.whatsapp);
 
         lojasParceirasHome.innerHTML += `
             <div class="bg-white text-gray-900 rounded-[1.5rem] p-5 border border-white/10">
@@ -892,28 +978,108 @@ function renderizarLojasParceiras(){
 
             </div>
         `;
-
     });
 
     renderizar();
+}
 
+function mostrarToastNovasFigurinhas(novos){
+    const primeira = novos[0];
+    const total = novos.length;
+
+    novaFigurinhaTexto.textContent =
+        total === 1
+            ? `${primeira.jogador || "Nova figurinha"} foi adicionada ao feed.`
+            : `${total} novas figurinhas foram adicionadas ao feed.`;
+
+    novaFigurinhaToast.classList.remove('hidden');
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(()=>{
+        novaFigurinhaToast.classList.add('hidden');
+    },10000);
+}
+
+function enviarNotificacaoNavegador(novos){
+    if(!("Notification" in window)){
+        return;
+    }
+
+    if(Notification.permission !== "granted"){
+        return;
+    }
+
+    const primeira = novos[0];
+
+    const titulo =
+        "Nova figurinha disponível";
+
+    const body =
+        novos.length === 1
+            ? `${primeira.jogador || "Uma nova figurinha"} entrou no feed.`
+            : `${novos.length} novas figurinhas entraram no feed.`;
+
+    const notificacao =
+        new Notification(
+            titulo,
+            {
+                body
+            }
+        );
+
+    notificacao.onclick = ()=>{
+        window.focus();
+        document.getElementById('feed').scrollIntoView({ behavior:"smooth" });
+        notificacao.close();
+    };
+}
+
+function notificarNovasFigurinhas(novos){
+    if(novos.length === 0){
+        return;
+    }
+
+    mostrarToastNovasFigurinhas(novos);
+    enviarNotificacaoNavegador(novos);
+}
+
+function atualizarBotaoNotificacoes(){
+    if(!("Notification" in window)){
+        btnNotificacoes.textContent = "Notificações indisponíveis";
+        btnNotificacoes.disabled = true;
+        btnNotificacoes.className = "bg-gray-400 text-white px-5 py-3 rounded-full font-black text-xs md:text-sm cursor-not-allowed";
+        return;
+    }
+
+    if(Notification.permission === "granted"){
+        btnNotificacoes.textContent = "Notificações ativas";
+        btnNotificacoes.className = "bg-green-600 text-white px-5 py-3 rounded-full font-black text-xs md:text-sm";
+        return;
+    }
+
+    if(Notification.permission === "denied"){
+        btnNotificacoes.textContent = "Notificações bloqueadas";
+        btnNotificacoes.disabled = true;
+        btnNotificacoes.className = "bg-gray-400 text-white px-5 py-3 rounded-full font-black text-xs md:text-sm cursor-not-allowed";
+        return;
+    }
+
+    btnNotificacoes.textContent = "Ativar notificações";
 }
 
 async function atualizarNomeDaLocalizacao(){
-
     if(userLat === null || userLng === null){
         return;
     }
 
     try{
-
         const res =
             await fetch(
                 `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}`
             );
 
-        const data =
-            await res.json();
+        const data = await res.json();
 
         locationName =
             data.address?.city ||
@@ -923,43 +1089,28 @@ async function atualizarNomeDaLocalizacao(){
             data.address?.county ||
             "sua região";
 
-        userCity =
-            locationName;
-
         headerLocationText.textContent =
             `Sua localização: ${locationName}`;
 
     }catch(error){
-
         headerLocationText.textContent =
             "Sua localização: região aproximada";
-
     }
-
 }
 
 function reconhecerLocalizacao(){
-
     if(!navigator.geolocation){
-
         headerLocationText.textContent =
             "Localização indisponível";
 
         renderizar();
-
         return;
-
     }
 
     navigator.geolocation.getCurrentPosition(
-
         async(pos)=>{
-
-            userLat =
-                pos.coords.latitude;
-
-            userLng =
-                pos.coords.longitude;
+            userLat = pos.coords.latitude;
+            userLng = pos.coords.longitude;
 
             headerLocationText.textContent =
                 "Sua localização: região aproximada";
@@ -967,35 +1118,25 @@ function reconhecerLocalizacao(){
             await atualizarNomeDaLocalizacao();
 
             renderizar();
-
         },
-
         ()=>{
-
             headerLocationText.textContent =
                 "Localização não ativada";
 
             renderizar();
-
         },
-
         {
             enableHighAccuracy:true,
             timeout:10000,
             maximumAge:60000
         }
-
     );
-
 }
 
 onAuthStateChanged(auth, async(user)=>{
-
-    const authArea =
-        document.getElementById('authArea');
+    const authArea = document.getElementById('authArea');
 
     if(user){
-
         authArea.innerHTML = `
             <div class="flex items-center gap-2 md:gap-3">
 
@@ -1020,13 +1161,9 @@ onAuthStateChanged(auth, async(user)=>{
         document
             .getElementById('logoutBtn')
             .addEventListener('click', async()=>{
-
                 await signOut(auth);
-
             });
-
     }
-
 });
 
 const q =
@@ -1036,21 +1173,42 @@ const q =
     );
 
 onSnapshot(q, (snapshot)=>{
-
-    anuncios =
+    const listaAtual =
         snapshot.docs.map((documento)=>({
             id: documento.id,
             ...documento.data()
         }));
 
+    const visiveisAtuais =
+        listaAtual.filter((ad)=>
+            (ad.status || "aprovado") === "aprovado"
+        );
+
+    const novosVisiveis =
+        visiveisAtuais.filter((ad)=>
+            !idsVisiveisConhecidos.has(ad.id)
+        );
+
+    anuncios = listaAtual;
+
+    atualizarFiltros();
     renderizar();
 
+    if(primeiraCargaAnuncios){
+        primeiraCargaAnuncios = false;
+    }else{
+        notificarNovasFigurinhas(novosVisiveis);
+    }
+
+    idsVisiveisConhecidos =
+        new Set(
+            visiveisAtuais.map((ad)=>ad.id)
+        );
 });
 
 onSnapshot(
     collection(db, "lojasRetirada"),
     (snapshot)=>{
-
         lojasParceiras =
             snapshot.docs.map((documento)=>({
                 id: documento.id,
@@ -1058,17 +1216,13 @@ onSnapshot(
             }));
 
         renderizarLojasParceiras();
-
     },
     (error)=>{
-
         console.error(error);
 
-        lojasParceiras =
-            [];
+        lojasParceiras = [];
 
         renderizarLojasParceiras();
-
     }
 );
 
@@ -1080,25 +1234,62 @@ searchBtn.addEventListener('click', ()=>{
     renderizar();
 });
 
+[
+    filtroSelecao,
+    filtroTipo,
+    filtroRaridade,
+    filtroCidade,
+    ordenarPor
+].forEach((select)=>{
+    select.addEventListener('change', ()=>{
+        renderizar();
+    });
+});
+
 document
     .getElementById('btnAnunciar')
     .addEventListener('click', (event)=>{
-
         event.preventDefault();
 
         if(!auth.currentUser){
-
             window.location.href =
                 "login.html";
-
             return;
-
         }
 
         window.location.href =
             "anunciar.html";
-
     });
+
+btnNotificacoes.addEventListener('click', async()=>{
+    if(!("Notification" in window)){
+        alert("Seu navegador não suporta notificações.");
+        return;
+    }
+
+    const permissao =
+        await Notification.requestPermission();
+
+    atualizarBotaoNotificacoes();
+
+    if(permissao === "granted"){
+        alert("Notificações ativadas. Você será avisado quando novas figurinhas aparecerem enquanto a página estiver aberta.");
+    }
+});
+
+verNovasBtn.addEventListener('click', ()=>{
+    novaFigurinhaToast.classList.add('hidden');
+
+    document
+        .getElementById('feed')
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+});
+
+fecharToastBtn.addEventListener('click', ()=>{
+    novaFigurinhaToast.classList.add('hidden');
+});
 
 const parceiroMsg =
     encodeURIComponent("Olá! Tenho interesse em cadastrar minha loja como ponto oficial de retirada do FigurinhasCup.");
@@ -1112,7 +1303,6 @@ const securityMessages =
 let securityMessageIndex = 0;
 
 setInterval(()=>{
-
     if(securityMessages.length === 0){
         return;
     }
@@ -1130,6 +1320,7 @@ setInterval(()=>{
 
 },6000);
 
+atualizarBotaoNotificacoes();
 reconhecerLocalizacao();
 
 </script>
